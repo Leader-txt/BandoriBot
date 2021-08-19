@@ -1,0 +1,109 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v5.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v5.0": {
+      "Mirai-CSharp/1.0.2.1": {
+        "dependencies": {
+          "Newtonsoft.Json": "12.0.3",
+          "System.Drawing.Common": "5.0.0-preview.5.20278.1"
+        },
+        "runtime": {
+          "Mirai-CSharp.dll": {}
+        }
+      },
+      "Microsoft.NETCore.Platforms/5.0.0-preview.5.20278.1": {},
+      "Microsoft.Win32.SystemEvents/5.0.0-preview.5.20278.1": {
+        "dependencies": {
+          "Microsoft.NETCore.Platforms": "5.0.0-preview.5.20278.1"
+        },
+        "runtime": {
+          "lib/netstandard2.0/Microsoft.Win32.SystemEvents.dll": {
+            "assemblyVersion": "5.0.0.0",
+            "fileVersion": "5.0.20.27801"
+          }
+        },
+        "runtimeTargets": {
+          "runtimes/win/lib/netcoreapp3.0/Microsoft.Win32.SystemEvents.dll": {
+            "rid": "win",
+            "assetType": "runtime",
+            "assemblyVersion": "5.0.0.0",
+            "fileVersion": "5.0.20.27801"
+          }
+        }
+      },
+      "Newtonsoft.Json/12.0.3": {
+        "runtime": {
+          "lib/netstandard2.0/Newtonsoft.Json.dll": {
+            "assemblyVersion": "12.0.0.0",
+            "fileVersion": "12.0.3.23909"
+          }
+        }
+      },
+      "System.Drawing.Common/5.0.0-preview.5.20278.1": {
+        "dependencies": {
+          "Microsoft.NETCore.Platforms": "5.0.0-preview.5.20278.1",
+          "Microsoft.Win32.SystemEvents": "5.0.0-preview.5.20278.1"
+        },
+        "runtime": {
+          "lib/netstandard2.0/System.Drawing.Common.dll": {
+            "assemblyVersion": "4.0.0.1",
+            "fileVersion": "4.6.26919.2"
+          }
+        },
+        "runtimeTargets": {
+          "runtimes/unix/lib/netcoreapp3.0/System.Drawing.Common.dll": {
+            "rid": "unix",
+            "assetType": "runtime",
+            "assemblyVersion": "5.0.0.0",
+            "fileVersion": "5.0.20.27801"
+          },
+          "runtimes/win/lib/netcoreapp3.0/System.Drawing.Common.dll": {
+            "rid": "win",
+            "assetType": "runtime",
+            "assemblyVersion": "5.0.0.0",
+            "fileVersion": "5.0.20.27801"
+          }
+        }
+      }
+    }
+  },
+  "libraries": {
+    "Mirai-CSharp/1.0.2.1": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Microsoft.NETCore.Platforms/5.0.0-preview.5.20278.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-Rz4yyJ07AilKLSHXybw9/qn5wPsk1D1FUMqXifsHuVxiSysQNS6yII9VQKP52BECV8czgrMNwer2IDWm/J6eeQ==",
+      "path": "microsoft.netcore.platforms/5.0.0-preview.5.20278.1",
+      "hashPath": "microsoft.netcore.platforms.5.0.0-preview.5.20278.1.nupkg.sha512"
+    },
+    "Microsoft.Win32.SystemEvents/5.0.0-preview.5.20278.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-Un4aGozg7lwzyBIFCVyS1V5KTBSy7GNoaLDGB6uzNATm6peXIIaIKhaUXetv69B7s5FBzt+87OCEirTWyf9E9g==",
+      "path": "microsoft.win32.systemevents/5.0.0-preview.5.20278.1",
+      "hashPath": "microsoft.win32.systemevents.5.0.0-preview.5.20278.1.nupkg.sha512"
+    },
+    "Newtonsoft.Json/12.0.3": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-6mgjfnRB4jKMlzHSl+VD+oUc1IebOZabkbyWj2RiTgWwYPPuaK1H97G1sHqGwPlS5npiF5Q0OrxN1wni2n5QWg==",
+      "path": "newtonsoft.json/12.0.3",
+      "hashPath": "newtonsoft.json.12.0.3.nupkg.sha512"
+    },
+    "System.Drawing.Common/5.0.0-preview.5.20278.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-o8bc3pqwaQPm/lannT/k/GRZPJ5MsiG7Os0pUOJ8n6XOE3ud5khx5b3J0Jx1ENqtvjcoqNMdW2vo1ySLGxiFBA==",
+      "path": "system.drawing.common/5.0.0-preview.5.20278.1",
+      "hashPath": "system.drawing.common.5.0.0-preview.5.20278.1.nupkg.sha512"
+    }
+  }
+}

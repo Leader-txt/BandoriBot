@@ -1,0 +1,27 @@
+{
+  "version": 2,
+  "dgSpecHash": "kdWdCYodHoXO2PiMJjkVEULkPxvZC6S2ga4rbsDV3O9W6W51eDqw4Nblr0qVq3IL4v6L4edUMzgpFWk0v1X11w==",
+  "success": true,
+  "projectFilePath": "F:\\Code\\BandoriBot\\Mirai-CSharp\\Mirai-CSharp\\Mirai-CSharp.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Leader\\.nuget\\packages\\microsoft.bcl.asyncinterfaces\\1.1.0\\microsoft.bcl.asyncinterfaces.1.1.0.nupkg.sha512",
+    "C:\\Users\\Leader\\.nuget\\packages\\microsoft.netcore.platforms\\1.1.0\\microsoft.netcore.platforms.1.1.0.nupkg.sha512",
+    "C:\\Users\\Leader\\.nuget\\packages\\microsoft.netcore.platforms\\3.1.0\\microsoft.netcore.platforms.3.1.0.nupkg.sha512",
+    "C:\\Users\\Leader\\.nuget\\packages\\microsoft.netcore.platforms\\5.0.0-preview.5.20278.1\\microsoft.netcore.platforms.5.0.0-preview.5.20278.1.nupkg.sha512",
+    "C:\\Users\\Leader\\.nuget\\packages\\microsoft.win32.systemevents\\4.7.0\\microsoft.win32.systemevents.4.7.0.nupkg.sha512",
+    "C:\\Users\\Leader\\.nuget\\packages\\microsoft.win32.systemevents\\5.0.0-preview.5.20278.1\\microsoft.win32.systemevents.5.0.0-preview.5.20278.1.nupkg.sha512",
+    "C:\\Users\\Leader\\.nuget\\packages\\netstandard.library\\2.0.3\\netstandard.library.2.0.3.nupkg.sha512",
+    "C:\\Users\\Leader\\.nuget\\packages\\newtonsoft.json\\12.0.3\\newtonsoft.json.12.0.3.nupkg.sha512",
+    "C:\\Users\\Leader\\.nuget\\packages\\system.buffers\\4.5.1\\system.buffers.4.5.1.nupkg.sha512",
+    "C:\\Users\\Leader\\.nuget\\packages\\system.collections.immutable\\1.7.1\\system.collections.immutable.1.7.1.nupkg.sha512",
+    "C:\\Users\\Leader\\.nuget\\packages\\system.drawing.common\\4.7.0\\system.drawing.common.4.7.0.nupkg.sha512",
+    "C:\\Users\\Leader\\.nuget\\packages\\system.drawing.common\\5.0.0-preview.5.20278.1\\system.drawing.common.5.0.0-preview.5.20278.1.nupkg.sha512",
+    "C:\\Users\\Leader\\.nuget\\packages\\system.memory\\4.5.4\\system.memory.4.5.4.nupkg.sha512",
+    "C:\\Users\\Leader\\.nuget\\packages\\system.numerics.vectors\\4.5.0\\system.numerics.vectors.4.5.0.nupkg.sha512",
+    "C:\\Users\\Leader\\.nuget\\packages\\system.runtime.compilerservices.unsafe\\4.7.1\\system.runtime.compilerservices.unsafe.4.7.1.nupkg.sha512",
+    "C:\\Users\\Leader\\.nuget\\packages\\system.text.encodings.web\\4.7.1\\system.text.encodings.web.4.7.1.nupkg.sha512",
+    "C:\\Users\\Leader\\.nuget\\packages\\system.text.json\\4.7.2\\system.text.json.4.7.2.nupkg.sha512",
+    "C:\\Users\\Leader\\.nuget\\packages\\system.threading.tasks.extensions\\4.5.4\\system.threading.tasks.extensions.4.5.4.nupkg.sha512"
+  ],
+  "logs": []
+}

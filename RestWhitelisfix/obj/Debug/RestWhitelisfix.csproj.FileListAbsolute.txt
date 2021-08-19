@@ -1,0 +1,14 @@
+F:\Code\BandoriBot-master\RestWhitelisfix\bin\Debug\RestWhitelisfix.dll
+F:\Code\BandoriBot-master\RestWhitelisfix\bin\Debug\RestWhitelisfix.pdb
+F:\Code\BandoriBot-master\RestWhitelisfix\bin\Debug\OTAPI.dll
+F:\Code\BandoriBot-master\RestWhitelisfix\bin\Debug\TerrariaServer.exe
+F:\Code\BandoriBot-master\RestWhitelisfix\bin\Debug\TShockAPI.dll
+F:\Code\BandoriBot-master\RestWhitelisfix\bin\Debug\Newtonsoft.Json.dll
+F:\Code\BandoriBot-master\RestWhitelisfix\bin\Debug\OTAPI.pdb
+F:\Code\BandoriBot-master\RestWhitelisfix\bin\Debug\TerrariaServer.pdb
+F:\Code\BandoriBot-master\RestWhitelisfix\bin\Debug\Newtonsoft.Json.xml
+F:\Code\BandoriBot-master\RestWhitelisfix\obj\Debug\RestWhitelisfix.csprojAssemblyReference.cache
+F:\Code\BandoriBot-master\RestWhitelisfix\obj\Debug\RestWhitelisfix.csproj.CoreCompileInputs.cache
+F:\Code\BandoriBot-master\RestWhitelisfix\obj\Debug\RestWhitelisfix.csproj.CopyComplete
+F:\Code\BandoriBot-master\RestWhitelisfix\obj\Debug\RestWhitelisfix.dll
+F:\Code\BandoriBot-master\RestWhitelisfix\obj\Debug\RestWhitelisfix.pdb

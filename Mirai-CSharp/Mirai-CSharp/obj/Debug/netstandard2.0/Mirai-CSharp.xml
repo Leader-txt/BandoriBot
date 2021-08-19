@@ -1,0 +1,2358 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Mirai-CSharp</name>
+    </assembly>
+    <members>
+        <member name="T:Mirai_CSharp.Exceptions.BotMutedException">
+            <summary>
+            尝试使用被禁言的机器人QQ发送消息时引发的异常
+            </summary>
+        </member>
+        <member name="P:Mirai_CSharp.Exceptions.BotMutedException.BotQQ">
+            <summary>
+            机器人QQ
+            </summary>
+        </member>
+        <member name="T:Mirai_CSharp.Exceptions.BotNotFoundException">
+            <summary>
+            当给定的机器人QQ不存在时引发的异常
+            </summary>
+        </member>
+        <member name="P:Mirai_CSharp.Exceptions.BotNotFoundException.BotQQ">
+            <summary>
+            机器人QQ
+            </summary>
+        </member>
+        <member name="T:Mirai_CSharp.Exceptions.InvalidAuthKeyException">
+            <summary>
+            提供错误的AuthKey时引发的异常
+            </summary>
+        </member>
+        <member name="P:Mirai_CSharp.Exceptions.InvalidAuthKeyException.AuthKey">
+            <summary>
+            错误的AuthKey
+            </summary>
+        </member>
+        <member name="T:Mirai_CSharp.Exceptions.InvalidSessionException">
+            <summary>
+            操作一个失效, 不存在或未认证(未激活)的Session时引发的异常
+            </summary>
+        </member>
+        <member name="P:Mirai_CSharp.Exceptions.InvalidSessionException.SessionKey">
+            <summary>
+            SessionKey
+            </summary>
+        </member>
+        <member name="T:Mirai_CSharp.Exceptions.MessageTooLongException">
+            <summary>
+            尝试发送过长的消息时引发的异常
+            </summary>
+        </member>
+        <member name="P:Mirai_CSharp.Exceptions.MessageTooLongException.Chain">
+            <summary>
+            错误的AuthKey
+            </summary>
+        </member>
+        <member name="T:Mirai_CSharp.Exceptions.PermissionDeniedException">
+            <summary>
+            当给定的机器人QQ不具有对应操作的权限时引发的异常
+            </summary>
+        </member>
+        <member name="P:Mirai_CSharp.Exceptions.PermissionDeniedException.BotQQ">
+            <summary>
+            机器人QQ
+            </summary>
+        </member>
+        <member name="T:Mirai_CSharp.Exceptions.TargetNotFoundException">
+            <summary>
+            当发送消息的对象(QQ/群号)不存在时引发的异常
+            </summary>
+        </member>
+        <member name="P:Mirai_CSharp.Exceptions.TargetNotFoundException.Message">
+            <inheritdoc/>
+        </member>
+        <member name="P:Mirai_CSharp.Exceptions.TargetNotFoundException.Target">
+            <summary>
+            目标QQ/群号
+            </summary>
+        </member>
+        <member name="T:Mirai_CSharp.Extensions.HttpClientExtensions">
+            <summary>
+            <see cref="T:System.Net.Http.HttpClient"/> 的扩展方法
+            </summary>
+        </member>
+        <member name="M:Mirai_CSharp.Extensions.HttpClientExtensions.SendAsync(System.Net.Http.HttpClient,System.Net.Http.HttpMethod,System.Uri,System.Net.Http.HttpContent,System.Threading.CancellationToken)">
+            <summary>
+            异步发起一个 Http 请求
+            </summary>
+            <param name="client">要进行请求的 <see cref="T:System.Net.Http.HttpClient"/></param>
+            <param name="method">请求方式</param>
+            <param name="uri">请求目标</param>
+            <param name="content">请求正文</param>
+            <param name="token">用于取消请求的 <see cref="T:System.Threading.CancellationToken"/></param>
+            <exception cref="T:System.ArgumentNullException"/>
+            <exception cref="T:System.InvalidOperationException"/>
+            <exception cref="T:System.Net.Http.HttpRequestException"/>
+            <returns>表示此异步操作的 <see cref="T:System.Threading.Tasks.Task"/></returns>
+        </member>
+        <member name="M:Mirai_CSharp.Extensions.HttpClientExtensions.GetBytesAsync(System.Threading.Tasks.Task{System.Net.Http.HttpResponseMessage},System.Threading.CancellationToken)">
+            <summary>
+            将服务器响应正文异步序列化为 <see cref="T:System.Byte"/>[]
+            </summary>
+            <param name="responseTask">要处理的一个异步请求任务</param>
+            <param name="token">本参数将被忽略, 因为 <see cref="M:System.Net.Http.HttpContent.ReadAsByteArrayAsync"/> 方法没有一个用于接收 <see cref="T:System.Threading.CancellationToken"/> 的重载</param>
+            <returns>表示此异步操作的 <see cref="T:System.Threading.Tasks.Task"/></returns>
+        </member>
+        <member name="M:Mirai_CSharp.Extensions.HttpClientExtensions.GetStringAsync(System.Threading.Tasks.Task{System.Net.Http.HttpResponseMessage},System.Threading.CancellationToken)">
+            <summary>
+            将服务器响应正文异步序列化为 <see cref="T:System.String"/>
+            </summary>
+            <param name="responseTask">要处理的一个异步请求任务</param>
+            <param name="token">本参数将被忽略, 因为 <see cref="M:System.Net.Http.HttpContent.ReadAsByteArrayAsync"/> 方法没有一个用于接收 <see cref="T:System.Threading.CancellationToken"/> 的重载</param>
+            <returns>表示此异步操作的 <see cref="T:System.Threading.Tasks.Task"/></returns>
+        </member>
+        <member name="M:Mirai_CSharp.Extensions.HttpClientExtensions.GetObjectAsync``1(System.Threading.Tasks.Task{System.Net.Http.HttpResponseMessage},System.Threading.CancellationToken)">
+            <inheritdoc cref="M:Mirai_CSharp.Extensions.HttpClientExtensions.GetObjectAsync``1(System.Threading.Tasks.Task{System.Net.Http.HttpResponseMessage},System.Text.Json.JsonSerializerOptions,System.Threading.CancellationToken)"/>
+        </member>
+        <member name="M:Mirai_CSharp.Extensions.HttpClientExtensions.GetObjectAsync``1(System.Threading.Tasks.Task{System.Net.Http.HttpResponseMessage},System.Text.Json.JsonSerializerOptions,System.Threading.CancellationToken)">
+            <summary>
+            将服务器响应正文异步序列化为 <typeparamref name="T"/> 的一个实例
+            </summary>
+            <param name="responseTask">要处理的一个异步请求任务</param>
+            <param name="options">反序列化时要使用的 <see cref="T:System.Text.Json.JsonSerializerOptions"/></param>
+            <param name="token">用于取消反序列化的 <see cref="T:System.Threading.CancellationToken"/></param>
+            <remarks>
+            请确保服务器响应的 Json 是以 UTF-8 编码的
+            </remarks>
+            <returns>表示此异步操作的 <see cref="T:System.Threading.Tasks.Task"/></returns>
+        </member>
+        <member name="M:Mirai_CSharp.Extensions.HttpClientExtensions.GetObjectAsync(System.Threading.Tasks.Task{System.Net.Http.HttpResponseMessage},System.Type,System.Threading.CancellationToken)">
+            <inheritdoc cref="M:Mirai_CSharp.Extensions.HttpClientExtensions.GetObjectAsync(System.Threading.Tasks.Task{System.Net.Http.HttpResponseMessage},System.Type,System.Text.Json.JsonSerializerOptions,System.Threading.CancellationToken)"/>
+        </member>
+        <member name="M:Mirai_CSharp.Extensions.HttpClientExtensions.GetObjectAsync(System.Threading.Tasks.Task{System.Net.Http.HttpResponseMessage},System.Type,System.Text.Json.JsonSerializerOptions,System.Threading.CancellationToken)">
+            <summary>
+            将服务器响应正文异步序列化为 <paramref name="returnType"/> 表示的一个实例
+            </summary>
+            <param name="returnType">用于转换和返回的 <see cref="T:System.Type"/></param>
+            <inheritdoc cref="M:Mirai_CSharp.Extensions.HttpClientExtensions.GetObjectAsync``1(System.Threading.Tasks.Task{System.Net.Http.HttpResponseMessage},System.Text.Json.JsonSerializerOptions,System.Threading.CancellationToken)"/>
+        </member>
+        <member name="M:Mirai_CSharp.Extensions.HttpClientExtensions.GetJsonAsync(System.Threading.Tasks.Task{System.Net.Http.HttpResponseMessage},System.Threading.CancellationToken)">
+            <inheritdoc cref="M:Mirai_CSharp.Extensions.HttpClientExtensions.GetJsonAsync(System.Threading.Tasks.Task{System.Net.Http.HttpResponseMessage},System.Text.Json.JsonDocumentOptions,System.Threading.CancellationToken)"/>
+        </member>
+        <member name="M:Mirai_CSharp.Extensions.HttpClientExtensions.GetJsonAsync(System.Threading.Tasks.Task{System.Net.Http.HttpResponseMessage},System.Text.Json.JsonDocumentOptions,System.Threading.CancellationToken)">
+            <summary>
+            将服务器响应正文异步反序列化为一个 <see cref="T:System.Text.Json.JsonDocument"/> 实例
+            </summary>
+            <param name="responseTask">要处理的一个异步请求任务</param>
+            <param name="options">反序列化时要使用的 <see cref="T:System.Text.Json.JsonDocumentOptions"/></param>
+            <param name="token">用于取消反序列化的 <see cref="T:System.Threading.CancellationToken"/></param>
+            <remarks>
+            请确保服务器响应的 Json 是以 UTF-8 编码的
+            </remarks>
+            <returns>表示此异步操作的 <see cref="T:System.Threading.Tasks.Task"/></returns>
+        </member>
+        <member name="M:Mirai_CSharp.Extensions.HttpClientExtensions.PostAsync(System.Net.Http.HttpClient,System.Uri,System.Byte[],System.Threading.CancellationToken)">
+            <summary>
+            异步发起一个 HttpPost 请求
+            </summary>
+            <inheritdoc cref="M:Mirai_CSharp.Extensions.HttpClientExtensions.SendAsync(System.Net.Http.HttpClient,System.Net.Http.HttpMethod,System.Uri,System.Net.Http.HttpContent,System.Threading.CancellationToken)"/>
+        </member>
+        <member name="M:Mirai_CSharp.Extensions.HttpClientExtensions.PostAsync(System.Net.Http.HttpClient,System.String,System.Byte[],System.Threading.CancellationToken)">
+            <inheritdoc cref="M:Mirai_CSharp.Extensions.HttpClientExtensions.PostAsync(System.Net.Http.HttpClient,System.Uri,System.Byte[],System.Threading.CancellationToken)"/>
+        </member>
+        <member name="M:Mirai_CSharp.Extensions.HttpClientExtensions.PostAsync(System.Net.Http.HttpClient,System.Uri,System.Threading.CancellationToken)">
+            <summary>
+            异步发起一个 HttpPost 请求
+            </summary>
+            <inheritdoc cref="M:Mirai_CSharp.Extensions.HttpClientExtensions.PostAsync(System.Net.Http.HttpClient,System.Uri,System.Byte[],System.Threading.CancellationToken)"/>
+        </member>
+        <member name="M:Mirai_CSharp.Extensions.HttpClientExtensions.PostAsync(System.Net.Http.HttpClient,System.String,System.Threading.CancellationToken)">
+            <inheritdoc cref="M:Mirai_CSharp.Extensions.HttpClientExtensions.PostAsync(System.Net.Http.HttpClient,System.String,System.Byte[],System.Threading.CancellationToken)"/>
+        </member>
+        <member name="M:Mirai_CSharp.Extensions.HttpClientExtensions.PostAsync(System.Net.Http.HttpClient,System.Uri,System.Collections.Generic.IEnumerable{System.Net.Http.HttpContent},System.Threading.CancellationToken)">
+            <summary>
+            异步发起一个 HttpPost 请求
+            </summary>
+            <param name="contents">请求正文片段, 将以 multipart/form-data 的形式序列化</param>
+            <inheritdoc cref="M:Mirai_CSharp.Extensions.HttpClientExtensions.SendAsync(System.Net.Http.HttpClient,System.Net.Http.HttpMethod,System.Uri,System.Net.Http.HttpContent,System.Threading.CancellationToken)"/>
+        </member>
+        <member name="M:Mirai_CSharp.Extensions.HttpClientExtensions.PostAsync(System.Net.Http.HttpClient,System.String,System.Collections.Generic.IEnumerable{System.Net.Http.HttpContent},System.Threading.CancellationToken)">
+            <inheritdoc cref="M:Mirai_CSharp.Extensions.HttpClientExtensions.PostAsync(System.Net.Http.HttpClient,System.Uri,System.Collections.Generic.IEnumerable{System.Net.Http.HttpContent},System.Threading.CancellationToken)"/>
+        </member>
+        <member name="M:Mirai_CSharp.Extensions.HttpClientExtensions.PostAsJsonAsync``1(System.Net.Http.HttpClient,System.Uri,``0,System.Threading.CancellationToken)">
+            <inheritdoc cref="M:Mirai_CSharp.Extensions.HttpClientExtensions.PostAsJsonAsync``1(System.Net.Http.HttpClient,System.Uri,``0,System.Text.Json.JsonSerializerOptions,System.Threading.CancellationToken)"/>
+        </member>
+        <member name="M:Mirai_CSharp.Extensions.HttpClientExtensions.PostAsJsonAsync``1(System.Net.Http.HttpClient,System.String,``0,System.Threading.CancellationToken)">
+            <inheritdoc cref="M:Mirai_CSharp.Extensions.HttpClientExtensions.PostAsJsonAsync``1(System.Net.Http.HttpClient,System.String,``0,System.Text.Json.JsonSerializerOptions,System.Threading.CancellationToken)"/>
+        </member>
+        <member name="M:Mirai_CSharp.Extensions.HttpClientExtensions.PostAsJsonAsync``1(System.Net.Http.HttpClient,System.Uri,``0,System.Text.Json.JsonSerializerOptions,System.Threading.CancellationToken)">
+            <summary>
+            异步发起一个 HttpPost 请求
+            </summary>
+            <param name="value">作为 Json 正文的对象</param>
+            <param name="options">序列化 <paramref name="value"/> 时要用到的 <see cref="T:System.Text.Json.JsonSerializerOptions"/></param>
+            <inheritdoc cref="M:Mirai_CSharp.Extensions.HttpClientExtensions.PostAsync(System.Net.Http.HttpClient,System.Uri,System.Byte[],System.Threading.CancellationToken)"/>
+        </member>
+        <member name="M:Mirai_CSharp.Extensions.HttpClientExtensions.PostAsJsonAsync``1(System.Net.Http.HttpClient,System.String,``0,System.Text.Json.JsonSerializerOptions,System.Threading.CancellationToken)">
+            <param name="url">请求目标</param>
+            <inheritdoc cref="M:Mirai_CSharp.Extensions.HttpClientExtensions.PostAsJsonAsync``1(System.Net.Http.HttpClient,System.Uri,``0,System.Text.Json.JsonSerializerOptions,System.Threading.CancellationToken)"/>
+        </member>
+        <member name="M:Mirai_CSharp.Extensions.HttpClientExtensions.PostAsync(System.Net.Http.HttpClient,System.Uri,System.String,System.Text.Encoding,System.Threading.CancellationToken)">
+            <summary>
+            异步发起一个 HttpPost 请求
+            </summary>
+            <param name="encoding">将 <paramref name="content"/> 处理到 <see cref="T:System.Net.Http.StringContent"/> 时要用的的一个 <see cref="T:System.Text.Encoding"/>。 默认为 <see cref="P:System.Text.Encoding.UTF8"/></param>
+            <inheritdoc cref="M:Mirai_CSharp.Extensions.HttpClientExtensions.SendAsync(System.Net.Http.HttpClient,System.Net.Http.HttpMethod,System.Uri,System.Net.Http.HttpContent,System.Threading.CancellationToken)"/>
+        </member>
+        <member name="M:Mirai_CSharp.Extensions.HttpClientExtensions.PostAsync(System.Net.Http.HttpClient,System.String,System.String,System.Text.Encoding,System.Threading.CancellationToken)">
+            <param name="url">请求目标</param>
+            <inheritdoc cref="M:Mirai_CSharp.Extensions.HttpClientExtensions.PostAsync(System.Net.Http.HttpClient,System.Uri,System.String,System.Text.Encoding,System.Threading.CancellationToken)"/>
+        </member>
+        <member name="M:Mirai_CSharp.Extensions.HttpClientExtensions.PostAsync(System.Net.Http.HttpClient,System.Uri,System.String,System.Threading.CancellationToken)">
+            <inheritdoc cref="M:Mirai_CSharp.Extensions.HttpClientExtensions.PostAsync(System.Net.Http.HttpClient,System.Uri,System.String,System.Text.Encoding,System.Threading.CancellationToken)"/>
+        </member>
+        <member name="M:Mirai_CSharp.Extensions.HttpClientExtensions.PostAsync(System.Net.Http.HttpClient,System.String,System.String,System.Threading.CancellationToken)">
+            <inheritdoc cref="M:Mirai_CSharp.Extensions.HttpClientExtensions.PostAsync(System.Net.Http.HttpClient,System.String,System.String,System.Text.Encoding,System.Threading.CancellationToken)"/>
+        </member>
+        <member name="M:Mirai_CSharp.Extensions.ModelBuilderExtensions.AddPlainMessage(Mirai_CSharp.Models.IMessageBuilder,System.String)">
+            <summary>
+            为给定的 <see cref="T:Mirai_CSharp.Models.IMessageBuilder"/> 添加一条 <see cref="T:Mirai_CSharp.Models.PlainMessage"/>
+            </summary>
+            <param name="builder">要添加到的目标</param>
+            <param name="text">消息内容</param>
+            <remarks>
+            不会检查传入的 <paramref name="text"/> 为非 <see langword="null"/> 或非空
+            </remarks>
+            <returns>传入的 <see cref="T:Mirai_CSharp.Models.IMessageBuilder"/>, 可继续用于链式调用</returns>
+        </member>
+        <member name="M:Mirai_CSharp.Extensions.ModelBuilderExtensions.AddImageMessage(Mirai_CSharp.Models.IMessageBuilder,System.String,System.String,System.String)">
+            <summary>
+            为给定的 <see cref="T:Mirai_CSharp.Models.IMessageBuilder"/> 添加一条 <see cref="T:Mirai_CSharp.Models.ImageMessage"/>
+            </summary>
+            <param name="builder">要添加到的目标</param>
+            <param name="imageId">图片格式。不为空时将忽略 <paramref name="url"/> 参数
+            <list type="number">
+            <item><term>{XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX}.mirai</term><description>群图片</description></item>
+            <item><term>/XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX</term><description>好友图片</description></item>
+            </list>
+            </param>
+            <param name="url">网络图片链接</param>
+            <param name="path">本地图片路径。相对路径于 plugins/MiraiAPIHTTP/images</param>
+            <remarks>
+            不会检查传入的 <paramref name="imageId"/>, <paramref name="url"/>, <paramref name="path"/> 至少有一个为非 <see langword="null"/>
+            </remarks>
+            <returns>传入的 <see cref="T:Mirai_CSharp.Models.IMessageBuilder"/>, 可继续用于链式调用</returns>
+        </member>
+        <member name="M:Mirai_CSharp.Extensions.ModelBuilderExtensions.AddFlashImageMessage(Mirai_CSharp.Models.IMessageBuilder,System.String,System.String,System.String)">
+            <summary>
+            为给定的 <see cref="T:Mirai_CSharp.Models.IMessageBuilder"/> 添加一条 <see cref="T:Mirai_CSharp.Models.FlashImageMessage"/>
+            </summary>
+            <param name="builder">要添加到的目标</param>
+            <param name="imageId">图片格式。不为空时将忽略 <paramref name="url"/> 参数
+            <list type="number">
+            <item><term>{XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX}.mirai</term><description>群图片</description></item>
+            <item><term>/XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX</term><description>好友图片</description></item>
+            </list>
+            </param>
+            <param name="url">网络图片链接</param>
+            <param name="path">本地图片路径。相对路径于 plugins/MiraiAPIHTTP/images</param>
+            <remarks>
+            不会检查传入的 <paramref name="imageId"/>, <paramref name="url"/>, <paramref name="path"/> 至少有一个为非 <see langword="null"/>
+            </remarks>
+            <returns>传入的 <see cref="T:Mirai_CSharp.Models.IMessageBuilder"/>, 可继续用于链式调用</returns>
+        </member>
+        <member name="M:Mirai_CSharp.Extensions.ModelBuilderExtensions.AddAtMessage(Mirai_CSharp.Models.IMessageBuilder,System.Int64)">
+            <summary>
+            为给定的 <see cref="T:Mirai_CSharp.Models.IMessageBuilder"/> 添加一条 <see cref="T:Mirai_CSharp.Models.AtMessage"/>
+            </summary>
+            <param name="builder">要添加到的目标</param>
+            <param name="target">要@的群员QQ号</param>
+            <remarks>
+            不会检查传入的 <paramref name="target"/> 是否有效
+            </remarks>
+            <returns>传入的 <see cref="T:Mirai_CSharp.Models.IMessageBuilder"/>, 可继续用于链式调用</returns>
+        </member>
+        <member name="M:Mirai_CSharp.Extensions.ModelBuilderExtensions.AddAtAllMessage(Mirai_CSharp.Models.IMessageBuilder)">
+            <summary>
+            为给定的 <see cref="T:Mirai_CSharp.Models.IMessageBuilder"/> 添加一条 <see cref="T:Mirai_CSharp.Models.AtAllMessage"/>
+            </summary>
+            <param name="builder">要添加到的目标</param>
+            <returns>传入的 <see cref="T:Mirai_CSharp.Models.IMessageBuilder"/>, 可继续用于链式调用</returns>
+        </member>
+        <member name="M:Mirai_CSharp.Extensions.ModelBuilderExtensions.AddFaceMessage(Mirai_CSharp.Models.IMessageBuilder,System.Int32,System.String)">
+            <summary>
+            为给定的 <see cref="T:Mirai_CSharp.Models.IMessageBuilder"/> 添加一条 <see cref="T:Mirai_CSharp.Models.FaceMessage"/>
+            </summary>
+            <param name="builder">要添加到的目标</param>
+            <param name="id">QQ表情编号, 优先高于 <paramref name="name"/></param>
+            <param name="name">QQ表情拼音, 可选</param>
+            <remarks>
+            不会检查传入的参数是否有效。 <paramref name="id"/> 的取值参见 <a href="https://github.com/mamoe/mirai/blob/master/mirai-core/src/commonMain/kotlin/net.mamoe.mirai/message/data/Face.kt#L41"/>
+            </remarks>
+            <returns>传入的 <see cref="T:Mirai_CSharp.Models.IMessageBuilder"/>, 可继续用于链式调用</returns>
+        </member>
+        <member name="M:Mirai_CSharp.Extensions.ModelBuilderExtensions.AddXmlMessage(Mirai_CSharp.Models.IMessageBuilder,System.String)">
+            <summary>
+            为给定的 <see cref="T:Mirai_CSharp.Models.IMessageBuilder"/> 添加一条 <see cref="T:Mirai_CSharp.Models.XmlMessage"/>
+            </summary>
+            <param name="builder">要添加到的目标</param>
+            <param name="xml">xml原始字符串</param>
+            <remarks>
+            不会检查传入的 <paramref name="xml"/> 是否有效
+            </remarks>
+            <returns>传入的 <see cref="T:Mirai_CSharp.Models.IMessageBuilder"/>, 可继续用于链式调用</returns>
+        </member>
+        <member name="M:Mirai_CSharp.Extensions.ModelBuilderExtensions.AddJsonMessage(Mirai_CSharp.Models.IMessageBuilder,System.String)">
+            <summary>
+            为给定的 <see cref="T:Mirai_CSharp.Models.IMessageBuilder"/> 添加一条 <see cref="T:Mirai_CSharp.Models.JsonMessage"/>
+            </summary>
+            <param name="builder">要添加到的目标</param>
+            <param name="json">json原始字符串</param>
+            <remarks>
+            不会检查传入的 <paramref name="json"/> 是否有效
+            </remarks>
+            <returns>传入的 <see cref="T:Mirai_CSharp.Models.IMessageBuilder"/>, 可继续用于链式调用</returns>
+        </member>
+        <member name="M:Mirai_CSharp.Extensions.ModelBuilderExtensions.AddAppMessage(Mirai_CSharp.Models.IMessageBuilder,System.String)">
+            <summary>
+            为给定的 <see cref="T:Mirai_CSharp.Models.IMessageBuilder"/> 添加一条 <see cref="T:Mirai_CSharp.Models.AppMessage"/>
+            </summary>
+            <param name="builder">要添加到的目标</param>
+            <param name="content">消息内容</param>
+            <remarks>
+            不会检查传入的 <paramref name="content"/> 是否有效
+            </remarks>
+            <returns>传入的 <see cref="T:Mirai_CSharp.Models.IMessageBuilder"/>, 可继续用于链式调用</returns>
+        </member>
+        <member name="M:Mirai_CSharp.Extensions.ModelBuilderExtensions.AddPokeMessage(Mirai_CSharp.Models.IMessageBuilder,Mirai_CSharp.Models.PokeMessage.PokeType)">
+            <summary>
+            为给定的 <see cref="T:Mirai_CSharp.Models.IMessageBuilder"/> 添加一条 <see cref="T:Mirai_CSharp.Models.PokeMessage"/>
+            </summary>
+            <param name="builder">要添加到的目标</param>
+            <param name="name">戳一戳的类型</param>
+            <remarks>
+            不会检查传入的 <paramref name="name"/> 是否有效
+            </remarks>
+            <returns>传入的 <see cref="T:Mirai_CSharp.Models.IMessageBuilder"/>, 可继续用于链式调用</returns>
+        </member>
+        <member name="M:Mirai_CSharp.Extensions.ModelBuilderExtensions.AddVoiceMessage(Mirai_CSharp.Models.IMessageBuilder,System.String)">
+            <summary>
+            为给定的 <see cref="T:Mirai_CSharp.Models.IMessageBuilder"/> 添加一条 <see cref="T:Mirai_CSharp.Models.VoiceMessage"/>
+            </summary>
+            <param name="builder">要添加到的目标</param>
+            <param name="fileName">语音文件路径</param>
+            <remarks>
+            不会检查传入的 <paramref name="fileName"/> 是否存在
+            </remarks>
+            <returns>传入的 <see cref="T:Mirai_CSharp.Models.IMessageBuilder"/>, 可继续用于链式调用</returns>
+        </member>
+        <member name="M:Mirai_CSharp.Extensions.ModelBuilderExtensions.AddVoiceMessage(Mirai_CSharp.Models.IMessageBuilder,System.String,System.String,System.String)">
+            <summary>
+            为给定的 <see cref="T:Mirai_CSharp.Models.IMessageBuilder"/> 添加一条 <see cref="T:Mirai_CSharp.Models.VoiceMessage"/>
+            </summary>
+            <param name="builder">要添加到的目标</param>
+            <param name="voiceId">语音Id</param>
+            <param name="url">用于下载并发送语音的Url</param>
+            <param name="path">语音文件路径, 相对路径于 plugins/MiraiAPIHTTP/voices</param>
+            <remarks>
+            不会检查传入的 <paramref name="path"/> 是否存在
+            </remarks>
+            <returns>传入的 <see cref="T:Mirai_CSharp.Models.IMessageBuilder"/>, 可继续用于链式调用</returns>
+        </member>
+        <member name="T:Mirai_CSharp.Models.IBotEventArgs">
+            <summary>
+            机器人本身事件接口。仅含QQ号
+            </summary>
+        </member>
+        <member name="P:Mirai_CSharp.Models.IBotEventArgs.QQNumber">
+            <summary>
+            机器人QQ号
+            </summary>
+        </member>
+        <member name="P:Mirai_CSharp.Models.BotEventArgs.QQNumber">
+            <summary>
+            机器人QQ号
+            </summary>
+        </member>
+        <member name="T:Mirai_CSharp.Models.IBotOnlineEventArgs">
+            <summary>
+            提供Bot登录成功信息的接口。继承自 <see cref="T:Mirai_CSharp.Models.IBotEventArgs"/>
+            </summary>
+        </member>
+        <member name="T:Mirai_CSharp.Models.IBotPositiveOfflineEventArgs">
+            <summary>
+            提供Bot主动离线信息的接口。继承自 <see cref="T:Mirai_CSharp.Models.IBotEventArgs"/>
+            </summary>
+        </member>
+        <member name="T:Mirai_CSharp.Models.IBotKickedOfflineEventArgs">
+            <summary>
+            提供Bot被挤下线信息的接口。继承自 <see cref="T:Mirai_CSharp.Models.IBotEventArgs"/>
+            </summary>
+        </member>
+        <member name="T:Mirai_CSharp.Models.IBotDroppedEventArgs">
+            <summary>
+            提供Bot意外断开连接信息的接口。继承自 <see cref="T:Mirai_CSharp.Models.IBotEventArgs"/>
+            </summary>
+        </member>
+        <member name="T:Mirai_CSharp.Models.IBotReloginEventArgs">
+            <summary>
+            提供Bot主动重新登录信息的接口。继承自 <see cref="T:Mirai_CSharp.Models.IBotEventArgs"/>
+            </summary>
+        </member>
+        <member name="T:Mirai_CSharp.Models.IBotInvitedJoinGroupEventArgs">
+            <summary>
+            提供Bot被邀请入群相关信息的接口。继承自 <see cref="T:Mirai_CSharp.Models.ICommonGroupApplyEventArgs"/>
+            </summary>
+        </member>
+        <member name="T:Mirai_CSharp.Models.ICommandExecutedEventArgs">
+            <summary>
+            提供已执行的指令相关信息的接口
+            </summary>
+        </member>
+        <member name="P:Mirai_CSharp.Models.ICommandExecutedEventArgs.Name">
+            <summary>
+            指令名称
+            </summary>
+        </member>
+        <member name="P:Mirai_CSharp.Models.ICommandExecutedEventArgs.Args">
+            <summary>
+            指令参数
+            </summary>
+        </member>
+        <member name="P:Mirai_CSharp.Models.ICommandExecutedEventArgs.Sender">
+            <summary>
+            指令发送者QQ号
+            </summary>
+            <remarks>
+            <list type="bullet">
+            <item>当指令通过好友消息发送时为好友QQ号</item>
+            <item>当指令通过群组消息发送时为发送者QQ号</item>
+            <item>当指令通过其他方式发送时为0</item>
+            </list>
+            </remarks>
+        </member>
+        <member name="P:Mirai_CSharp.Models.ICommandExecutedEventArgs.Group">
+            <summary>
+            指令发送者所在的群号
+            </summary>
+            <remarks>
+            <list type="bullet">
+            <item>当指令通过好友消息发送时为0</item>
+            <item>当指令通过群组消息发送时为发送者所在群号</item>
+            <item>当指令通过其他方式发送时为0</item>
+            </list>
+            </remarks>
+        </member>
+        <member name="T:Mirai_CSharp.Models.ICommonMessageEventArgs">
+            <summary>
+            提供通用消息的相关信息接口
+            </summary>
+        </member>
+        <member name="P:Mirai_CSharp.Models.ICommonMessageEventArgs.Chain">
+            <summary>
+            消息链数组
+            </summary>
+        </member>
+        <member name="P:Mirai_CSharp.Models.CommonMessageEventArgs.Chain">
+            <summary>
+            消息链数组
+            </summary>
+        </member>
+        <member name="T:Mirai_CSharp.Models.IDisconnectedEventArgs">
+            <summary>
+            提供断开连接相关信息的接口
+            </summary>
+        </member>
+        <member name="P:Mirai_CSharp.Models.IDisconnectedEventArgs.Exception">
+            <summary>
+            导致断开连接的异常对象
+            </summary>
+        </member>
+        <member name="T:Mirai_CSharp.Models.IFriendMessageEventArgs">
+            <summary>
+            提供好友消息的相关信息接口。继承自 <see cref="T:Mirai_CSharp.Models.ICommonMessageEventArgs"/>
+            </summary>
+        </member>
+        <member name="T:Mirai_CSharp.Models.IFriendMessageRevokedEventArgs">
+            <summary>
+            提供好友撤回消息的相关信息接口。继承自 <see cref="T:Mirai_CSharp.Models.IMessageRevokedEventArgs"/>
+            </summary>
+        </member>
+        <member name="P:Mirai_CSharp.Models.IFriendMessageRevokedEventArgs.Operator">
+            <summary>
+            进行撤回操作的QQ号
+            </summary>
+        </member>
+        <member name="P:Mirai_CSharp.Models.FriendMessageRevokedEventArgs.Operator">
+            <summary>
+            进行撤回操作的QQ号
+            </summary>
+        </member>
+        <member name="T:Mirai_CSharp.Models.INewFriendApplyEventArgs">
+            <summary>
+            提供好友申请相关信息的接口。继承自 <see cref="T:Mirai_CSharp.Models.INewApplyEventArgs"/>
+            </summary>
+        </member>
+        <member name="T:Mirai_CSharp.Models.IGroupMessageBaseEventArgs">
+            <summary>
+            提供群消息和临时消息的相关信息基接口。继承自 <see cref="T:Mirai_CSharp.Models.ICommonMessageEventArgs"/>
+            </summary>
+        </member>
+        <member name="T:Mirai_CSharp.Models.ICommonGroupApplyEventArgs">
+            <summary>
+            提供入群申请/受邀入群相关信息的基接口。继承自 <see cref="T:Mirai_CSharp.Models.INewApplyEventArgs"/>
+            </summary>
+        </member>
+        <member name="T:Mirai_CSharp.Models.IGroupApplyEventArgs">
+            <summary>
+            提供入群申请相关信息的接口。继承自 <see cref="T:Mirai_CSharp.Models.ICommonGroupApplyEventArgs"/>
+            </summary>
+        </member>
+        <member name="T:Mirai_CSharp.Models.IGroupEventArgs">
+            <summary>
+            提供群事件的信息接口
+            </summary>
+        </member>
+        <member name="T:Mirai_CSharp.Models.IMemberEventArgs">
+            <summary>
+            提供群成员信息的接口
+            </summary>
+        </member>
+        <member name="T:Mirai_CSharp.Models.IOperatorEventArgs">
+            <summary>
+            提供群内操作者信息的接口
+            </summary>
+        </member>
+        <member name="T:Mirai_CSharp.Models.IGroupOperatingEventArgs">
+            <summary>
+            提供群内管理事件相关信息的接口。继承自 <see cref="T:Mirai_CSharp.Models.IGroupEventArgs"/> 和 <see cref="T:Mirai_CSharp.Models.IOperatorEventArgs"/>
+            </summary>
+        </member>
+        <member name="T:Mirai_CSharp.Models.IMemberOperatingEventArgs">
+            <summary>
+            提供群内成员被管理操作事件相关信息的接口。继承自 <see cref="T:Mirai_CSharp.Models.IMemberEventArgs"/> 和 <see cref="T:Mirai_CSharp.Models.IOperatorEventArgs"/>
+            </summary>
+        </member>
+        <member name="T:Mirai_CSharp.Models.IGroupMessageEventArgs">
+            <summary>
+            提供群消息的相关信息接口。继承自 <see cref="T:Mirai_CSharp.Models.IGroupMessageBaseEventArgs"/>
+            </summary>
+        </member>
+        <member name="T:Mirai_CSharp.Models.IGroupMessageRevokedEventArgs">
+            <summary>
+            提供群内撤回消息的相关信息接口。继承自 <see cref="T:Mirai_CSharp.Models.IGroupOperatingEventArgs"/> 和 <see cref="T:Mirai_CSharp.Models.IMessageRevokedEventArgs"/>
+            </summary>
+        </member>
+        <member name="P:Mirai_CSharp.Models.GroupMessageRevokedEventArgs.Group">
+            <summary>
+            被撤回消息所在群信息
+            </summary>
+        </member>
+        <member name="P:Mirai_CSharp.Models.GroupMessageRevokedEventArgs.Operator">
+            <summary>
+            进行撤回操作的用户信息
+            </summary>
+        </member>
+        <member name="T:Mirai_CSharp.Models.IMutedEventArgs">
+            <summary>
+            提供禁言信息的接口
+            </summary>
+        </member>
+        <member name="T:Mirai_CSharp.Models.IBotUnmutedEventArgs">
+            <summary>
+            提供Bot被解除禁言事件相关信息的接口。继承自 <see cref="T:Mirai_CSharp.Models.IOperatorEventArgs"/>
+            </summary>
+        </member>
+        <member name="T:Mirai_CSharp.Models.IBotMutedEventArgs">
+            <summary>
+            提供Bot被禁言事件相关信息的接口。继承自 <see cref="T:Mirai_CSharp.Models.IOperatorEventArgs"/> 和 <see cref="T:Mirai_CSharp.Models.IMutedEventArgs"/>
+            </summary>
+        </member>
+        <member name="T:Mirai_CSharp.Models.IGroupMemberUnmutedEventArgs">
+            <summary>
+            提供其它群成员被解除禁言事件相关信息的接口。继承自 <see cref="T:Mirai_CSharp.Models.IMemberOperatingEventArgs"/>
+            </summary>
+        </member>
+        <member name="T:Mirai_CSharp.Models.IGroupMemberMutedEventArgs">
+            <summary>
+            提供其它群成员被禁言事件相关信息的接口。继承自 <see cref="T:Mirai_CSharp.Models.IMemberOperatingEventArgs"/> 和 <see cref="T:Mirai_CSharp.Models.IMutedEventArgs"/>
+            </summary>
+        </member>
+        <member name="T:Mirai_CSharp.Models.IPropertyChangedEventArgs`1">
+            <summary>
+            提供修改前和修改后的 <typeparamref name="TProperty"/> 信息接口
+            </summary>
+            <typeparam name="TProperty">属性类型</typeparam>
+        </member>
+        <member name="P:Mirai_CSharp.Models.IPropertyChangedEventArgs`1.Origin">
+            <summary>
+            修改前
+            </summary>
+        </member>
+        <member name="P:Mirai_CSharp.Models.IPropertyChangedEventArgs`1.Current">
+            <summary>
+            修改后
+            </summary>
+        </member>
+        <member name="P:Mirai_CSharp.Models.PropertyChangedEventArgs`1.Origin">
+            <summary>
+            修改前
+            </summary>
+        </member>
+        <member name="P:Mirai_CSharp.Models.PropertyChangedEventArgs`1.Current">
+            <summary>
+            修改后
+            </summary>
+        </member>
+        <member name="T:Mirai_CSharp.Models.IEnumPropertyChangedEventArgs`1">
+            <summary>
+            提供修改前和修改后的 <typeparamref name="TProperty"/> 信息接口
+            </summary>
+            <remarks>
+            本接口是对于 <see langword="enum"/> 的特定实现
+            </remarks>
+            <typeparam name="TProperty">属性类型, 必须为枚举类型</typeparam>
+        </member>
+        <member name="P:Mirai_CSharp.Models.IEnumPropertyChangedEventArgs`1.Origin">
+            <inheritdoc/>
+        </member>
+        <member name="P:Mirai_CSharp.Models.IEnumPropertyChangedEventArgs`1.Current">
+            <inheritdoc/>
+        </member>
+        <member name="T:Mirai_CSharp.Models.IBotGroupPropertyChangedEventArgs`1">
+            <summary>
+            提供Bot在群中属性改变的信息接口。继承自 <see cref="T:Mirai_CSharp.Models.IPropertyChangedEventArgs`1"/> 和 <see cref="T:Mirai_CSharp.Models.IGroupEventArgs"/>
+            </summary>
+            <typeparam name="TProperty">属性类型</typeparam>
+        </member>
+        <member name="P:Mirai_CSharp.Models.BotGroupPropertyChangedEventArgs`1.Group">
+            <summary>
+            机器人所在群信息
+            </summary>
+        </member>
+        <member name="T:Mirai_CSharp.Models.IBotGroupEnumPropertyChangedEventArgs`1">
+            <summary>
+            提供Bot在群中属性改变的信息接口。继承自 <see cref="T:Mirai_CSharp.Models.IEnumPropertyChangedEventArgs`1"/> 和 <see cref="T:Mirai_CSharp.Models.IGroupEventArgs"/>
+            </summary>
+            <remarks>
+            本接口是对于 <see langword="enum"/> 的特定实现
+            </remarks>
+            <typeparam name="TProperty">属性类型, 必须为枚举类型</typeparam>
+        </member>
+        <member name="T:Mirai_CSharp.Models.IGroupPropertyChangedEventArgs`1">
+            <summary>
+            提供群属性改变的信息接口。继承自 <see cref="T:Mirai_CSharp.Models.IPropertyChangedEventArgs`1"/> 和 <see cref="T:Mirai_CSharp.Models.IGroupOperatingEventArgs"/>
+            </summary>
+            <typeparam name="TProperty">属性类型</typeparam>
+        </member>
+        <member name="P:Mirai_CSharp.Models.GroupPropertyChangedEventArgs`1.Operator">
+            <summary>
+            操作者信息
+            </summary>
+        </member>
+        <member name="T:Mirai_CSharp.Models.IGroupMemberPropertyChangedEventArgs`1">
+            <summary>
+            提供群成员属性改变的信息接口。继承自 <see cref="T:Mirai_CSharp.Models.IPropertyChangedEventArgs`1"/> 和 <see cref="T:Mirai_CSharp.Models.IMemberEventArgs"/>
+            </summary>
+            <typeparam name="TProperty">属性类型</typeparam>
+        </member>
+        <member name="P:Mirai_CSharp.Models.GroupMemberPropertyChangedEventArgs`1.Member">
+            <summary>
+            被操作者信息
+            </summary>
+        </member>
+        <member name="T:Mirai_CSharp.Models.IGroupMemberEnumPropertyChangedEventArgs`1">
+            <summary>
+            提供群成员属性改变的信息接口。继承自 <see cref="T:Mirai_CSharp.Models.IEnumPropertyChangedEventArgs`1"/> 和 <see cref="T:Mirai_CSharp.Models.IMemberEventArgs"/>
+            </summary>
+            <remarks>
+            本接口是对于 <see langword="enum"/> 的特定实现
+            </remarks>
+            <typeparam name="TProperty">属性类型, 必须为枚举类型</typeparam>
+        </member>
+        <member name="T:Mirai_CSharp.Models.IBotGroupPermissionChangedEventArgs">
+            <summary>
+            提供Bot在群里的权限被改变相关信息的接口。继承自 <see cref="T:Mirai_CSharp.Models.IBotGroupPropertyChangedEventArgs`1"/>
+            </summary>
+        </member>
+        <member name="T:Mirai_CSharp.Models.IGroupMuteAllChangedEventArgs">
+            <summary>
+            提供全员禁言设置被改变相关信息的接口。继承自 <see cref="T:Mirai_CSharp.Models.IGroupPropertyChangedEventArgs`1"/>
+            </summary>
+        </member>
+        <member name="T:Mirai_CSharp.Models.IGroupAnonymousChatChangedEventArgs">
+            <summary>
+            提供匿名聊天设置被改变相关信息的接口。继承自 <see cref="T:Mirai_CSharp.Models.IGroupPropertyChangedEventArgs`1"/>
+            </summary>
+        </member>
+        <member name="T:Mirai_CSharp.Models.IGroupConfessTalkChangedEventArgs">
+            <summary>
+            提供坦白说设置被改变相关信息的接口。继承自 <see cref="T:Mirai_CSharp.Models.IGroupPropertyChangedEventArgs`1"/>
+            </summary>
+        </member>
+        <member name="T:Mirai_CSharp.Models.IGroupMemberInviteChangedEventArgs">
+            <summary>
+            提供群员邀请好友加群设置被改变相关信息的接口。继承自 <see cref="T:Mirai_CSharp.Models.IGroupPropertyChangedEventArgs`1"/>
+            </summary>
+        </member>
+        <member name="T:Mirai_CSharp.Models.IBotJoinedGroupEventArgs">
+            <summary>
+            提供Bot加入了一个新群相关信息的接口。继承自 <see cref="T:Mirai_CSharp.Models.IGroupEventArgs"/>
+            </summary>
+        </member>
+        <member name="T:Mirai_CSharp.Models.IBotPositiveLeaveGroupEventArgs">
+            <summary>
+            提供Bot主动退出一个群相关信息的接口。继承自 <see cref="T:Mirai_CSharp.Models.IGroupEventArgs"/>
+            </summary>
+        </member>
+        <member name="T:Mirai_CSharp.Models.IBotKickedOutEventArgs">
+            <summary>
+            提供Bot被踢出一个群相关信息的接口。继承自 <see cref="T:Mirai_CSharp.Models.IGroupEventArgs"/>
+            </summary>
+        </member>
+        <member name="T:Mirai_CSharp.Models.IGroupMemberPermissionChangedEventArgs">
+            <summary>
+            提供成员权限改变相关信息的接口。继承自 <see cref="T:Mirai_CSharp.Models.IGroupMemberEnumPropertyChangedEventArgs`1"/>
+            </summary>
+        </member>
+        <member name="T:Mirai_CSharp.Models.IGroupMemberCardChangedEventArgs">
+            <summary>
+            提供群名片改动相关信息的接口。继承自 <see cref="T:Mirai_CSharp.Models.IGroupMemberPropertyChangedEventArgs`1"/>
+            </summary>
+        </member>
+        <member name="T:Mirai_CSharp.Models.IGroupMemberSpecialTitleChangedEventArgs">
+            <summary>
+            提供群头衔改动相关信息的接口。继承自 <see cref="T:Mirai_CSharp.Models.IGroupMemberPropertyChangedEventArgs`1"/>
+            </summary>
+        </member>
+        <member name="T:Mirai_CSharp.Models.IGroupNameChangedEventArgs">
+            <summary>
+            提供群名称改变相关信息的接口。继承自 <see cref="T:Mirai_CSharp.Models.IGroupPropertyChangedEventArgs`1"/>
+            </summary>
+            
+        </member>
+        <member name="T:Mirai_CSharp.Models.IGroupEntranceAnnouncementChangedEventArgs">
+            <summary>
+            提供入群公告改变相关信息的接口。继承自 <see cref="T:Mirai_CSharp.Models.IGroupPropertyChangedEventArgs`1"/>
+            </summary>
+        </member>
+        <member name="T:Mirai_CSharp.Models.IGroupMemberJoinedEventArgs">
+            <summary>
+            提供新人入群相关信息的接口。继承自 <see cref="T:Mirai_CSharp.Models.IMemberEventArgs"/>
+            </summary>
+        </member>
+        <member name="T:Mirai_CSharp.Models.IGroupMemberPositiveLeaveEventArgs">
+            <summary>
+            提供成员主动离群相关信息的接口。继承自 <see cref="T:Mirai_CSharp.Models.IMemberEventArgs"/>
+            </summary>
+        </member>
+        <member name="T:Mirai_CSharp.Models.IGroupMemberKickedEventArgs">
+            <summary>
+            提供成员被踢出群相关信息的接口。继承自 <see cref="T:Mirai_CSharp.Models.IMemberEventArgs"/>
+            </summary>
+        </member>
+        <member name="T:Mirai_CSharp.Models.IMessageRevokedEventArgs">
+            <summary>
+            提供撤回消息的通用信息接口
+            </summary>
+        </member>
+        <member name="P:Mirai_CSharp.Models.IMessageRevokedEventArgs.SenderId">
+            <summary>
+            原消息发送者的QQ号
+            </summary>
+        </member>
+        <member name="P:Mirai_CSharp.Models.IMessageRevokedEventArgs.MessageId">
+            <summary>
+            原消息发送时间
+            </summary>
+        </member>
+        <member name="P:Mirai_CSharp.Models.IMessageRevokedEventArgs.SentTime">
+            <summary>
+            原消息发送时间
+            </summary>
+        </member>
+        <member name="P:Mirai_CSharp.Models.MessageRevokedEventArgs.SenderId">
+            <summary>
+            原消息发送者的QQ号
+            </summary>
+        </member>
+        <member name="P:Mirai_CSharp.Models.MessageRevokedEventArgs.MessageId">
+            <summary>
+            原消息发送时间
+            </summary>
+        </member>
+        <member name="P:Mirai_CSharp.Models.MessageRevokedEventArgs.SentTime">
+            <summary>
+            原消息发送时间
+            </summary>
+        </member>
+        <member name="T:Mirai_CSharp.Models.IApplyResponseArgs">
+            <summary>
+            提供用于处理相关申请所需信息的接口
+            </summary>
+        </member>
+        <member name="T:Mirai_CSharp.Models.INewApplyEventArgs">
+            <summary>
+            提供通用申请相关信息的接口。继承自 <see cref="T:Mirai_CSharp.Models.IApplyResponseArgs"/>
+            </summary>
+        </member>
+        <member name="T:Mirai_CSharp.Models.ITempMessageEventArgs">
+            <summary>
+            提供临时消息的相关信息接口。继承自 <see cref="T:Mirai_CSharp.Models.IGroupMessageBaseEventArgs"/>
+            </summary>
+        </member>
+        <member name="T:Mirai_CSharp.Models.IUnknownMessageEventArgs">
+            <summary>
+            提供未知消息相关信息的接口
+            </summary>
+        </member>
+        <member name="P:Mirai_CSharp.Models.IUnknownMessageEventArgs.Message">
+            <summary>
+            未知的Json消息。以 <see cref="T:System.Text.Json.JsonElement"/> 表示
+            </summary>
+        </member>
+        <member name="T:Mirai_CSharp.Models.FriendApplyAction">
+            <summary>
+            指示如何处理添加好友请求
+            </summary>
+        </member>
+        <member name="F:Mirai_CSharp.Models.FriendApplyAction.Allow">
+            <summary>
+            同意添加好友
+            </summary>
+        </member>
+        <member name="F:Mirai_CSharp.Models.FriendApplyAction.Deny">
+            <summary>
+            拒绝添加好友
+            </summary>
+        </member>
+        <member name="F:Mirai_CSharp.Models.FriendApplyAction.DenyAndBlock">
+            <summary>
+            拒绝添加好友并添加黑名单, 不再接收该用户的好友申请
+            </summary>
+        </member>
+        <member name="T:Mirai_CSharp.Models.IFriendInfo">
+            <summary>
+            提供好友信息的接口。继承自 <see cref="T:Mirai_CSharp.Models.IBaseInfo"/>
+            </summary>
+        </member>
+        <member name="P:Mirai_CSharp.Models.IFriendInfo.Name">
+            <summary>
+            好友昵称
+            </summary>
+        </member>
+        <member name="P:Mirai_CSharp.Models.IFriendInfo.Remark">
+            <summary>
+            好友备注
+            </summary>
+        </member>
+        <member name="P:Mirai_CSharp.Models.FriendInfo.Name">
+            <summary>
+            好友昵称
+            </summary>
+        </member>
+        <member name="P:Mirai_CSharp.Models.FriendInfo.Remark">
+            <summary>
+            好友备注
+            </summary>
+        </member>
+        <member name="T:Mirai_CSharp.Models.GroupApplyActions">
+            <summary>
+            指示如何处理加群请求
+            </summary>
+        </member>
+        <member name="F:Mirai_CSharp.Models.GroupApplyActions.Allow">
+            <summary>
+            同意入群
+            </summary>
+        </member>
+        <member name="F:Mirai_CSharp.Models.GroupApplyActions.Deny">
+            <summary>
+            拒绝入群
+            </summary>
+        </member>
+        <member name="F:Mirai_CSharp.Models.GroupApplyActions.Ignore">
+            <summary>
+            忽略请求
+            </summary>
+        </member>
+        <member name="F:Mirai_CSharp.Models.GroupApplyActions.DenyAndBlock">
+            <summary>
+            拒绝入群并添加黑名单, 不再接收该用户的入群申请
+            </summary>
+        </member>
+        <member name="F:Mirai_CSharp.Models.GroupApplyActions.IgnoreAndBlock">
+            <summary>
+            忽略入群并添加黑名单, 不再接收该用户的入群申请
+            </summary>
+        </member>
+        <member name="T:Mirai_CSharp.Models.IGroupConfig">
+            <summary>
+            提供群信息的接口
+            </summary>
+        </member>
+        <member name="P:Mirai_CSharp.Models.IGroupConfig.Name">
+            <summary>
+            群名
+            </summary>
+        </member>
+        <member name="P:Mirai_CSharp.Models.IGroupConfig.Announcement">
+            <summary>
+            群公告
+            </summary>
+        </member>
+        <member name="P:Mirai_CSharp.Models.IGroupConfig.ConfessTalk">
+            <summary>
+            是否允许坦白说
+            </summary>
+        </member>
+        <member name="P:Mirai_CSharp.Models.IGroupConfig.MemberInvite">
+            <summary>
+            是否允许群成员邀请新用户
+            </summary>
+        </member>
+        <member name="P:Mirai_CSharp.Models.IGroupConfig.AutoApprove">
+            <summary>
+            是否自动通过入群申请
+            </summary>
+        </member>
+        <member name="P:Mirai_CSharp.Models.IGroupConfig.AnonymousChat">
+            <summary>
+            是否允许匿名聊天
+            </summary>
+        </member>
+        <member name="P:Mirai_CSharp.Models.GroupConfig.Name">
+            <summary>
+            群名
+            </summary>
+        </member>
+        <member name="P:Mirai_CSharp.Models.GroupConfig.Announcement">
+            <summary>
+            群公告
+            </summary>
+        </member>
+        <member name="P:Mirai_CSharp.Models.GroupConfig.ConfessTalk">
+            <summary>
+            是否允许坦白说
+            </summary>
+        </member>
+        <member name="P:Mirai_CSharp.Models.GroupConfig.MemberInvite">
+            <summary>
+            是否允许群成员邀请新用户
+            </summary>
+        </member>
+        <member name="P:Mirai_CSharp.Models.GroupConfig.AutoApprove">
+            <summary>
+            是否自动通过入群申请
+            </summary>
+        </member>
+        <member name="P:Mirai_CSharp.Models.GroupConfig.AnonymousChat">
+            <summary>
+            是否允许匿名聊天
+            </summary>
+        </member>
+        <member name="T:Mirai_CSharp.Models.IBaseInfo">
+            <summary>
+            提供基本信息(Id和名称)的接口
+            </summary>
+        </member>
+        <member name="P:Mirai_CSharp.Models.IBaseInfo.Id">
+            <summary>
+            QQ号/群号
+            </summary>
+        </member>
+        <member name="P:Mirai_CSharp.Models.IBaseInfo.Name">
+            <summary>
+            昵称/群名
+            </summary>
+        </member>
+        <member name="P:Mirai_CSharp.Models.BaseInfo.Id">
+            <summary>
+            QQ号/群号
+            </summary>
+        </member>
+        <member name="P:Mirai_CSharp.Models.BaseInfo.Name">
+            <summary>
+            昵称/群名
+            </summary>
+        </member>
+        <member name="T:Mirai_CSharp.Models.IGroupInfo">
+            <summary>
+            提供群内权限和基本信息的接口。继承自 <see cref="T:Mirai_CSharp.Models.IBaseInfo"/>
+            </summary>
+        </member>
+        <member name="P:Mirai_CSharp.Models.IGroupInfo.Permission">
+            <summary>
+            权限信息
+            </summary>
+        </member>
+        <member name="P:Mirai_CSharp.Models.GroupInfo.Permission">
+            <summary>
+            Bot在群内的权限
+            </summary>
+        </member>
+        <member name="T:Mirai_CSharp.Models.IGroupMemberCardInfo">
+            <summary>
+            提供群名片和专属头衔的接口
+            </summary>
+        </member>
+        <member name="P:Mirai_CSharp.Models.IGroupMemberCardInfo.Name">
+            <summary>
+            群名片
+            </summary>
+        </member>
+        <member name="P:Mirai_CSharp.Models.IGroupMemberCardInfo.SpecialTitle">
+            <summary>
+            专属头衔
+            </summary>
+        </member>
+        <member name="P:Mirai_CSharp.Models.GroupMemberCardInfo.Name">
+            <summary>
+            群名片
+            </summary>
+        </member>
+        <member name="P:Mirai_CSharp.Models.GroupMemberCardInfo.SpecialTitle">
+            <summary>
+            专属头衔
+            </summary>
+        </member>
+        <member name="T:Mirai_CSharp.Models.IGroupMemberInfo">
+            <summary>
+            提供群成员信息的接口。继承自 <see cref="T:Mirai_CSharp.Models.IGroupInfo"/>
+            </summary>
+        </member>
+        <member name="P:Mirai_CSharp.Models.IGroupMemberInfo.Name">
+            <summary>
+            成员昵称
+            </summary>
+        </member>
+        <member name="P:Mirai_CSharp.Models.IGroupMemberInfo.Group">
+            <summary>
+            机器人所在群的信息
+            </summary>
+        </member>
+        <member name="P:Mirai_CSharp.Models.GroupMemberInfo.Name">
+            <summary>
+            成员昵称
+            </summary>
+        </member>
+        <member name="P:Mirai_CSharp.Models.GroupMemberInfo.Group">
+            <summary>
+            机器人所在群的信息
+            </summary>
+        </member>
+        <member name="T:Mirai_CSharp.Models.GroupPermission">
+            <summary>
+            群成员权限
+            </summary>
+        </member>
+        <member name="F:Mirai_CSharp.Models.GroupPermission.Member">
+            <summary>
+            普通成员
+            </summary>
+        </member>
+        <member name="F:Mirai_CSharp.Models.GroupPermission.Administrator">
+            <summary>
+            管理员
+            </summary>
+        </member>
+        <member name="F:Mirai_CSharp.Models.GroupPermission.Owner">
+            <summary>
+            群主
+            </summary>
+        </member>
+        <member name="T:Mirai_CSharp.Models.AppMessage">
+            <summary>
+            表示App消息
+            </summary>
+        </member>
+        <member name="P:Mirai_CSharp.Models.AppMessage.Content">
+            <summary>
+            消息内容
+            </summary>
+        </member>
+        <member name="M:Mirai_CSharp.Models.AppMessage.#ctor">
+            <summary>
+            初始化 <see cref="T:Mirai_CSharp.Models.AppMessage"/> 类的新实例
+            </summary>
+        </member>
+        <member name="M:Mirai_CSharp.Models.AppMessage.#ctor(System.String)">
+            <summary>
+            初始化 <see cref="T:Mirai_CSharp.Models.AppMessage"/> 类的新实例
+            </summary>
+            <param name="content">消息内容</param>
+        </member>
+        <member name="M:Mirai_CSharp.Models.AppMessage.ToString">
+            <inheritdoc/>
+        </member>
+        <member name="T:Mirai_CSharp.Models.AtAllMessage">
+            <summary>
+            表示 @全体成员 消息
+            </summary>
+        </member>
+        <member name="M:Mirai_CSharp.Models.AtAllMessage.#ctor">
+            <summary>
+            初始化 <see cref="T:Mirai_CSharp.Models.AtAllMessage"/> 类的新实例
+            </summary>
+        </member>
+        <member name="M:Mirai_CSharp.Models.AtAllMessage.ToString">
+            <inheritdoc/>
+        </member>
+        <member name="T:Mirai_CSharp.Models.AtMessage">
+            <summary>
+            表示 @特定对象 消息
+            </summary>
+        </member>
+        <member name="P:Mirai_CSharp.Models.AtMessage.Target">
+            <summary>
+            被@的群员QQ号
+            </summary>
+        </member>
+        <member name="P:Mirai_CSharp.Models.AtMessage.Display">
+            <summary>
+            At时显示的文字, 发送消息时无效, 自动使用群名片
+            </summary>
+        </member>
+        <member name="M:Mirai_CSharp.Models.AtMessage.#ctor">
+            <summary>
+            初始化 <see cref="T:Mirai_CSharp.Models.AtMessage"/> 类的新实例
+            </summary>
+        </member>
+        <member name="M:Mirai_CSharp.Models.AtMessage.#ctor(System.Int64)">
+            <summary>
+            初始化 <see cref="T:Mirai_CSharp.Models.AtMessage"/> 类的新实例
+            </summary>
+            <param name="target">要@的群员QQ号</param>
+        </member>
+        <member name="M:Mirai_CSharp.Models.AtMessage.#ctor(System.Int64,System.String)">
+            <summary>
+            初始化 <see cref="T:Mirai_CSharp.Models.AtMessage"/> 类的新实例
+            </summary>
+            <param name="target">要@的群员QQ号</param>
+            <param name="display">@时显示的文字</param>
+        </member>
+        <member name="M:Mirai_CSharp.Models.AtMessage.ToString">
+            <inheritdoc/>
+        </member>
+        <member name="T:Mirai_CSharp.Models.CommonImageMessage">
+            <summary>
+            图片消息基类
+            </summary>
+        </member>
+        <member name="P:Mirai_CSharp.Models.CommonImageMessage.ImageId">
+            <summary>
+            图片的imageId, 群图片与好友图片格式不同。不为空时将忽略url属性
+            </summary>
+            <remarks>
+            格式如下:
+            <list type="number">
+            <item><term>{XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX}.mirai</term><description>群图片</description></item>
+            <item><term>/XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX</term><description>好友图片</description></item>
+            </list>
+            </remarks>
+        </member>
+        <member name="P:Mirai_CSharp.Models.CommonImageMessage.Url">
+            <summary>
+            图片的URL, 发送时可作网络图片的链接；接收时为腾讯图片服务器的链接, 可用于图片下载
+            </summary>
+        </member>
+        <member name="P:Mirai_CSharp.Models.CommonImageMessage.Path">
+            <summary>
+            图片的路径, 发送本地图片, 相对路径于 plugins/MiraiAPIHTTP/images
+            </summary>
+        </member>
+        <member name="M:Mirai_CSharp.Models.CommonImageMessage.#ctor(System.String,System.String,System.String,System.String)">
+            <summary>
+            请子类重写Summary
+            </summary>
+            <param name="type">图片类型。供api或反序列化使用</param>
+            <param name="imageId">图片格式。不为空时将忽略 <paramref name="url"/> 参数
+            <list type="number">
+            <item><term>{XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX}.mirai</term><description>群图片</description></item>
+            <item><term>/XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX</term><description>好友图片</description></item>
+            </list>
+            </param>
+            <param name="url">网络图片链接</param>
+            <param name="path">本地图片路径。相对路径于 plugins/MiraiAPIHTTP/images</param>
+        </member>
+        <member name="T:Mirai_CSharp.Models.FaceMessage">
+            <summary>
+            表示一个QQ表情
+            </summary>
+        </member>
+        <member name="P:Mirai_CSharp.Models.FaceMessage.Id">
+            <summary>
+            QQ表情编号, 可选, 优先高于 <see cref="P:Mirai_CSharp.Models.FaceMessage.Name"/>
+            </summary>
+            <remarks>
+            编号详见 <a href="https://github.com/mamoe/mirai/blob/master/mirai-core/src/commonMain/kotlin/net.mamoe.mirai/message/data/Face.kt#L41"/>
+            </remarks>
+        </member>
+        <member name="P:Mirai_CSharp.Models.FaceMessage.Name">
+            <summary>
+            QQ表情拼音, 可选
+            </summary>
+        </member>
+        <member name="M:Mirai_CSharp.Models.FaceMessage.#ctor">
+            <summary>
+            初始化 <see cref="T:Mirai_CSharp.Models.FaceMessage"/> 类的新实例
+            </summary>
+        </member>
+        <member name="M:Mirai_CSharp.Models.FaceMessage.#ctor(System.Int32,System.String)">
+            <summary>
+            初始化 <see cref="T:Mirai_CSharp.Models.FaceMessage"/> 类的新实例
+            </summary>
+            <param name="id">QQ表情编号, 优先高于 <paramref name="name"/></param>
+            <param name="name">QQ表情拼音, 可选</param>
+        </member>
+        <member name="M:Mirai_CSharp.Models.FaceMessage.ToString">
+            <inheritdoc/>
+        </member>
+        <member name="T:Mirai_CSharp.Models.FlashImageMessage">
+            <summary>
+            表示闪照消息
+            </summary>
+        </member>
+        <member name="M:Mirai_CSharp.Models.FlashImageMessage.#ctor">
+            <summary>
+            初始化 <see cref="T:Mirai_CSharp.Models.FlashImageMessage"/> 类的新实例
+            </summary>
+        </member>
+        <member name="M:Mirai_CSharp.Models.FlashImageMessage.#ctor(System.String,System.String,System.String)">
+            <summary>
+            初始化 <see cref="T:Mirai_CSharp.Models.FlashImageMessage"/> 类的新实例
+            </summary>
+            <param name="imageId">图片格式。不为空时将忽略 <paramref name="url"/> 参数
+            <list type="number">
+            <item><term>{XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX}.mirai</term><description>群图片</description></item>
+            <item><term>/XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX</term><description>好友图片</description></item>
+            </list>
+            </param>
+            <param name="url">网络图片链接</param>
+            <param name="path">本地图片路径。相对路径于 plugins/MiraiAPIHTTP/images</param>
+        </member>
+        <member name="M:Mirai_CSharp.Models.FlashImageMessage.ToString">
+            <inheritdoc/>
+        </member>
+        <member name="T:Mirai_CSharp.Models.ImageMessage">
+            <summary>
+            表示图片消息
+            </summary>
+        </member>
+        <member name="M:Mirai_CSharp.Models.ImageMessage.#ctor">
+            <summary>
+            初始化 <see cref="T:Mirai_CSharp.Models.ImageMessage"/> 类的新实例
+            </summary>
+        </member>
+        <member name="M:Mirai_CSharp.Models.ImageMessage.#ctor(System.String,System.String,System.String)">
+            <summary>
+            初始化 <see cref="T:Mirai_CSharp.Models.ImageMessage"/> 类的新实例
+            </summary>
+            <param name="imageId">图片格式。不为空时将忽略 <paramref name="url"/> 参数
+            <list type="number">
+            <item><term>{XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX}.mirai</term><description>群图片</description></item>
+            <item><term>/XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX</term><description>好友图片</description></item>
+            </list>
+            </param>
+            <param name="url">网络图片链接</param>
+            <param name="path">本地图片路径。相对路径于 plugins/MiraiAPIHTTP/images</param>
+        </member>
+        <member name="M:Mirai_CSharp.Models.ImageMessage.ToString">
+            <inheritdoc/>
+        </member>
+        <member name="T:Mirai_CSharp.Models.JsonMessage">
+            <summary>
+            表示Json消息
+            </summary>
+        </member>
+        <member name="P:Mirai_CSharp.Models.JsonMessage.Json">
+            <summary>
+            Json原始字符串
+            </summary>
+        </member>
+        <member name="M:Mirai_CSharp.Models.JsonMessage.#ctor">
+            <summary>
+            初始化 <see cref="T:Mirai_CSharp.Models.JsonMessage"/> 类的新实例
+            </summary>
+        </member>
+        <member name="M:Mirai_CSharp.Models.JsonMessage.#ctor(System.String)">
+            <summary>
+            初始化 <see cref="T:Mirai_CSharp.Models.JsonMessage"/> 类的新实例
+            </summary>
+            <param name="json">要发送的原始Json字符串</param>
+        </member>
+        <member name="M:Mirai_CSharp.Models.JsonMessage.ToString">
+            <inheritdoc/>
+        </member>
+        <member name="P:Mirai_CSharp.Models.IMessageBase.Type">
+            <summary>
+            消息类型。供api或反序列化使用
+            </summary>
+        </member>
+        <member name="P:Mirai_CSharp.Models.Messages.Type">
+            <summary>
+            消息类型。供api或反序列化使用
+            </summary>
+        </member>
+        <member name="T:Mirai_CSharp.Models.PlainMessage">
+            <summary>
+            表示文字消息
+            </summary>
+        </member>
+        <member name="P:Mirai_CSharp.Models.PlainMessage.Message">
+            <summary>
+            文字消息
+            </summary>
+        </member>
+        <member name="M:Mirai_CSharp.Models.PlainMessage.#ctor">
+            <summary>
+            初始化 <see cref="T:Mirai_CSharp.Models.PlainMessage"/> 类的新实例
+            </summary>
+        </member>
+        <member name="M:Mirai_CSharp.Models.PlainMessage.#ctor(System.String)">
+            <summary>
+            初始化 <see cref="T:Mirai_CSharp.Models.PlainMessage"/> 类的新实例
+            </summary>
+            <param name="message">文字消息内容</param>
+        </member>
+        <member name="M:Mirai_CSharp.Models.PlainMessage.ToString">
+            <inheritdoc/>
+        </member>
+        <member name="T:Mirai_CSharp.Models.PokeMessage">
+            <summary>
+            表示戳一戳消息
+            </summary>
+        </member>
+        <member name="T:Mirai_CSharp.Models.PokeMessage.PokeType">
+            <summary>
+            戳一戳的类型。
+            </summary>
+            <remarks>
+            SVIP的Poke带Id, <see langword="enum"/> 无法表示两个值, 不写。
+            详见 <a href="https://github.com/mamoe/mirai/blob/8ca4357eb834f3c284deb68a6dd25d5c59957a82/mirai-core/src/commonMain/kotlin/net.mamoe.mirai/message/data/HummerMessage.kt#L56"/>
+            </remarks>
+        </member>
+        <member name="F:Mirai_CSharp.Models.PokeMessage.PokeType.Poke">
+            <summary>
+            戳一戳
+            </summary>
+        </member>
+        <member name="F:Mirai_CSharp.Models.PokeMessage.PokeType.ShowLove">
+            <summary>
+            比心
+            </summary>
+        </member>
+        <member name="F:Mirai_CSharp.Models.PokeMessage.PokeType.Like">
+            <summary>
+            点赞
+            </summary>
+        </member>
+        <member name="F:Mirai_CSharp.Models.PokeMessage.PokeType.Heartbroken">
+            <summary>
+            心碎
+            </summary>
+        </member>
+        <member name="F:Mirai_CSharp.Models.PokeMessage.PokeType.SixSixSix">
+            <summary>
+            666
+            </summary>
+        </member>
+        <member name="F:Mirai_CSharp.Models.PokeMessage.PokeType.FangDaZhao">
+            <summary>
+            放大招
+            </summary>
+        </member>
+        <member name="P:Mirai_CSharp.Models.PokeMessage.Name">
+            <summary>
+            戳一戳类型
+            </summary>
+        </member>
+        <member name="M:Mirai_CSharp.Models.PokeMessage.#ctor">
+            <summary>
+            初始化 <see cref="T:Mirai_CSharp.Models.PokeMessage"/> 类的新实例
+            </summary>
+        </member>
+        <member name="M:Mirai_CSharp.Models.PokeMessage.#ctor(Mirai_CSharp.Models.PokeMessage.PokeType)">
+            <summary>
+            初始化 <see cref="T:Mirai_CSharp.Models.PokeMessage"/> 类的新实例
+            </summary>
+            <param name="name">戳一戳的类型</param>
+        </member>
+        <member name="M:Mirai_CSharp.Models.PokeMessage.ToString">
+            <inheritdoc/>
+        </member>
+        <member name="T:Mirai_CSharp.Models.QuoteMessage">
+            <summary>
+            表示引用消息
+            </summary>
+        </member>
+        <member name="P:Mirai_CSharp.Models.QuoteMessage.Id">
+            <summary>
+            被引用回复的原消息的messageId
+            </summary>
+        </member>
+        <member name="P:Mirai_CSharp.Models.QuoteMessage.GroupId">
+            <summary>
+            被引用回复的原消息所接收的群号, 当为好友消息时为0
+            </summary>
+        </member>
+        <member name="P:Mirai_CSharp.Models.QuoteMessage.SenderId">
+            <summary>
+            被引用回复的原消息的发送者的QQ号
+            </summary>
+        </member>
+        <member name="P:Mirai_CSharp.Models.QuoteMessage.TargetId">
+            <summary>
+            被引用回复的原消息的接收者者的QQ号（或群号）
+            </summary>
+        </member>
+        <member name="P:Mirai_CSharp.Models.QuoteMessage.OriginChain">
+            <summary>
+            被引用回复的原消息的消息链数组
+            </summary>
+        </member>
+        <member name="M:Mirai_CSharp.Models.QuoteMessage.#ctor">
+            <summary>
+            初始化 <see cref="T:Mirai_CSharp.Models.QuoteMessage"/> 类的新实例
+            </summary>
+        </member>
+        <member name="M:Mirai_CSharp.Models.QuoteMessage.#ctor(System.Int32,System.Int64,System.Int64,System.Int64,Mirai_CSharp.Models.IMessageBase[])">
+            <summary>
+            初始化 <see cref="T:Mirai_CSharp.Models.QuoteMessage"/> 类的新实例
+            </summary>
+            <param name="id">被引用回复的原消息的messageId</param>
+            <param name="groupId">被引用回复的原消息所接收的群号, 当为好友消息时为0</param>
+            <param name="senderId">被引用回复的原消息的发送者的QQ号</param>
+            <param name="targetId">被引用回复的原消息的接收者者的QQ号（或群号）</param>
+            <param name="originChain">被引用回复的原消息的消息链数组</param>
+        </member>
+        <member name="M:Mirai_CSharp.Models.QuoteMessage.ToString">
+            <inheritdoc/>
+        </member>
+        <member name="T:Mirai_CSharp.Models.SourceMessage">
+            <summary>
+            表示消息的基本信息
+            </summary>
+        </member>
+        <member name="P:Mirai_CSharp.Models.SourceMessage.Id">
+            <summary>
+            消息的识别号, 用于引用回复或撤回
+            </summary>
+        </member>
+        <member name="P:Mirai_CSharp.Models.SourceMessage.Time">
+            <summary>
+            消息时间
+            </summary>
+        </member>
+        <member name="M:Mirai_CSharp.Models.SourceMessage.#ctor">
+            <summary>
+            初始化 <see cref="T:Mirai_CSharp.Models.SourceMessage"/> 类的新实例
+            </summary>
+        </member>
+        <member name="M:Mirai_CSharp.Models.SourceMessage.#ctor(System.Int32,System.DateTime)">
+            <summary>
+            初始化 <see cref="T:Mirai_CSharp.Models.SourceMessage"/> 类的新实例
+            </summary>
+            <param name="id">消息的识别号, 用于引用回复或撤回</param>
+            <param name="time">消息时间</param>
+        </member>
+        <member name="M:Mirai_CSharp.Models.SourceMessage.ToString">
+            <inheritdoc/>
+        </member>
+        <member name="T:Mirai_CSharp.Models.UnknownMessage">
+            <summary>
+            表示未知消息
+            </summary>
+        </member>
+        <member name="P:Mirai_CSharp.Models.UnknownMessage.Data">
+            <summary>
+            消息内容。如有需要请自行解析
+            </summary>
+        </member>
+        <member name="M:Mirai_CSharp.Models.UnknownMessage.#ctor">
+            <summary>
+            初始化 <see cref="T:Mirai_CSharp.Models.UnknownMessage"/> 类的新实例
+            </summary>
+        </member>
+        <member name="M:Mirai_CSharp.Models.UnknownMessage.#ctor(System.Text.Json.JsonElement)">
+            <summary>
+            初始化 <see cref="T:Mirai_CSharp.Models.UnknownMessage"/> 类的新实例
+            </summary>
+            <param name="data">服务器响应的内容</param>
+        </member>
+        <member name="T:Mirai_CSharp.Models.VoiceMessage">
+            <summary>
+            表示语音消息。
+            </summary>
+        </member>
+        <member name="P:Mirai_CSharp.Models.VoiceMessage.VoiceId">
+            <summary>
+            语音文件名
+            </summary>
+            <remarks>
+            此属性不为 <see langword="null"/> 时将忽略 <see cref="P:Mirai_CSharp.Models.VoiceMessage.Url"/>
+            </remarks>
+        </member>
+        <member name="P:Mirai_CSharp.Models.VoiceMessage.Url">
+            <summary>
+            用于下载语音的Url
+            </summary>
+            <remarks>
+            此属性不为 <see langword="null"/> 时将忽略 <see cref="P:Mirai_CSharp.Models.VoiceMessage.Path"/>
+            </remarks>
+        </member>
+        <member name="P:Mirai_CSharp.Models.VoiceMessage.Path">
+            <summary>
+            语音文件的路径
+            </summary>
+        </member>
+        <member name="M:Mirai_CSharp.Models.VoiceMessage.#ctor">
+            <summary>
+            初始化 <see cref="T:Mirai_CSharp.Models.VoiceMessage"/> 类的新实例
+            </summary>
+        </member>
+        <member name="M:Mirai_CSharp.Models.VoiceMessage.#ctor(System.String,System.String,System.String)">
+            <summary>
+            初始化 <see cref="T:Mirai_CSharp.Models.VoiceMessage"/> 类的新实例
+            </summary>
+            <param name="voiceId">语音Id</param>
+            <param name="url">用于下载语音的Url</param>
+            <param name="path">语音文件的路径, 相对路径于 plugins/MiraiAPIHTTP/voices</param>
+        </member>
+        <member name="T:Mirai_CSharp.Models.XmlMessage">
+            <summary>
+            表示xml消息
+            </summary>
+        </member>
+        <member name="P:Mirai_CSharp.Models.XmlMessage.Xml">
+            <summary>
+            Xml原始字符串
+            </summary>
+        </member>
+        <member name="M:Mirai_CSharp.Models.XmlMessage.#ctor">
+            <summary>
+            初始化 <see cref="T:Mirai_CSharp.Models.XmlMessage"/> 类的新实例
+            </summary>
+        </member>
+        <member name="M:Mirai_CSharp.Models.XmlMessage.#ctor(System.String)">
+            <summary>
+            初始化 <see cref="T:Mirai_CSharp.Models.XmlMessage"/> 类的新实例
+            </summary>
+            <param name="xml">要发送的原始xml字符串</param>
+        </member>
+        <member name="M:Mirai_CSharp.Models.XmlMessage.ToString">
+            <inheritdoc/>
+        </member>
+        <member name="P:Mirai_CSharp.Models.MiraiHttpSessionOptions.Host">
+            <summary>
+            目标主机
+            </summary>
+        </member>
+        <member name="P:Mirai_CSharp.Models.MiraiHttpSessionOptions.Port">
+            <summary>
+            目标端口
+            </summary>
+        </member>
+        <member name="P:Mirai_CSharp.Models.MiraiHttpSessionOptions.AuthKey">
+            <summary>
+            配置mirai-api-http时的AuthKey
+            </summary>
+        </member>
+        <member name="P:Mirai_CSharp.Models.MiraiHttpSessionOptions.BaseUrl">
+            <summary>
+            内部使用。
+            </summary>
+        </member>
+        <member name="P:Mirai_CSharp.Models.IMiraiSessionConfig.CacheSize">
+            <summary>
+            缓存大小
+            </summary>
+        </member>
+        <member name="P:Mirai_CSharp.Models.IMiraiSessionConfig.EnableWebSocket">
+            <summary>
+            是否开启Websocket
+            </summary>
+        </member>
+        <member name="P:Mirai_CSharp.Models.MiraiSessionConfig.CacheSize">
+            <summary>
+            缓存大小
+            </summary>
+        </member>
+        <member name="P:Mirai_CSharp.Models.MiraiSessionConfig.EnableWebSocket">
+            <summary>
+            是否启用WebSocket
+            </summary>
+        </member>
+        <member name="T:Mirai_CSharp.Models.PictureTarget">
+            <summary>
+            图片的目标类型
+            </summary>
+        </member>
+        <member name="F:Mirai_CSharp.Models.PictureTarget.Friend">
+            <summary>
+            好友
+            </summary>
+        </member>
+        <member name="F:Mirai_CSharp.Models.PictureTarget.Group">
+            <summary>
+            群
+            </summary>
+        </member>
+        <member name="F:Mirai_CSharp.Models.PictureTarget.Temp">
+            <summary>
+            临时会话
+            </summary>
+        </member>
+        <member name="T:Mirai_CSharp.Models.UploadTarget">
+            <summary>
+            上传对象的目标类型
+            </summary>
+        </member>
+        <member name="F:Mirai_CSharp.Models.UploadTarget.Friend">
+            <summary>
+            好友
+            </summary>
+        </member>
+        <member name="F:Mirai_CSharp.Models.UploadTarget.Group">
+            <summary>
+            群
+            </summary>
+        </member>
+        <member name="F:Mirai_CSharp.Models.UploadTarget.Temp">
+            <summary>
+            临时会话
+            </summary>
+        </member>
+        <member name="T:Mirai_CSharp.Plugin.IPlugin">
+            <summary>
+            表示处理mirai-api-http消息的接口
+            </summary>
+        </member>
+        <member name="T:Mirai_CSharp.Plugin.IPlugin`1">
+            <summary>
+            内部使用。表示处理特定 <typeparamref name="TEventArgs"/> 的接口
+            </summary>
+        </member>
+        <member name="M:Mirai_CSharp.Plugin.IPlugin`1.HandleEvent(Mirai_CSharp.MiraiHttpSession,`0)">
+            <summary>
+            内部使用
+            </summary>
+        </member>
+        <member name="M:Mirai_CSharp.MiraiHttpSession.HandleNewFriendApplyAsync(Mirai_CSharp.Models.IApplyResponseArgs,Mirai_CSharp.Models.FriendApplyAction,System.String)">
+            <summary>
+            异步处理添加好友请求
+            </summary>
+            <param name="args">收到添加好友申请事件中的参数, 即<see cref="T:Mirai_CSharp.Models.INewFriendApplyEventArgs"/></param>
+            <inheritdoc cref="M:Mirai_CSharp.MiraiHttpSession.CommonHandleApplyAsync(System.String,Mirai_CSharp.Models.IApplyResponseArgs,System.Int32,System.String)"/>
+        </member>
+        <member name="M:Mirai_CSharp.MiraiHttpSession.HandleGroupApplyAsync(Mirai_CSharp.Models.IApplyResponseArgs,Mirai_CSharp.Models.GroupApplyActions,System.String)">
+            <summary>
+            异步处理加群请求
+            </summary>
+            <param name="args">收到用户入群申请事件中的参数, 即 <see cref="T:Mirai_CSharp.Models.IGroupApplyEventArgs"/></param>
+            <inheritdoc cref="M:Mirai_CSharp.MiraiHttpSession.CommonHandleApplyAsync(System.String,Mirai_CSharp.Models.IApplyResponseArgs,System.Int32,System.String)"/>
+        </member>
+        <member name="M:Mirai_CSharp.MiraiHttpSession.HandleBotInvitedJoinGroupAsync(Mirai_CSharp.Models.IApplyResponseArgs,Mirai_CSharp.Models.GroupApplyActions,System.String)">
+            <summary>
+            异步处理Bot受邀加群请求
+            </summary>
+            <param name="args">Bot受邀入群事件中的参数, 即 <see cref="T:Mirai_CSharp.Models.IBotInvitedJoinGroupEventArgs"/></param>
+            <inheritdoc cref="M:Mirai_CSharp.MiraiHttpSession.CommonHandleApplyAsync(System.String,Mirai_CSharp.Models.IApplyResponseArgs,System.Int32,System.String)"/>
+        </member>
+        <member name="M:Mirai_CSharp.MiraiHttpSession.CommonHandleApplyAsync(System.String,Mirai_CSharp.Models.IApplyResponseArgs,System.Int32,System.String)">
+            <summary>
+            内部使用
+            </summary>
+            <exception cref="T:System.InvalidOperationException"/>
+            <param name="action">处理方式</param>
+            <param name="message">附加信息</param>
+        </member>
+        <member name="M:Mirai_CSharp.MiraiHttpSession.ConnectAsync(Mirai_CSharp.Models.MiraiHttpSessionOptions,System.Int64)">
+            <remarks>
+            不会连接到指令监控的ws服务。此方法线程安全。但是在连接过程中, 如果尝试多次调用, 除了第一次以后的所有调用都将立即返回。
+            </remarks>
+            <inheritdoc cref="M:Mirai_CSharp.MiraiHttpSession.ConnectAsync(Mirai_CSharp.Models.MiraiHttpSessionOptions,System.Int64,System.Boolean)"/>
+        </member>
+        <member name="M:Mirai_CSharp.MiraiHttpSession.ConnectAsync(Mirai_CSharp.Models.MiraiHttpSessionOptions,System.Int64,System.Boolean)">
+            <summary>
+            异步连接到mirai-api-http。
+            </summary>
+            <remarks>
+            此方法线程安全。但是在连接过程中, 如果尝试多次调用, 除了第一次以后的所有调用都将立即返回。
+            </remarks>
+            <exception cref="T:Mirai_CSharp.Exceptions.BotNotFoundException"/>
+            <exception cref="T:Mirai_CSharp.Exceptions.InvalidAuthKeyException"/>
+            <param name="options">连接信息</param>
+            <param name="qqNumber">Session将要绑定的Bot的qq号</param>
+            <param name="listenCommand">是否监听指令相关的消息</param>
+        </member>
+        <member name="M:Mirai_CSharp.MiraiHttpSession.GetVersionAsync(System.Net.Http.HttpClient,Mirai_CSharp.Models.MiraiHttpSessionOptions)">
+            <summary>
+            异步获取mirai-api-http的版本号
+            </summary>
+            <param name="client">要进行请求的 <see cref="T:System.Net.Http.HttpClient"/></param>
+            <param name="options">连接信息</param>
+            <returns>表示此异步操作的 <see cref="T:System.Threading.Tasks.Task"/></returns>
+        </member>
+        <member name="M:Mirai_CSharp.MiraiHttpSession.GetVersionAsync(Mirai_CSharp.Models.MiraiHttpSessionOptions)">
+            <inheritdoc cref="M:Mirai_CSharp.MiraiHttpSession.GetVersionAsync(System.Net.Http.HttpClient,Mirai_CSharp.Models.MiraiHttpSessionOptions)"/>
+        </member>
+        <member name="M:Mirai_CSharp.MiraiHttpSession.GetVersionAsync">
+            <inheritdoc cref="M:Mirai_CSharp.MiraiHttpSession.GetVersionAsync(System.Net.Http.HttpClient,Mirai_CSharp.Models.MiraiHttpSessionOptions)"/>
+        </member>
+        <member name="M:Mirai_CSharp.MiraiHttpSession.ReleaseAsync(System.Threading.CancellationToken)">
+            <summary>
+            异步释放Session
+            </summary>
+            <param name="token"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mirai_CSharp.MiraiHttpSession.RegisterCommandAsync(System.Net.Http.HttpClient,Mirai_CSharp.Models.MiraiHttpSessionOptions,System.String,System.String[],System.String,System.String)">
+            <summary>
+            异步注册指令
+            </summary>
+            <exception cref="T:Mirai_CSharp.Exceptions.InvalidAuthKeyException"/>
+            <exception cref="T:System.InvalidOperationException"/>
+            <param name="client">要进行请求的 <see cref="T:System.Net.Http.HttpClient"/></param>
+            <param name="options">连接信息</param>
+            <param name="name">指令名</param>
+            <param name="alias">指令别名</param>
+            <param name="description">指令描述</param>
+            <param name="usage">指令用法, 会在指令执行错误时显示</param>
+            <returns>表示此异步操作的 <see cref="T:System.Threading.Tasks.Task"/></returns>
+        </member>
+        <member name="M:Mirai_CSharp.MiraiHttpSession.RegisterCommandAsync(Mirai_CSharp.Models.MiraiHttpSessionOptions,System.String,System.String[],System.String,System.String)">
+            <inheritdoc cref="M:Mirai_CSharp.MiraiHttpSession.RegisterCommandAsync(System.Net.Http.HttpClient,Mirai_CSharp.Models.MiraiHttpSessionOptions,System.String,System.String[],System.String,System.String)"/>
+        </member>
+        <member name="M:Mirai_CSharp.MiraiHttpSession.RegisterCommandAsync(System.String,System.String[],System.String,System.String)">
+            <inheritdoc cref="M:Mirai_CSharp.MiraiHttpSession.RegisterCommandAsync(System.Net.Http.HttpClient,Mirai_CSharp.Models.MiraiHttpSessionOptions,System.String,System.String[],System.String,System.String)"/>
+        </member>
+        <member name="M:Mirai_CSharp.MiraiHttpSession.ExecuteCommandAsync(System.Net.Http.HttpClient,Mirai_CSharp.Models.MiraiHttpSessionOptions,System.String,System.String[])">
+            <summary>
+            异步执行指令
+            </summary>
+            <exception cref="T:Mirai_CSharp.Exceptions.InvalidAuthKeyException"/>
+            <exception cref="T:System.InvalidOperationException"/>
+            <exception cref="T:Mirai_CSharp.Exceptions.TargetNotFoundException"/>
+            <param name="client">要进行请求的 <see cref="T:System.Net.Http.HttpClient"/></param>
+            <param name="options">连接信息</param>
+            <param name="name">指令名</param>
+            <param name="args">指令参数</param>
+            <returns>表示此异步操作的 <see cref="T:System.Threading.Tasks.Task"/></returns>
+        </member>
+        <member name="M:Mirai_CSharp.MiraiHttpSession.ExecuteCommandAsync(Mirai_CSharp.Models.MiraiHttpSessionOptions,System.String,System.String[])">
+            <inheritdoc cref="M:Mirai_CSharp.MiraiHttpSession.ExecuteCommandAsync(System.Net.Http.HttpClient,Mirai_CSharp.Models.MiraiHttpSessionOptions,System.String,System.String[])"/>
+        </member>
+        <member name="M:Mirai_CSharp.MiraiHttpSession.ExecuteCommandAsync(System.String,System.String[])">
+            <inheritdoc cref="M:Mirai_CSharp.MiraiHttpSession.ExecuteCommandAsync(System.Net.Http.HttpClient,Mirai_CSharp.Models.MiraiHttpSessionOptions,System.String,System.String[])"/>
+        </member>
+        <member name="M:Mirai_CSharp.MiraiHttpSession.GetManagersAsync(System.Net.Http.HttpClient,Mirai_CSharp.Models.MiraiHttpSessionOptions,System.Int64,System.Threading.CancellationToken)">
+            <summary>
+            异步获取给定QQ的Managers
+            </summary>
+            <exception cref="T:Mirai_CSharp.Exceptions.BotNotFoundException"/>
+            <exception cref="T:Mirai_CSharp.Exceptions.InvalidAuthKeyException"/>
+            <param name="client">要进行请求的 <see cref="T:System.Net.Http.HttpClient"/></param>
+            <param name="options">连接信息</param>
+            <param name="qqNumber">机器人QQ号</param>
+            <param name="token">用于取消操作的Token</param>
+            <returns>能够管理此机器人的QQ号数组</returns>
+            <returns>表示此异步操作的 <see cref="T:System.Threading.Tasks.Task"/></returns>
+        </member>
+        <member name="M:Mirai_CSharp.MiraiHttpSession.GetManagersAsync(Mirai_CSharp.Models.MiraiHttpSessionOptions,System.Int64,System.Threading.CancellationToken)">
+            <inheritdoc cref="M:Mirai_CSharp.MiraiHttpSession.GetManagersAsync(System.Net.Http.HttpClient,Mirai_CSharp.Models.MiraiHttpSessionOptions,System.Int64,System.Threading.CancellationToken)"/>
+        </member>
+        <member name="M:Mirai_CSharp.MiraiHttpSession.GetManagersAsync(System.Int64)">
+            <inheritdoc cref="M:Mirai_CSharp.MiraiHttpSession.GetManagersAsync(System.Net.Http.HttpClient,Mirai_CSharp.Models.MiraiHttpSessionOptions,System.Int64,System.Threading.CancellationToken)"/>
+        </member>
+        <member name="M:Mirai_CSharp.MiraiHttpSession.GetConfigAsync">
+            <summary>
+            异步获取当前Session的Config
+            </summary>
+        </member>
+        <member name="M:Mirai_CSharp.MiraiHttpSession.SetConfigAsync(Mirai_CSharp.Models.IMiraiSessionConfig)">
+            <summary>
+            异步设置当前Session的Config
+            </summary>
+            <param name="config">配置信息</param>
+        </member>
+        <member name="P:Mirai_CSharp.MiraiHttpSession.Connected">
+            <summary>
+            Session连接状态
+            </summary>
+        </member>
+        <member name="P:Mirai_CSharp.MiraiHttpSession.QQNumber">
+            <summary>
+            Session绑定的QQ号。未连接为 <see langword="null"/>。
+            </summary>
+        </member>
+        <member name="M:Mirai_CSharp.MiraiHttpSession.#ctor">
+            <summary>
+            初始化 <see cref="T:Mirai_CSharp.MiraiHttpSession"/> 类的新实例
+            </summary>
+        </member>
+        <member name="M:Mirai_CSharp.MiraiHttpSession.AddPlugin(Mirai_CSharp.Plugin.IPlugin)">
+            <summary>
+            添加一个用于处理消息的 <see cref="T:Mirai_CSharp.Plugin.IPlugin"/>
+            </summary>
+        </member>
+        <member name="M:Mirai_CSharp.MiraiHttpSession.RemovePlugin(Mirai_CSharp.Plugin.IPlugin)">
+            <summary>
+            移除一个用于处理消息的 <see cref="T:Mirai_CSharp.Plugin.IPlugin"/>。 <paramref name="plugin"/> 必须在之前通过 <see cref="M:Mirai_CSharp.MiraiHttpSession.AddPlugin(Mirai_CSharp.Plugin.IPlugin)"/> 添加过
+            </summary>
+        </member>
+        <member name="M:Mirai_CSharp.MiraiHttpSession.DisposeAsync">
+            <summary>
+            异步释放当前Session, 并清理相关资源。
+            </summary>
+            <remarks>
+            本方法线程安全。
+            </remarks>
+            <returns></returns>
+        </member>
+        <member name="E:Mirai_CSharp.MiraiHttpSession.BotOnlineEvt">
+            <summary>
+            Bot登录成功
+            </summary>
+        </member>
+        <member name="E:Mirai_CSharp.MiraiHttpSession.BotPositiveOfflineEvt">
+            <summary>
+            Bot主动离线
+            </summary>
+        </member>
+        <member name="E:Mirai_CSharp.MiraiHttpSession.BotKickedOfflineEvt">
+            <summary>
+            Bot被挤下线
+            </summary>
+        </member>
+        <member name="E:Mirai_CSharp.MiraiHttpSession.BotDroppedEvt">
+            <summary>
+            Bot意外断开连接(服务器主动断开连接、网络问题等等)
+            </summary>
+        </member>
+        <member name="E:Mirai_CSharp.MiraiHttpSession.BotReloginEvt">
+            <summary>
+            Bot主动重新登录
+            </summary>
+        </member>
+        <member name="E:Mirai_CSharp.MiraiHttpSession.BotGroupPermissionChangedEvt">
+            <summary>
+            Bot在群里的权限被改变. 操作人一定是群主
+            </summary>
+        </member>
+        <member name="E:Mirai_CSharp.MiraiHttpSession.BotMutedEvt">
+            <summary>
+            Bot被禁言
+            </summary>
+        </member>
+        <member name="E:Mirai_CSharp.MiraiHttpSession.BotUnmutedEvt">
+            <summary>
+            Bot被取消禁言
+            </summary>
+        </member>
+        <member name="E:Mirai_CSharp.MiraiHttpSession.BotJoinedGroupEvt">
+            <summary>
+            Bot加入了一个新群
+            </summary>
+        </member>
+        <member name="E:Mirai_CSharp.MiraiHttpSession.BotPositiveLeaveGroupEvt">
+            <summary>
+            Bot主动退出一个群
+            </summary>
+        </member>
+        <member name="E:Mirai_CSharp.MiraiHttpSession.BotKickedOutEvt">
+            <summary>
+            Bot被踢出一个群
+            </summary>
+        </member>
+        <member name="E:Mirai_CSharp.MiraiHttpSession.BotInvitedJoinGroupEvt">
+            <summary>
+            Bot被邀请入群
+            </summary>
+        </member>
+        <member name="E:Mirai_CSharp.MiraiHttpSession.CommandExecuted">
+            <summary>
+            指令执行后引发的事件
+            </summary>
+        </member>
+        <member name="T:Mirai_CSharp.MiraiHttpSession.CommonEventHandler`1">
+            <summary>
+            通用事件委托
+            </summary>
+            <typeparam name="TEventArgs">事件参数</typeparam>
+            <param name="sender">调用此委托的 <see cref="T:Mirai_CSharp.MiraiHttpSession"/></param>
+            <param name="e">事件参数</param>
+        </member>
+        <member name="E:Mirai_CSharp.MiraiHttpSession.DisconnectedEvt">
+            <summary>
+            与mirai-api-http的ws连接被异常断开
+            </summary>
+        </member>
+        <member name="E:Mirai_CSharp.MiraiHttpSession.UnknownMessageEvt">
+            <summary>
+            收到未知消息。如有需要, 请自行解析
+            </summary>
+        </member>
+        <member name="E:Mirai_CSharp.MiraiHttpSession.FriendMessageEvt">
+            <summary>
+            收到好友消息
+            </summary>
+        </member>
+        <member name="E:Mirai_CSharp.MiraiHttpSession.FriendMessageRevokedEvt">
+            <summary>
+            好友消息被撤回
+            </summary>
+        </member>
+        <member name="E:Mirai_CSharp.MiraiHttpSession.NewFriendApplyEvt">
+            <summary>
+            收到添加好友申请
+            </summary>
+        </member>
+        <member name="E:Mirai_CSharp.MiraiHttpSession.GroupMessageEvt">
+            <summary>
+            收到群消息
+            </summary>
+        </member>
+        <member name="E:Mirai_CSharp.MiraiHttpSession.GroupMessageRevokedEvt">
+            <summary>
+            群消息被撤回
+            </summary>
+        </member>
+        <member name="E:Mirai_CSharp.MiraiHttpSession.GroupNameChangedEvt">
+            <summary>
+            某个群名被改变
+            </summary>
+        </member>
+        <member name="E:Mirai_CSharp.MiraiHttpSession.GroupEntranceAnnouncementChangedEvt">
+            <summary>
+            某群入群公告改变
+            </summary>
+        </member>
+        <member name="E:Mirai_CSharp.MiraiHttpSession.GroupMuteAllChangedEvt">
+            <summary>
+            全员禁言设置被改变
+            </summary>
+        </member>
+        <member name="E:Mirai_CSharp.MiraiHttpSession.GroupAnonymousChatChangedEvt">
+            <summary>
+            匿名聊天设置被改变
+            </summary>
+        </member>
+        <member name="E:Mirai_CSharp.MiraiHttpSession.GroupConfessTalkChangedEvt">
+            <summary>
+            坦白说设置被改变
+            </summary>
+        </member>
+        <member name="E:Mirai_CSharp.MiraiHttpSession.GroupMemberInviteChangedEvt">
+            <summary>
+            群员邀请好友加群设置被改变
+            </summary>
+        </member>
+        <member name="E:Mirai_CSharp.MiraiHttpSession.GroupMemberJoinedEvt">
+            <summary>
+            新人入群
+            </summary>
+        </member>
+        <member name="E:Mirai_CSharp.MiraiHttpSession.GroupMemberPositiveLeaveEvt">
+            <summary>
+            成员主动离群（该成员不是Bot, 见 <see cref="E:Mirai_CSharp.MiraiHttpSession.BotPositiveLeaveGroupEvt"/>）
+            </summary>
+        </member>
+        <member name="E:Mirai_CSharp.MiraiHttpSession.GroupMemberKickedEvt">
+            <summary>
+            成员被踢出群（该成员不是Bot, 见 <see cref="E:Mirai_CSharp.MiraiHttpSession.BotKickedOutEvt"/>）
+            </summary>
+        </member>
+        <member name="E:Mirai_CSharp.MiraiHttpSession.GroupMemberCardChangedEvt">
+            <summary>
+            群名片改动
+            </summary>
+        </member>
+        <member name="E:Mirai_CSharp.MiraiHttpSession.GroupMemberSpecialTitleChangedEvt">
+            <summary>
+            群头衔改动（只有群主有操作限权）
+            </summary>
+        </member>
+        <member name="E:Mirai_CSharp.MiraiHttpSession.GroupMemberPermissionChangedEvt">
+            <summary>
+            成员权限改变（该成员不是Bot, 见 <see cref="E:Mirai_CSharp.MiraiHttpSession.BotGroupPermissionChangedEvt"/>）
+            </summary>
+        </member>
+        <member name="E:Mirai_CSharp.MiraiHttpSession.GroupMemberMutedEvt">
+            <summary>
+            群成员被禁言（该成员不可能是Bot, 见 <see cref="T:Mirai_CSharp.Models.BotMutedEventArgs"/>）
+            </summary>
+        </member>
+        <member name="E:Mirai_CSharp.MiraiHttpSession.GroupMemberUnmutedEvt">
+            <summary>
+            群成员被取消禁言（该成员不可能是Bot, 见 <see cref="T:Mirai_CSharp.Models.BotUnmutedEventArgs"/>）
+            </summary>
+        </member>
+        <member name="E:Mirai_CSharp.MiraiHttpSession.GroupApplyEvt">
+            <summary>
+            收到用户入群申请（Bot需要有 <see cref="F:Mirai_CSharp.Models.GroupPermission.Administrator"/> 或 <see cref="F:Mirai_CSharp.Models.GroupPermission.Owner"/> 权限）
+            </summary>
+        </member>
+        <member name="E:Mirai_CSharp.MiraiHttpSession.TempMessageEvt">
+            <summary>
+            收到临时消息
+            </summary>
+        </member>
+        <member name="M:Mirai_CSharp.MiraiHttpSession.GetFriendListAsync">
+            <summary>
+            异步获取好友列表
+            </summary>
+            <exception cref="T:System.InvalidOperationException"/>
+        </member>
+        <member name="M:Mirai_CSharp.MiraiHttpSession.GetGroupListAsync">
+            <summary>
+            异步获取群列表
+            </summary>
+            <exception cref="T:System.InvalidOperationException"/>
+        </member>
+        <member name="M:Mirai_CSharp.MiraiHttpSession.GetGroupMemberListAsync(System.Int64)">
+            <summary>
+            异步获取群成员列表
+            </summary>
+            <exception cref="T:System.InvalidOperationException"/>
+            <exception cref="T:Mirai_CSharp.Exceptions.TargetNotFoundException"/>
+            <param name="groupNumber">将要进行查询的群号</param>
+        </member>
+        <member name="M:Mirai_CSharp.MiraiHttpSession.InternalToggleMuteAllAsync(System.Boolean,System.Int64)">
+            <summary>
+            内部使用
+            </summary>
+            <exception cref="T:System.InvalidOperationException"/>
+            <exception cref="T:Mirai_CSharp.Exceptions.PermissionDeniedException"/>
+            <exception cref="T:Mirai_CSharp.Exceptions.TargetNotFoundException"/>
+            <param name="action">禁言为 <see langword="true"/>, 解禁为 <see langword="false"/></param>
+            <param name="groupNumber">将要操作的群号</param>
+        </member>
+        <member name="M:Mirai_CSharp.MiraiHttpSession.MuteAllAsync(System.Int64)">
+            <summary>
+            异步开启全体禁言
+            </summary>
+            <param name="groupNumber">将要进行全体禁言的群号</param>
+            <inheritdoc cref="M:Mirai_CSharp.MiraiHttpSession.InternalToggleMuteAllAsync(System.Boolean,System.Int64)"/>
+        </member>
+        <member name="M:Mirai_CSharp.MiraiHttpSession.UnmuteAllAsync(System.Int64)">
+            <summary>
+            异步关闭全体禁言
+            </summary>
+            <param name="groupNumber">将要关闭全体禁言的群号</param>
+            <inheritdoc cref="M:Mirai_CSharp.MiraiHttpSession.InternalToggleMuteAllAsync(System.Boolean,System.Int64)"/>
+        </member>
+        <member name="M:Mirai_CSharp.MiraiHttpSession.MuteAsync(System.Int64,System.Int64,System.TimeSpan)">
+            <summary>
+            异步禁言给定用户
+            </summary>
+            <exception cref="T:System.InvalidOperationException"/>
+            <exception cref="T:Mirai_CSharp.Exceptions.PermissionDeniedException"/>
+            <exception cref="T:Mirai_CSharp.Exceptions.TargetNotFoundException"/>
+            <param name="memberId">将要被禁言的QQ号</param>
+            <param name="groupNumber">该用户所在群号</param>
+            <param name="duration">禁言时长。必须介于[1秒, 30天]</param>
+        </member>
+        <member name="M:Mirai_CSharp.MiraiHttpSession.UnmuteAsync(System.Int64,System.Int64)">
+            <summary>
+            异步解禁给定用户
+            </summary>
+            <exception cref="T:System.InvalidOperationException"/>
+            <exception cref="T:Mirai_CSharp.Exceptions.PermissionDeniedException"/>
+            <exception cref="T:Mirai_CSharp.Exceptions.TargetNotFoundException"/>
+            <param name="memberId">将要解除禁言的QQ号</param>
+            <param name="groupNumber">该用户所在群号</param>
+        </member>
+        <member name="M:Mirai_CSharp.MiraiHttpSession.KickMemberAsync(System.Int64,System.Int64,System.String)">
+            <summary>
+            异步将给定用户踢出给定的群
+            </summary>
+            <exception cref="T:System.InvalidOperationException"/>
+            <exception cref="T:Mirai_CSharp.Exceptions.PermissionDeniedException"/>
+            <exception cref="T:Mirai_CSharp.Exceptions.TargetNotFoundException"/>
+            <param name="memberId">将要被踢出的QQ号</param>
+            <param name="groupNumber">该用户所在群号</param>
+            <param name="msg">附加消息</param>
+        </member>
+        <member name="M:Mirai_CSharp.MiraiHttpSession.LeaveGroupAsync(System.Int64)">
+            <summary>
+            异步使当前机器人退出给定的群
+            </summary>
+            <exception cref="T:System.InvalidOperationException"/>
+            <exception cref="T:Mirai_CSharp.Exceptions.TargetNotFoundException"/>
+            <param name="groupNumber">将要退出的群号</param>
+        </member>
+        <member name="M:Mirai_CSharp.MiraiHttpSession.ChangeGroupConfigAsync(System.Int64,Mirai_CSharp.Models.IGroupConfig)">
+            <summary>
+            异步修改群信息
+            </summary>
+            <exception cref="T:System.InvalidOperationException"/>
+            <exception cref="T:Mirai_CSharp.Exceptions.PermissionDeniedException"/>
+            <exception cref="T:Mirai_CSharp.Exceptions.TargetNotFoundException"/>
+            <param name="groupNumber">要进行修改的群号</param>
+            <param name="config">群信息。其中不进行修改的值请置为 <see langword="null"/></param>
+        </member>
+        <member name="M:Mirai_CSharp.MiraiHttpSession.GetGroupConfigAsync(System.Int64)">
+            <summary>
+            异步获取群信息
+            </summary>
+            <exception cref="T:System.InvalidOperationException"/>
+            <exception cref="T:Mirai_CSharp.Exceptions.TargetNotFoundException"/>
+            <param name="groupNumber">要获取信息的群号</param>
+        </member>
+        <member name="M:Mirai_CSharp.MiraiHttpSession.ChangeGroupMemberInfoAsync(System.Int64,System.Int64,Mirai_CSharp.Models.IGroupMemberCardInfo)">
+            <summary>
+            异步修改给定群员的信息
+            </summary>
+            <exception cref="T:System.InvalidOperationException"/>
+            <exception cref="T:Mirai_CSharp.Exceptions.PermissionDeniedException"/>
+            <exception cref="T:Mirai_CSharp.Exceptions.TargetNotFoundException"/>
+            <param name="memberId">将要修改信息的QQ号</param>
+            <param name="groupNumber">该用户所在群号</param>
+            <param name="info">用户信息。其中不进行修改的值请置为 <see langword="null"/></param>
+        </member>
+        <member name="M:Mirai_CSharp.MiraiHttpSession.GetGroupMemberInfoAsync(System.Int64,System.Int64)">
+            <summary>
+            异步获取给定群员的信息
+            </summary>
+            <exception cref="T:System.InvalidOperationException"/>
+            <exception cref="T:Mirai_CSharp.Exceptions.TargetNotFoundException"/>
+            <param name="memberId">要获取信息的QQ号</param>
+            <param name="groupNumber">该用户所在群号</param>
+        </member>
+        <member name="M:Mirai_CSharp.MiraiHttpSession.CommonSendMessageAsync(System.String,System.Nullable{System.Int64},System.Nullable{System.Int64},Mirai_CSharp.Models.IMessageBase[],System.Nullable{System.Int32})">
+            <summary>
+            内部使用
+            </summary>
+            <param name="action">api的action</param>
+            <param name="qqNumber">目标QQ号</param>
+            <param name="groupNumber">目标所在的群号</param>
+            <param name="chain">消息链数组。不可为 <see langword="null"/> 或空数组</param>
+            <param name="quoteMsgId">引用一条消息的messageId进行回复。为 <see langword="null"/> 时不进行引用。</param>
+            <exception cref="T:System.ArgumentException"/>
+            <exception cref="T:System.InvalidOperationException"/>
+            <exception cref="T:Mirai_CSharp.Exceptions.MessageTooLongException"/>
+            <exception cref="T:Mirai_CSharp.Exceptions.TargetNotFoundException"/>
+            <returns>用于标识本条消息的 Id</returns>
+        </member>
+        <member name="M:Mirai_CSharp.MiraiHttpSession.SendFriendMessageAsync(System.Int64,Mirai_CSharp.Models.IMessageBase[])">
+            <summary>
+            异步发送好友消息
+            </summary>
+            <remarks>
+            本方法不会引用回复, 要引用回复, 请调用 <see cref="M:Mirai_CSharp.MiraiHttpSession.SendFriendMessageAsync(System.Int64,Mirai_CSharp.Models.IMessageBase[],System.Nullable{System.Int32})"/>
+            </remarks>
+            <exception cref="T:System.ArgumentException"/>
+            <exception cref="T:System.InvalidOperationException"/>
+            <exception cref="T:Mirai_CSharp.Exceptions.MessageTooLongException"/>
+            <exception cref="T:Mirai_CSharp.Exceptions.TargetNotFoundException"/>
+            <param name="qqNumber">目标QQ号</param>
+            <param name="chain">消息链数组。不可为 <see langword="null"/> 或空数组</param>
+        </member>
+        <member name="M:Mirai_CSharp.MiraiHttpSession.SendFriendMessageAsync(System.Int64,Mirai_CSharp.Models.IMessageBase[],System.Nullable{System.Int32})">
+            <summary>
+            异步发送好友消息
+            </summary>
+            <exception cref="T:System.ArgumentException"/>
+            <exception cref="T:System.InvalidOperationException"/>
+            <exception cref="T:Mirai_CSharp.Exceptions.MessageTooLongException"/>
+            <exception cref="T:Mirai_CSharp.Exceptions.TargetNotFoundException"/>
+            <param name="qqNumber">目标QQ号</param>
+            <param name="chain">消息链数组。不可为 <see langword="null"/> 或空数组</param>
+            <param name="quoteMsgId">引用一条消息的messageId进行回复。为 <see langword="null"/> 时不进行引用。</param>
+        </member>
+        <member name="M:Mirai_CSharp.MiraiHttpSession.SendFriendMessageAsync(System.Int64,Mirai_CSharp.Models.IMessageBuilder,System.Nullable{System.Int32})">
+            <summary>
+            异步发送好友消息
+            </summary>
+            <param name="builder">构建完毕的 <see cref="T:Mirai_CSharp.Models.IMessageBuilder"/></param>
+            <inheritdoc cref="M:Mirai_CSharp.MiraiHttpSession.CommonSendMessageAsync(System.String,System.Nullable{System.Int64},System.Nullable{System.Int64},Mirai_CSharp.Models.IMessageBase[],System.Nullable{System.Int32})"/>
+        </member>
+        <member name="M:Mirai_CSharp.MiraiHttpSession.SendTempMessageAsync(System.Int64,System.Int64,Mirai_CSharp.Models.IMessageBase[])">
+            <summary>
+            异步发送临时消息
+            </summary>
+            <remarks>
+            本方法不会引用回复, 要引用回复, 请调用 <see cref="M:Mirai_CSharp.MiraiHttpSession.SendTempMessageAsync(System.Int64,System.Int64,Mirai_CSharp.Models.IMessageBase[],System.Nullable{System.Int32})"/>
+            </remarks>
+            <inheritdoc cref="M:Mirai_CSharp.MiraiHttpSession.CommonSendMessageAsync(System.String,System.Nullable{System.Int64},System.Nullable{System.Int64},Mirai_CSharp.Models.IMessageBase[],System.Nullable{System.Int32})"/>
+        </member>
+        <member name="M:Mirai_CSharp.MiraiHttpSession.SendTempMessageAsync(System.Int64,System.Int64,Mirai_CSharp.Models.IMessageBase[],System.Nullable{System.Int32})">
+            <summary>
+            异步发送临时消息
+            </summary>
+            <inheritdoc cref="M:Mirai_CSharp.MiraiHttpSession.CommonSendMessageAsync(System.String,System.Nullable{System.Int64},System.Nullable{System.Int64},Mirai_CSharp.Models.IMessageBase[],System.Nullable{System.Int32})"/>
+        </member>
+        <member name="M:Mirai_CSharp.MiraiHttpSession.SendTempMessageAsync(System.Int64,System.Int64,Mirai_CSharp.Models.IMessageBuilder,System.Nullable{System.Int32})">
+            <summary>
+            异步发送临时消息
+            </summary>
+            <param name="builder">构建完毕的 <see cref="T:Mirai_CSharp.Models.IMessageBuilder"/></param>
+            <inheritdoc cref="M:Mirai_CSharp.MiraiHttpSession.CommonSendMessageAsync(System.String,System.Nullable{System.Int64},System.Nullable{System.Int64},Mirai_CSharp.Models.IMessageBase[],System.Nullable{System.Int32})"/>
+        </member>
+        <member name="M:Mirai_CSharp.MiraiHttpSession.SendGroupMessageAsync(System.Int64,Mirai_CSharp.Models.IMessageBase[])">
+            <summary>
+            异步发送群消息
+            </summary>
+            <remarks>
+            本方法不会引用回复, 要引用回复, 请调用 <see cref="M:Mirai_CSharp.MiraiHttpSession.SendGroupMessageAsync(System.Int64,Mirai_CSharp.Models.IMessageBase[],System.Nullable{System.Int32})"/>
+            </remarks>
+            <exception cref="T:Mirai_CSharp.Exceptions.BotMutedException"/>
+            <inheritdoc cref="M:Mirai_CSharp.MiraiHttpSession.CommonSendMessageAsync(System.String,System.Nullable{System.Int64},System.Nullable{System.Int64},Mirai_CSharp.Models.IMessageBase[],System.Nullable{System.Int32})"/>
+        </member>
+        <member name="M:Mirai_CSharp.MiraiHttpSession.SendGroupMessageAsync(System.Int64,Mirai_CSharp.Models.IMessageBase[],System.Nullable{System.Int32})">
+            <summary>
+            异步发送群消息
+            </summary>
+            <exception cref="T:Mirai_CSharp.Exceptions.BotMutedException"/>
+            <inheritdoc cref="M:Mirai_CSharp.MiraiHttpSession.CommonSendMessageAsync(System.String,System.Nullable{System.Int64},System.Nullable{System.Int64},Mirai_CSharp.Models.IMessageBase[],System.Nullable{System.Int32})"/>
+        </member>
+        <member name="M:Mirai_CSharp.MiraiHttpSession.SendGroupMessageAsync(System.Int64,Mirai_CSharp.Models.IMessageBuilder,System.Nullable{System.Int32})">
+            <summary>
+            异步发送群消息
+            </summary>
+            <exception cref="T:Mirai_CSharp.Exceptions.BotMutedException"/>
+            <param name="builder">构建完毕的 <see cref="T:Mirai_CSharp.Models.IMessageBuilder"/></param>
+            <inheritdoc cref="M:Mirai_CSharp.MiraiHttpSession.CommonSendMessageAsync(System.String,System.Nullable{System.Int64},System.Nullable{System.Int64},Mirai_CSharp.Models.IMessageBase[],System.Nullable{System.Int32})"/>
+        </member>
+        <member name="M:Mirai_CSharp.MiraiHttpSession.RevokeMessageAsync(System.Int32)">
+            <summary>
+            异步撤回消息
+            </summary>
+            <param name="messageId">
+            请提供以下之一
+            <list type="bullet">
+            <item><see cref="P:Mirai_CSharp.Models.SourceMessage.Id"/></item>
+            <item><see cref="M:Mirai_CSharp.MiraiHttpSession.SendFriendMessageAsync(System.Int64,Mirai_CSharp.Models.IMessageBase[],System.Nullable{System.Int32})"/> 的返回值</item>
+            <item><see cref="M:Mirai_CSharp.MiraiHttpSession.SendTempMessageAsync(System.Int64,System.Int64,Mirai_CSharp.Models.IMessageBase[],System.Nullable{System.Int32})"/> 的返回值</item>
+            <item><see cref="M:Mirai_CSharp.MiraiHttpSession.SendGroupMessageAsync(System.Int64,Mirai_CSharp.Models.IMessageBase[],System.Nullable{System.Int32})"/> 的返回值</item>
+            </list>
+            </param>
+            <exception cref="T:System.InvalidOperationException"/>
+            <exception cref="T:Mirai_CSharp.Exceptions.TargetNotFoundException"/>
+        </member>
+        <member name="M:Mirai_CSharp.MiraiHttpSession.CommonSendImageAsync(System.Nullable{System.Int64},System.Nullable{System.Int64},System.String[])">
+            <summary>
+            内部使用
+            </summary>
+            <exception cref="T:System.ArgumentException"/>
+            <exception cref="T:System.InvalidOperationException"/>
+            <exception cref="T:System.NotSupportedException"/>
+            <exception cref="T:Mirai_CSharp.Exceptions.TargetNotFoundException"/>
+            <param name="qqNumber">目标QQ号</param>
+            <param name="groupNumber">目标QQ号所在的群号</param>
+            <param name="urls">一个Url数组。不可为 <see langword="null"/> 或空数组</param>
+            <returns>一组ImageId</returns>
+        </member>
+        <member name="M:Mirai_CSharp.MiraiHttpSession.SendImageToFriendAsync(System.Int64,System.String[])">
+            <summary>
+            异步发送给定Url数组中的图片到给定好友
+            </summary>
+            <inheritdoc cref="M:Mirai_CSharp.MiraiHttpSession.CommonSendImageAsync(System.Nullable{System.Int64},System.Nullable{System.Int64},System.String[])"/>
+        </member>
+        <member name="M:Mirai_CSharp.MiraiHttpSession.SendImageToTempAsync(System.Int64,System.Int64,System.String[])">
+            <summary>
+            异步发送给定Url数组中的图片到临时会话
+            </summary>
+            <inheritdoc cref="M:Mirai_CSharp.MiraiHttpSession.CommonSendImageAsync(System.Nullable{System.Int64},System.Nullable{System.Int64},System.String[])"/>
+        </member>
+        <member name="M:Mirai_CSharp.MiraiHttpSession.SendImageToGroupAsync(System.Int64,System.String[])">
+            <summary>
+            异步发送给定Url数组中的图片到群
+            </summary>
+            <exception cref="T:Mirai_CSharp.Exceptions.BotMutedException"/>
+            <inheritdoc cref="M:Mirai_CSharp.MiraiHttpSession.CommonSendImageAsync(System.Nullable{System.Int64},System.Nullable{System.Int64},System.String[])"/>
+        </member>
+        <member name="M:Mirai_CSharp.MiraiHttpSession.InternalUploadPictureAsync(Mirai_CSharp.MiraiHttpSession.InternalSessionInfo,Mirai_CSharp.Models.UploadTarget,System.IO.Stream)">
+            <summary>
+            内部使用
+            </summary>
+            <exception cref="T:System.InvalidOperationException"/>
+            <param name="type">目标类型</param>
+            <param name="imgStream">图片流</param>
+            <remarks>
+            注意: 当 mirai-api-http 的版本小于等于v1.7.0时, 本方法返回的将是一个只有 Url 有值的 <see cref="T:Mirai_CSharp.Models.ImageMessage"/>
+            </remarks>
+            <returns>一个 <see cref="T:Mirai_CSharp.Models.ImageMessage"/> 实例, 可用于以后的消息发送</returns>
+        </member>
+        <member name="M:Mirai_CSharp.MiraiHttpSession.UploadPictureAsync(Mirai_CSharp.Models.UploadTarget,System.String)">
+            <summary>
+            异步上传图片
+            </summary>
+            <exception cref="T:System.ArgumentException"/>
+            <exception cref="T:System.IO.FileNotFoundException"/>
+            <param name="imagePath">图片路径</param>
+            <inheritdoc cref="M:Mirai_CSharp.MiraiHttpSession.InternalUploadPictureAsync(Mirai_CSharp.MiraiHttpSession.InternalSessionInfo,Mirai_CSharp.Models.UploadTarget,System.IO.Stream)"/>
+        </member>
+        <member name="M:Mirai_CSharp.MiraiHttpSession.UploadPictureAsync(Mirai_CSharp.Models.UploadTarget,System.IO.Stream)">
+            <summary>
+            异步上传图片
+            </summary>
+            <exception cref="T:System.ArgumentException"/>
+            <param name="image">图片流</param>
+            <inheritdoc cref="M:Mirai_CSharp.MiraiHttpSession.InternalUploadPictureAsync(Mirai_CSharp.MiraiHttpSession.InternalSessionInfo,Mirai_CSharp.Models.UploadTarget,System.IO.Stream)"/>
+        </member>
+        <member name="M:Mirai_CSharp.MiraiHttpSession.UploadPictureAsync(Mirai_CSharp.Models.PictureTarget,System.String)">
+            <summary>
+            异步上传图片
+            </summary>
+            <exception cref="T:System.ArgumentException"/>
+            <exception cref="T:System.IO.FileNotFoundException"/>
+            <param name="imagePath">图片路径</param>
+            <inheritdoc cref="M:Mirai_CSharp.MiraiHttpSession.InternalUploadPictureAsync(Mirai_CSharp.MiraiHttpSession.InternalSessionInfo,Mirai_CSharp.Models.UploadTarget,System.IO.Stream)"/>
+        </member>
+        <member name="M:Mirai_CSharp.MiraiHttpSession.UploadPictureAsync(Mirai_CSharp.Models.PictureTarget,System.IO.Stream)">
+            <summary>
+            异步上传图片
+            </summary>
+            <exception cref="T:System.ArgumentException"/>
+            <param name="image">图片流</param>
+            <inheritdoc cref="M:Mirai_CSharp.MiraiHttpSession.InternalUploadPictureAsync(Mirai_CSharp.MiraiHttpSession.InternalSessionInfo,Mirai_CSharp.Models.UploadTarget,System.IO.Stream)"/>
+        </member>
+        <member name="M:Mirai_CSharp.MiraiHttpSession.InternalUploadVoiceAsync(Mirai_CSharp.MiraiHttpSession.InternalSessionInfo,Mirai_CSharp.Models.UploadTarget,System.IO.Stream)">
+            <summary>
+            内部使用
+            </summary>
+            <exception cref="T:System.NotSupportedException"/>
+            <param name="type">目标类型</param>
+            <param name="voiceStream">语音流</param>
+            <returns>一个 <see cref="T:Mirai_CSharp.Models.VoiceMessage"/> 实例, 可用于以后的消息发送</returns>
+        </member>
+        <member name="M:Mirai_CSharp.MiraiHttpSession.UploadVoiceAsync(Mirai_CSharp.Models.UploadTarget,System.String)">
+            <summary>
+            异步上传语音
+            </summary>
+            <exception cref="T:System.IO.FileNotFoundException"/>
+            <param name="voicePath">语音路径</param>
+            <inheritdoc cref="M:Mirai_CSharp.MiraiHttpSession.InternalUploadVoiceAsync(Mirai_CSharp.MiraiHttpSession.InternalSessionInfo,Mirai_CSharp.Models.UploadTarget,System.IO.Stream)"/>
+        </member>
+        <member name="M:Mirai_CSharp.MiraiHttpSession.UploadVoiceAsync(Mirai_CSharp.Models.UploadTarget,System.IO.Stream)">
+            <summary>
+            异步上传语音
+            </summary>
+            <param name="voice">语音流</param>
+            <inheritdoc cref="M:Mirai_CSharp.MiraiHttpSession.InternalUploadVoiceAsync(Mirai_CSharp.MiraiHttpSession.InternalSessionInfo,Mirai_CSharp.Models.UploadTarget,System.IO.Stream)"/>
+        </member>
+        <member name="M:Mirai_CSharp.MiraiHttpSession.GetCommonException(System.Int32,System.Text.Json.JsonElement@)">
+            <summary>
+            通过状态码返回相应的异常
+            </summary>
+            <returns>
+            根据给定的 <paramref name="code"/> 返回下列异常之一:
+            <list type="bullet">
+            <item><term><see cref="T:Mirai_CSharp.Exceptions.InvalidAuthKeyException"/></term><description><paramref name="code"/> 为 1</description></item>
+            <item><term><see cref="T:Mirai_CSharp.Exceptions.BotNotFoundException"/></term><description><paramref name="code"/> 为 2</description></item>
+            <item><term><see cref="T:Mirai_CSharp.Exceptions.InvalidSessionException"/></term><description><paramref name="code"/> 为 3 或 4</description></item>
+            <item><term><see cref="T:Mirai_CSharp.Exceptions.TargetNotFoundException"/></term><description><paramref name="code"/> 为 5</description></item>
+            <item><term><see cref="T:System.IO.FileNotFoundException"/></term><description><paramref name="code"/> 为 6</description></item>
+            <item><term><see cref="T:Mirai_CSharp.Exceptions.PermissionDeniedException"/></term><description><paramref name="code"/> 为 10</description></item>
+            <item><term><see cref="T:Mirai_CSharp.Exceptions.BotMutedException"/></term><description><paramref name="code"/> 为 20</description></item>
+            <item><term><see cref="T:Mirai_CSharp.Exceptions.MessageTooLongException"/></term><description><paramref name="code"/> 为 30</description></item>
+            <item><term><see cref="T:System.ArgumentException"/></term><description><paramref name="code"/> 为 400</description></item>
+            <item><term><see cref="T:Mirai_CSharp.Exceptions.UnknownResponseException"/></term><description>其它情况</description></item>
+            </list>
+            </returns>
+        </member>
+    </members>
+</doc>
