@@ -781,9 +781,56 @@ namespace BandoriBot.Commands
         public class 泰拉资料
         {
             [Permission("terraria.admin")]
+            public static void Main(CommandArgs args,string type,long qq)
+            {
+                if (type != "QQ") return;
+                var account = Configuration.GetConfig<AccountBinding>().t.Where(o => (o.group == Configuration.GetConfig<ServerManager>().GetServer(args).group || Configuration.GetConfig<ServerManager>().GetServerName(args) == "流光之城") && o.qq == qq).FirstOrDefault();
+                if (account == null)
+                {
+                    throw new CommandException("未找到该玩家资料！");
+                }
+                else
+                {
+                    JObject data;
+                    try
+                    {
+                        data = Configuration.GetConfig<ServerManager>()
+                        .GetServer(args).RunRest($"/v1/character/query?name={HttpUtility.UrlEncode(account.username)}") as JObject;
+                    }
+                    catch (CommandException e)
+                    {
+                        throw new CommandException("该泰拉角色不存在于服务器，请输入 泰拉玩家 查看！", e);
+                    }
+                    JObject bank = null;
+                    try
+                    {
+                        bank = Configuration.GetConfig<ServerManager>().GetServer(args).RunRest($"/economy/getplayermoney?player={HttpUtility.UrlEncode(account.username)}") as JObject;
+                    }
+                    catch { }
+                    args.Callback($"这是泰拉玩家[{account.username}]的资料\n" +
+                        $"QQ: {account.qq}\n" +
+                        //$"积分: {data["ip"]}\n" +；//$"神晶: {data["ip"]}\n" +
+                        $"权限: {data["group"]}\n" +
+                        //$"等级: {data["ip"]}\n" +
+                        //$"经验: {data["ip"]}\n" +；//$"财富: {data["ip"]}\n" +
+                        $"货币：{Utils.GetMoney(Configuration.GetConfig<ServerManager>().GetServer(args), account.username)}\r" +
+                        $"生命：{data["statLife"]}/{data["statLifeMax"]}\n" +
+                        $"法力：{data["statMana"]}/{data["statManaMax"]}\n" +
+                        ((bank != null && bank["status"].ToString() == "200") ? $"经济：{bank["money"]}$\n" : "") +
+                        $"钓鱼任务完成次数: {data["questsCompleted"]}\n" +
+                        //$"今日总在线时长:功能未实现\n" +
+                        //$"本期PE在线时长: {(int)data["onlinetime"] / 3600}分钟\n" +
+                        //$"本期PC在线时长: {(int)data["onlinetime"] / 3600}分钟\n" +
+                        $"本期总在线时长: {(int)data["onlinetime"] / 3600}分钟\n" +
+                    //$"当前服务器阶段: {((bool)data["online"] ? "肉前阶段" : "肉后阶段" : "巨人前阶段" : "巨人后阶段" : "四柱阶段" : "月后阶段")}");
+                    //$"状态: {((bool)data["online"] ? $"在线 ({GetCurrentServer(account.username)})" : "离线")}");
+                    $"状态: {(Utils.PlayerOnline(account.username) ? $"在线 ({Utils.GetOnlineServer(account.username)})" : "离线")}");
+                }
+            }
+            [Permission("terraria.admin")]
             public static void Main(CommandArgs args, string name)
             {
-                bool isqq = long.TryParse(name, out long qq);
+                /*bool isqq = long.TryParse(name, out long qq);
                 Binding account = null;
                 if (isqq)
                 {
@@ -792,8 +839,9 @@ namespace BandoriBot.Commands
                 else
                 {
                     account = Configuration.GetConfig<AccountBinding>().t.Where(o => (o.group == Configuration.GetConfig<ServerManager>().GetServer(args).group || Configuration.GetConfig<ServerManager>().GetServerName(args) == "流光之城") && o.username == name).FirstOrDefault();
-                }
-                if(account == null)
+                }*/
+                Binding account = Configuration.GetConfig<AccountBinding>().t.Where(o => (o.group == Configuration.GetConfig<ServerManager>().GetServer(args).group || Configuration.GetConfig<ServerManager>().GetServerName(args) == "流光之城") && o.username == name).FirstOrDefault();
+                if (account == null)
                 {
                     throw new CommandException("未找到该玩家资料！");
                 }
@@ -939,6 +987,7 @@ namespace BandoriBot.Commands
 
         public class 加入黑名单
         {
+            [Permission("terraria.admin")]
             public static void Main(CommandArgs args, long qq)
             {
                 Configuration.GetConfig<Blacklist>().hash.Add(qq);
@@ -948,6 +997,7 @@ namespace BandoriBot.Commands
         }
         public class 移除黑名单
         {
+            [Permission("terraria.admin")]
             public static void Main(CommandArgs args, long qq)
             {
                 Configuration.GetConfig<Blacklist>().hash.Remove(qq);
@@ -955,12 +1005,40 @@ namespace BandoriBot.Commands
                 args.Callback(qq + "已移除黑名单");
             }
         }
+        public class 黑名单
+        {
+            public static void Main(CommandArgs args)
+            {
+                args.Callback("命令列表：\n添加黑名单 QQ\n移除黑名单\n黑名单列表 [页码]\n查黑 QQ");
+            }
+        }
         public class 黑名单列表
         {
             public static void Main(CommandArgs args)
             {
                 int i = 0;
-                args.Callback("黑名单类别如下\n" + string.Join("\n", Configuration.GetConfig<Blacklist>().hash.Select(qq => $"{++i}. {qq}")));
+                args.Callback("黑名单列表如下\n" + string.Join("\n", Configuration.GetConfig<Blacklist>().hash.Select(qq => $"{++i}. {qq}")));
+            }
+            public static void Main(CommandArgs args,int page)
+            {
+                string info = "黑名单列表如下";
+                //args.Callback("黑名单列表如下\n" + string.Join("\n", Configuration.GetConfig<Blacklist>().hash.Select(qq => $"{++i}. {qq}")));
+                var list = Configuration.GetConfig<Blacklist>().hash.ToList();
+                for (int i = (page - 1) * 20; i < Math.Min(page * 20, list.Count); i++)
+                {
+                    info += $"\n{i+1}. {list[i]}";
+                }
+                info += $"第[{Math.Min(list.Count / 20 + 1, page)}/{list.Count / 20 + 1}]页";
+                args.Callback(info);
+            }
+        }
+        public class 查黑
+        {
+            public static void Main(CommandArgs args,long QQ)
+            {
+                int i = 0;
+                var list = string.Join("\n", Configuration.GetConfig<Blacklist>().hash.Select(qq => $"{++i}. {qq}"));
+                args.Callback((list.Contains(QQ.ToString()) ? "该用户在黑名单内" : "该用户不在黑名单内"));
             }
         }
 

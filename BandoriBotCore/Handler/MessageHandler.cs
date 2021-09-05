@@ -179,6 +179,8 @@ namespace BandoriBot.Handler
 
             Utils.Log(LoggerLevel.Debug, $"[{Sender.FromGroup}::{Sender.FromQQ}]recv msg: " + message);
 
+            var list = Configuration.GetConfig<Blacklist>().hash.ToList();
+            if(!list.Contains(Sender.FromQQ))
             Task.Run(() => instance.OnMessage(new HandlerArgs
             {
                 message = message,

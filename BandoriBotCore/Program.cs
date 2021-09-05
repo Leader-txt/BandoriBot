@@ -118,6 +118,8 @@ namespace BandoriBot
             CommandHelper.Register<AdditionalCommands.加入黑名单>();
             CommandHelper.Register<AdditionalCommands.移除黑名单>();
             CommandHelper.Register<AdditionalCommands.黑名单列表>();
+            CommandHelper.Register<AdditionalCommands.黑名单>();
+            CommandHelper.Register<AdditionalCommands.查黑>();
             CommandHelper.Register<AdditionalCommands.服务器列表>();
             CommandHelper.Register<AdditionalCommands.解ip>();
             CommandHelper.Register<AdditionalCommands.封ip>();
