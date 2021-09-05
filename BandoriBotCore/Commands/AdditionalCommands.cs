@@ -1019,17 +1019,17 @@ namespace BandoriBot.Commands
                 int i = 0;
                 args.Callback("黑名单列表如下\n" + string.Join("\n", Configuration.GetConfig<Blacklist>().hash.Select(qq => $"{++i}. {qq}")));
             }
-            public static void Main(CommandArgs args,int page)
+            public static void Main(CommandArgs args, int page)
             {
 
                 string info = "黑名单列表如下";
                 //args.Callback("黑名单列表如下\n" + string.Join("\n", Configuration.GetConfig<Blacklist>().hash.Select(qq => $"{++i}. {qq}")));
                 var list = Configuration.GetConfig<Blacklist>().hash.ToList();
-                for (int i = (page - 1) * 20; i < Math.Min(page * 20, list.Count); i++)
+                for (int i = Math.Min((page - 1), list.Count / 20) * 20; i < Math.Min(page * 20, list.Count); i++)
                 {
-                    info += $"\n{i+1}. {list[i]}";
+                    info += $"\n{i + 1}. {list[i]}";
                 }
-                info += $"第[{Math.Min(list.Count / 20 + 1, page)}/{list.Count / 20 + 1}]页";
+                info += $"\n第[{Math.Min(list.Count / 20 + 1, page)}/{list.Count / 20 + 1}]页";
                 args.Callback(info);
             }
         }
