@@ -1009,7 +1009,7 @@ namespace BandoriBot.Commands
         {
             public static void Main(CommandArgs args)
             {
-                args.Callback("命令列表：\n添加黑名单 QQ\n移除黑名单\n黑名单列表 [页码]\n查黑 QQ");
+                args.Callback("命令列表：\n添加黑名单 QQ\n移除黑名单\n黑名单列表 页码\n查黑 QQ");
             }
         }
         public class 黑名单列表
@@ -1017,7 +1017,8 @@ namespace BandoriBot.Commands
             public static void Main(CommandArgs args)
             {
                 int i = 0;
-                args.Callback("黑名单列表如下\n" + string.Join("\n", Configuration.GetConfig<Blacklist>().hash.Select(qq => $"{++i}. {qq}")));
+                args.Callback("黑名单列表 页码");
+                //args.Callback("黑名单列表如下\n" + string.Join("\n", Configuration.GetConfig<Blacklist>().hash.Select(qq => $"{++i}. {qq}")));
             }
             public static void Main(CommandArgs args, int page)
             {
