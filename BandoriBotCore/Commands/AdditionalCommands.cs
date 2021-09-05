@@ -1021,6 +1021,7 @@ namespace BandoriBot.Commands
             }
             public static void Main(CommandArgs args,int page)
             {
+
                 string info = "黑名单列表如下";
                 //args.Callback("黑名单列表如下\n" + string.Join("\n", Configuration.GetConfig<Blacklist>().hash.Select(qq => $"{++i}. {qq}")));
                 var list = Configuration.GetConfig<Blacklist>().hash.ToList();
