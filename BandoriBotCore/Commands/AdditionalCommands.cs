@@ -990,9 +990,16 @@ namespace BandoriBot.Commands
             [Permission("terraria.admin")]
             public static void Main(CommandArgs args, long qq)
             {
-                Configuration.GetConfig<Blacklist>().hash.Add(qq);
-                Configuration.GetConfig<Blacklist>().Save();
-                args.Callback(qq + "已加入黑名单");
+                if(Configuration.GetConfig<Admin >().hash.ToList().FindAll((long num)=>num==qq).Count == 0)
+                {
+                    Configuration.GetConfig<Blacklist>().hash.Add(qq);
+                    Configuration.GetConfig<Blacklist>().Save();
+                    args.Callback(qq + "已加入黑名单");
+                }
+                else
+                {
+                    args.Callback(qq + "为管理员，无法加入黑名单");
+                }
             }
         }
         public class 移除黑名单
