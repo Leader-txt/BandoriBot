@@ -415,7 +415,7 @@ namespace BandoriBot.Commands
                 {
                     throw new CommandException("该泰拉角色不存在于服务器，请输入 泰拉玩家 查看！", e);
                 }
-                Bitmap bitmap = new Bitmap(80 * 22, 80 * 12);
+                Bitmap bitmap = new Bitmap(80 * 22, 80 * 12);//1760x960
                 Graphics canvas = Graphics.FromImage(bitmap);
 
                 canvas.Clear(Color.White);
@@ -450,6 +450,7 @@ namespace BandoriBot.Commands
                 background.Dispose();
                 frame.Dispose();
                 args.Callback(Utils.GetImageCode(bitmap));
+                //args.Callback("test");
             }
 
             public static void Main(CommandArgs args)
@@ -632,6 +633,19 @@ namespace BandoriBot.Commands
             public static void Main(CommandArgs args)
             {
                 args.Callback("指令格式:泰拉在线排行 页码");
+            }
+        }
+        public class 泰拉每日在线排行
+        {
+            public static void Main(CommandArgs args, int page)
+            {
+                var name = GetUsername(args);
+                args.Callback(RankFormat($"当前在线排行如下: ", Configuration.GetConfig<ServerManager>().GetServer(args).RunRest($"/v1/dailyonlinetime/rankboard"),
+                    rank => $"共计在线{(int)rank["time"] / 3600}分钟", page, rank => rank.Value<string>("name") == name, rank => $"[{rank["name"]}]"));
+            }
+            public static void Main(CommandArgs args)
+            {
+                args.Callback("指令格式:泰拉每日在线排行 页码");
             }
         }
 

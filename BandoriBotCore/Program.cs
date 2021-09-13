@@ -98,6 +98,7 @@ namespace BandoriBot
             CommandHelper.Register<AdditionalCommands.泰拉资料>();
             CommandHelper.Register<AdditionalCommands.封>();
             CommandHelper.Register<AdditionalCommands.泰拉注册>();
+            CommandHelper.Register<AdditionalCommands.泰拉每日在线排行>();
             CommandHelper.Register<AdditionalCommands.泰拉在线排行>();
             CommandHelper.Register<AdditionalCommands.泰拉物品排行>();
             CommandHelper.Register<AdditionalCommands.泰拉财富排行>();

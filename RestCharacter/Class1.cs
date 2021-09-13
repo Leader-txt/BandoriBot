@@ -5,12 +5,15 @@ using Newtonsoft.Json.Linq;
 using Rests;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using Terraria;
 using TerrariaApi.Server;
 using TShockAPI;
+using TShockAPI.DB;
 using Wolfje.Plugins.SEconomy;
 
 namespace RestCharacter
@@ -18,6 +21,10 @@ namespace RestCharacter
     class DeathTimes : PlayerConfigBase<DeathTimes>
     {
         public int times = 0;
+    }
+    class DailyOnlineTime : PlayerConfigBase<DailyOnlineTime>
+    {
+        public int time = 0;
     }
     class OnlineTime : PlayerConfigBase<OnlineTime>
     {
@@ -39,6 +46,95 @@ namespace RestCharacter
         public override string Name => "RestCharacter";
         public override void Initialize()
         {
+            new Task(() =>
+            {
+                while(true)
+                {
+                    if (DateTime.Now.Hour == 5)
+                    {
+                        int i = 0;
+                        using (var context = Db.Context<DailyOnlineTime>())
+                            foreach (var o in context.Config.OrderByDescending(tuple => tuple.time))
+                            {
+                                i++;
+                                UserAccount account = TShock.UserAccounts.GetUserAccountByName(o.name);
+                                if (i <= 3)//如果排名前三则升级
+                                {
+                                    switch (account .Group)
+                                    {
+                                        case "default":
+                                            {
+                                                TShock.UserAccounts.SetUserGroup(account, "Lv1会员");
+                                            }
+                                            break;
+                                        case "Lv1会员":
+                                            {
+                                                TShock.UserAccounts.SetUserGroup(account, "Lv2会员");
+                                            }
+                                            break;
+                                        case "Lv2会员":
+                                            {
+                                                TShock.UserAccounts.SetUserGroup(account, "Lv3会员");
+                                            }
+                                            break;
+                                        case "Lv3会员":
+                                            {
+                                                TShock.UserAccounts.SetUserGroup(account, "Lv4会员");
+                                            }
+                                            break;
+                                        case "Lv4会员":
+                                            {
+                                                TShock.UserAccounts.SetUserGroup(account, "Lv5会员");
+                                            }
+                                            break;
+                                        case "Lv5会员":
+                                            {
+                                                TShock.UserAccounts.SetUserGroup(account, "Lv6会员");
+                                            }
+                                            break;
+                                    }
+                                }
+                                else//如果排名不为前三则降级
+                                {
+                                    switch (account.Group)
+                                    {
+                                        case "Lv1会员":
+                                            {
+                                                TShock.UserAccounts.SetUserGroup(account, "default");
+                                            }
+                                            break;
+                                        case "Lv2会员":
+                                            {
+                                                TShock.UserAccounts.SetUserGroup(account, "Lv1会员");
+                                            }
+                                            break;
+                                        case "Lv3会员":
+                                            {
+                                                TShock.UserAccounts.SetUserGroup(account, "Lv2会员");
+                                            }
+                                            break;
+                                        case "Lv4会员":
+                                            {
+                                                TShock.UserAccounts.SetUserGroup(account, "Lv3会员");
+                                            }
+                                            break;
+                                        case "Lv5会员":
+                                            {
+                                                TShock.UserAccounts.SetUserGroup(account, "Lv4会员");
+                                            }
+                                            break;
+                                        case "Lv6会员":
+                                            {
+                                                TShock.UserAccounts.SetUserGroup(account, "Lv5会员");
+                                            }
+                                            break;
+                                    }
+                                }
+                            }
+                        TShock.DB.QueryReader("update dailyonlinetime set time=0");
+                    }
+                }
+            }).Start();
             TShock.RestApi.Register(new SecureRestCommand("/v1/questrank/rankboard", (RestRequestArgs args) =>
             {
                 var i = 0;
@@ -95,6 +191,10 @@ namespace RestCharacter
                         p.Get<OnlineTime>().Set(d => d.time, d => d.time + 600).Update();
                     });
                     time = 0;
+                    TShock.Players.Where((p) => !string.IsNullOrEmpty(p.GetName()) && Netplay.Clients[p.TPlayer.whoAmI].IsActive).ForEach((p) =>
+                    {
+                        p.Get<DailyOnlineTime>().Set(d => d.time, d => d.time + 600).Update();
+                    });
                 }
             });
 
@@ -102,6 +202,22 @@ namespace RestCharacter
             {
                 int i = 0;
                 using (var context = Db.Context<OnlineTime>())
+                    return new JArray
+                    (
+                        context.Config.OrderByDescending(tuple => tuple.time)
+                        .AsEnumerable().Select(tuple => new JObject
+                        {
+                            ["time"] = (long)tuple.time,
+                            ["rank"] = ++i,
+                            ["name"] = tuple.name
+                        }).ToArray()
+                    );
+            }, new string[] { "onlinetime.rest" }));
+
+            TShock.RestApi.Register(new SecureRestCommand("/v1/dailyonlinetime/rankboard", (RestRequestArgs args) =>
+            {
+                int i = 0;
+                using (var context = Db.Context<DailyOnlineTime>())
                     return new JArray
                     (
                         context.Config.OrderByDescending(tuple => tuple.time)
