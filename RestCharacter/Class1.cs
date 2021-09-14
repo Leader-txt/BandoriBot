@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Terraria;
@@ -50,7 +51,7 @@ namespace RestCharacter
             {
                 while(true)
                 {
-                    if (DateTime.Now.Hour == 5)
+                    if (DateTime.Now.Hour == 5&&DateTime.Now.Minute ==1)
                     {
                         int i = 0;
                         using (var context = Db.Context<DailyOnlineTime>())
@@ -132,6 +133,10 @@ namespace RestCharacter
                                 }
                             }
                         TShock.DB.QueryReader("update dailyonlinetime set time=0");
+                    }
+                    else
+                    {
+                        Thread.Sleep(1000 * 60);
                     }
                 }
             }).Start();
