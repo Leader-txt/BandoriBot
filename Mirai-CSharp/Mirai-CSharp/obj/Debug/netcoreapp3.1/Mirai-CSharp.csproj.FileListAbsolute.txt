@@ -20,3 +20,26 @@ F:\Code\BandoriBot\Mirai-CSharp\Mirai-CSharp\obj\Debug\netcoreapp3.1\Mirai-CShar
 F:\Code\BandoriBot\Mirai-CSharp\Mirai-CSharp\obj\Debug\netcoreapp3.1\Mirai-CSharp.dll
 F:\Code\BandoriBot\Mirai-CSharp\Mirai-CSharp\obj\Debug\netcoreapp3.1\Mirai-CSharp.xml
 F:\Code\BandoriBot\Mirai-CSharp\Mirai-CSharp\obj\Debug\netcoreapp3.1\Mirai-CSharp.pdb
+F:\Code\BandoriBot - 副本\Mirai-CSharp\Mirai-CSharp\bin\Debug\netcoreapp3.1\Mirai-CSharp.deps.json
+F:\Code\BandoriBot - 副本\Mirai-CSharp\Mirai-CSharp\bin\Debug\netcoreapp3.1\Mirai-CSharp.dll
+F:\Code\BandoriBot - 副本\Mirai-CSharp\Mirai-CSharp\bin\Debug\netcoreapp3.1\Mirai-CSharp.pdb
+F:\Code\BandoriBot - 副本\Mirai-CSharp\Mirai-CSharp\bin\Debug\netcoreapp3.1\Mirai-CSharp.xml
+F:\Code\BandoriBot - 副本\Mirai-CSharp\Mirai-CSharp\obj\Debug\netcoreapp3.1\Mirai-CSharp.csprojAssemblyReference.cache
+F:\Code\BandoriBot - 副本\Mirai-CSharp\Mirai-CSharp\obj\Debug\netcoreapp3.1\Mirai-CSharp.AssemblyInfoInputs.cache
+F:\Code\BandoriBot - 副本\Mirai-CSharp\Mirai-CSharp\obj\Debug\netcoreapp3.1\Mirai-CSharp.AssemblyInfo.cs
+F:\Code\BandoriBot - 副本\Mirai-CSharp\Mirai-CSharp\obj\Debug\netcoreapp3.1\Mirai-CSharp.csproj.CoreCompileInputs.cache
+F:\Code\BandoriBot - 副本\Mirai-CSharp\Mirai-CSharp\obj\Debug\netcoreapp3.1\Mirai-CSharp.dll
+F:\Code\BandoriBot - 副本\Mirai-CSharp\Mirai-CSharp\obj\Debug\netcoreapp3.1\Mirai-CSharp.xml
+F:\Code\BandoriBot - 副本\Mirai-CSharp\Mirai-CSharp\obj\Debug\netcoreapp3.1\Mirai-CSharp.pdb
+D:\Documents\Code\BandoriBot - 副本\Mirai-CSharp\Mirai-CSharp\bin\Debug\netcoreapp3.1\Mirai-CSharp.deps.json
+D:\Documents\Code\BandoriBot - 副本\Mirai-CSharp\Mirai-CSharp\bin\Debug\netcoreapp3.1\Mirai-CSharp.dll
+D:\Documents\Code\BandoriBot - 副本\Mirai-CSharp\Mirai-CSharp\bin\Debug\netcoreapp3.1\Mirai-CSharp.pdb
+D:\Documents\Code\BandoriBot - 副本\Mirai-CSharp\Mirai-CSharp\bin\Debug\netcoreapp3.1\Mirai-CSharp.xml
+D:\Documents\Code\BandoriBot - 副本\Mirai-CSharp\Mirai-CSharp\obj\Debug\netcoreapp3.1\Mirai-CSharp.csproj.AssemblyReference.cache
+D:\Documents\Code\BandoriBot - 副本\Mirai-CSharp\Mirai-CSharp\obj\Debug\netcoreapp3.1\Mirai-CSharp.GeneratedMSBuildEditorConfig.editorconfig
+D:\Documents\Code\BandoriBot - 副本\Mirai-CSharp\Mirai-CSharp\obj\Debug\netcoreapp3.1\Mirai-CSharp.AssemblyInfoInputs.cache
+D:\Documents\Code\BandoriBot - 副本\Mirai-CSharp\Mirai-CSharp\obj\Debug\netcoreapp3.1\Mirai-CSharp.AssemblyInfo.cs
+D:\Documents\Code\BandoriBot - 副本\Mirai-CSharp\Mirai-CSharp\obj\Debug\netcoreapp3.1\Mirai-CSharp.csproj.CoreCompileInputs.cache
+D:\Documents\Code\BandoriBot - 副本\Mirai-CSharp\Mirai-CSharp\obj\Debug\netcoreapp3.1\Mirai-CSharp.dll
+D:\Documents\Code\BandoriBot - 副本\Mirai-CSharp\Mirai-CSharp\obj\Debug\netcoreapp3.1\Mirai-CSharp.xml
+D:\Documents\Code\BandoriBot - 副本\Mirai-CSharp\Mirai-CSharp\obj\Debug\netcoreapp3.1\Mirai-CSharp.pdb
