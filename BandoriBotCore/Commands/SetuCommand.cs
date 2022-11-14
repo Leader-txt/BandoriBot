@@ -18,6 +18,9 @@ namespace BandoriBot.Commands
     public class R18AllowedCommand : HashCommand<R18Allowed, long>
     {
         public override List<string> Alias => new List<string> { "/r18" };
+
+        protected override string Permission => throw new NotImplementedException();
+
         public override async Task Run(CommandArgs args)
         {
             if (args.Source.FromQQ != 1176321897L) return;
@@ -28,6 +31,9 @@ namespace BandoriBot.Commands
     public class NormalAllowedCommand : HashCommand<NormalAllowed, long>
     {
         public override List<string> Alias => new List<string> { "/normal" };
+
+        protected override string Permission => throw new NotImplementedException();
+
         protected override long GetTarget(long value) => value;
 
         public override async Task Run(CommandArgs args)

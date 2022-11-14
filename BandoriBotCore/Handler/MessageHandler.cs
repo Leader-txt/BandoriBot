@@ -1,88 +1,67 @@
-using BandoriBot.Commands;
-using BandoriBot.Config;
-using BandoriBot.Models;
-using Mirai_CSharp;
-using Mirai_CSharp.Models;
-using Mirai_CSharp.Plugin.Interfaces;
-using Newtonsoft.Json.Linq;
-using SekaiClient;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Threading;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using BandoriBot.Commands;
+using BandoriBot.Config;
+using BandoriBot.Handler;
+using BandoriBot.Models;
+using BandoriBot.Services;
+using Sora.Entities.Base;
 
-namespace BandoriBot.Handler
+namespace BandoriBot
 {
-    public class HandlerHolder
+    public static class MessageHandler
     {
-        public IMessageHandler handler;
-        public BlockingDelegate<HandlerArgs, bool> cmd;
-
-        public HandlerHolder(IMessageHandler handler)
-        {
-            this.handler = handler;
-            cmd = new BlockingDelegate<HandlerArgs, bool>(handler.OnMessage);
-        }
-    }
-
-    public struct Source
-    {
-        public long FromGroup, FromQQ;
-        public MiraiHttpSession Session;
-        public bool IsTemp;
-
-        internal static readonly long AdminQQ = long.Parse(File.ReadAllText("adminqq.txt"));
-
-        private bool IsAdmin => AdminQQ == FromQQ || Configuration.GetConfig<Admin>().hash.Contains(FromQQ);
-
-        public JObject GetSave()
-        {
-            var result = Configuration.GetConfig<Save>()[FromQQ];
-            if (result == null)
-            {
-                result = new JObject();
-                Configuration.GetConfig<Save>()[FromQQ] = result;
-            }
-            return result;
-        }
-
-        public async Task<bool> CheckPermission(long target = 0, GroupPermission required = GroupPermission.Administrator)
-        {
-            var qq = FromQQ;
-            return IsAdmin || ((target == 0 ? new IGroupMemberInfo[0] : await Session.GetGroupMemberListAsync(target))
-                .SingleOrDefault(info => info.Id == qq)?.Permission ?? GroupPermission.Member) >= required;
-        }
-
-        public bool HasPermission(string perm) =>
-            perm == null || IsAdmin ||
-            Configuration.GetConfig<PermissionConfig>().t[FromQQ].Contains(perm) ||
-            perm.Contains('.') && HasPermission(perm.Substring(0, perm.LastIndexOf('.')));
-    }
-
-    public class MessageHandler : IMessageHandler, IFriendMessage, IGroupMessage, IBotInvitedJoinGroup, INewFriendApply, IGroupMessageRevoked, ITempMessage
-    {
-        private class Message
-        {
-            public DateTime time;
-            public int id;
-            public long group, qq;
-            public IMessageBase[] message;
-        }
-
+        public static readonly HashSet<long> selfids =
+            new(File.ReadAllText("selfid.txt").Split('\n').Select(long.Parse));
+        private static readonly ConcurrentDictionary<long, (long, long)> hashedGroupCache = new();
         private static readonly List<HandlerHolder> functions = new List<HandlerHolder>();
-        private static readonly IMessageHandler instance = new MessageHandler();
-        private static readonly Queue<Message> msgRecord = new Queue<Message>();
-        private static readonly State head = new State();
+        private static readonly State head = new();
         public static bool booted = false;
 
-        public static MiraiHttpSession session;
+        public static SoraApi session => bots.OrderBy(p => p.GetHashCode()).FirstOrDefault().Value;
+
+        private static unsafe long GetHashCode(string str)
+        {
+            long num = 5381;
+            long num2 = num;
+            int num3;
+            fixed (char* ptr = str)
+            {
+                char* ptr2 = ptr;
+                while ((num3 = (int)(*ptr2)) != 0)
+                {
+                    num = ((num << 5) + num ^ num3);
+                    num3 = (int)ptr2[1];
+                    if (num3 == 0)
+                    {
+                        break;
+                    }
+                    num2 = ((num2 << 5) + num2 ^ num3);
+                    ptr2 += 2;
+                }
+            }
+            return num + num2 * 1566083941;
+        }
+
+        public static long HashGroupCache(long guild, long channel)
+        {
+            var res = GetHashCode($"{guild}{channel}");
+            hashedGroupCache.TryAdd(res, (guild, channel));
+            return res;
+        }
+
+        public static (long guild, long channel) GetGroupCache(long hash) => hashedGroupCache[hash];
 
         private class State
         {
             public State[] next = new State[256];
+            public string trigger;
             public BlockingDelegate<CommandArgs> cmd;
         }
 
@@ -90,7 +69,6 @@ namespace BandoriBot.Handler
         public static void Register<T>() where T : new()
         {
             var t = new T();
-            if (t is ISession session) session.Session = MessageHandler.session;
             if (t is ICommand tcmd) Register(tcmd);
             else if (t is IMessageHandler tmsg) Register(tmsg);
         }
@@ -100,17 +78,26 @@ namespace BandoriBot.Handler
             functions.Add(new HandlerHolder(t));
         }
 
+        public static void SortHandler()
+        {
+            functions.Sort((a, b) => -a.handler.Priority.CompareTo(b.handler.Priority));
+        }
+
         public static void Register(ICommand t)
         {
             var @delegate = new BlockingDelegate<CommandArgs>(async args =>
             {
-                if (!args.Source.HasPermission(t.Permission))
+                if (!await args.Source.HasPermission(t.Permission, args.Source.FromGroup))
                 {
                     await args.Callback("access denied.");
                     return;
                 }
+
                 if (!Configuration.GetConfig<BlacklistF>().InBlacklist(args.Source.FromGroup, t))
+                {
+                    Utils.Log(LoggerLevel.Info, $"message {args.Arg} triggered command {t.GetType().FullName}");
                     await t.Run(args);
+                }
             });
 
             foreach (var alias in t.Alias)
@@ -122,14 +109,25 @@ namespace BandoriBot.Handler
                     node = node.next[b];
                 }
                 node.cmd = @delegate;
+                node.trigger = alias;
             }
         }
 
-        public bool IgnoreCommandHandled => true;
-
         //provide api compatibility
 
-        public void OnMessage(string message, Source source, bool isAdmin, Action<string> callback)
+        public static string OnMessageTest(Match match, Source source, bool isAdmin, Action<string> callback)
+        {
+            return string.Join("\n", source.Session.GetGroupRootFiles(source.FromGroup).Result.groupFolders
+                    .Where(f => f.Name.StartsWith(match.Groups[1].Value))
+                    .SelectMany(f => source.Session.GetGroupFilesByFolder(source.FromGroup, f.Id).Result.groupFiles)
+                    .Where(f => f.Name.EndsWith(".xlsx"))
+                    .GroupBy(f => f.UploadUserId)
+                    .OrderByDescending(g => g.Count())
+                    .Select((g, i) => $"{i + 1}.{g.First().UploadUserName}: {g.Count()}"))
+                .ToImageText();
+
+        }
+        public static void OnMessage(string message, Source source, bool isAdmin, Action<string> callback)
         {
             OnMessage(new HandlerArgs
             {
@@ -139,49 +137,70 @@ namespace BandoriBot.Handler
             }).Wait();
         }
 
-        private static int num = 0;
+        private static ConcurrentQueue<int> msgqueue = new();
+        public static readonly Dictionary<long, SoraApi> bots = new();
 
-        protected static void OnMessage(MiraiHttpSession session, string message, Source Sender)
+        private static bool SameMessageFiltering(string msg, Source src)
+        {
+            lock (bots)
+                if (bots.ContainsKey(src.FromQQ)) return false;
+            var hash = HashCode.Combine(msg, src.FromGroup, src.FromQQ, src.time.ToTimestamp() / 3000);
+            if (msgqueue.Contains(hash)) return false;
+            msgqueue.Enqueue(hash);
+            while (msgqueue.Count > 100) msgqueue.TryDequeue(out _);
+            return true;
+        }
+
+        public static async Task OnMessage(SoraApi session, string message, Source Sender)
         {
             if (!booted) return;
 
-            long ticks = DateTime.Now.Ticks;
+            lock (msgqueue)
+                if (!SameMessageFiltering(message, Sender)) return;
 
+            long ticks = DateTime.Now.Ticks;
             Func<string, Task> callback = async s =>
             {
                 try
                 {
-                    Utils.Log(LoggerLevel.Debug, $"[{ Sender.FromGroup}::{ Sender.FromQQ}] [{ (DateTime.Now.Ticks - ticks) / 10000}ms] sent msg: " + s);
-                    if (Sender.FromGroup != 0)
-                        await session.SendGroupMessageAsync(Sender.FromGroup, await Utils.GetMessageChain(s, async p => await session.UploadPictureAsync(UploadTarget.Group, p)));
-                    else if (!Sender.IsTemp)
-                        await session.SendFriendMessageAsync(Sender.FromQQ, await Utils.GetMessageChain(s, async p => await session.UploadPictureAsync(UploadTarget.Temp, p)));
+                    if (Sender.IsGuild)
+                    {
+                        var (guild, channel) = GetGroupCache(Sender.FromGroup);
+                        Utils.Log(LoggerLevel.Debug,
+                            $"[{guild}::{channel}::{Sender.FromQQ}] [{(DateTime.Now.Ticks - ticks) / 10000}ms] sent msg: " +
+                            s);
+                        await session.SendGuildMessage(guild, channel, Utils.GetMessageChain(s));
+                    }
                     else
-                        await session.SendTempMessageAsync(Sender.FromQQ, Sender.FromGroup, await Utils.GetMessageChain(s, async p => await session.UploadPictureAsync(UploadTarget.Friend, p)));
+                    {
+                        Utils.Log(LoggerLevel.Debug,
+                            $"[{Sender.FromGroup}::{Sender.FromQQ}] [{(DateTime.Now.Ticks - ticks) / 10000}ms] sent msg: " +
+                            s);
+                        if (Sender.FromGroup != 0)
+                            await session.SendGroupMessage(Sender.FromGroup, Utils.GetMessageChain(s));
+                        else
+                            await session.SendPrivateMessage(Sender.FromQQ, Utils.GetMessageChain(s));
+                    }
 
                 }
                 catch (Exception e)
                 {
-                    Utils.Log(LoggerLevel.Error, "error in msg: " + s + "\n" + e.ToString());
+                    Utils.Log(LoggerLevel.Error, $"error in msg: {s}\n{e}");
                 }
             };
 
-            ChatRecordContext.Context.Records.Add(new Record
-            {
-                Group = Sender.FromGroup,
-                QQ = Sender.FromQQ,
-                Message = message,
-                Time = DateTime.Now
-            });
+            RecordDatabaseManager.AddRecord(Sender.FromQQ, Sender.FromGroup, DateTime.Now, message);
 
-            if (Interlocked.Increment(ref num) % 100 == 0)
-                ChatRecordContext.Context.SaveChanges();
+            if (Configuration.GetConfig<GroupBlacklist>().InBlacklist(Sender.FromGroup) ||
+                Configuration.GetConfig<GroupBlacklist>().InBlacklist(Sender.FromQQ))
+            {
+                Utils.Log(LoggerLevel.Debug, $"[{Sender.FromGroup}::{Sender.FromQQ}]ignored msg: " + message);
+                return;
+            }
 
             Utils.Log(LoggerLevel.Debug, $"[{Sender.FromGroup}::{Sender.FromQQ}]recv msg: " + message);
 
-            var list = Configuration.GetConfig<Blacklist>().hash.ToList();
-            if(!list.Contains(Sender.FromQQ))
-            Task.Run(() => instance.OnMessage(new HandlerArgs
+            await Task.Run(() => OnMessage(new HandlerArgs
             {
                 message = message,
                 Sender = Sender,
@@ -189,15 +208,16 @@ namespace BandoriBot.Handler
             }));
         }
 
-        private void ProcessError(Func<string, Task> callback, Exception e)
+        private static void ProcessError(Func<string, Task> callback, Exception e, bool senderr)
         {
             Utils.Log(LoggerLevel.Error, e.ToString());
 
             while (e is AggregateException) e = e.InnerException;
             if (e is ApiException) callback(e.Message);
+            else if (senderr) callback(e.ToString());
         }
 
-        public async Task<bool> OnMessage(HandlerArgs args)
+        public static async Task<bool> OnMessage(HandlerArgs args)
         {
             var node = head;
             var i = 0;
@@ -217,17 +237,18 @@ namespace BandoriBot.Handler
             {
                 try
                 {
-                    await node.cmd.Run(new CommandArgs
+                    await node.cmd.Run(new CommandArgs(args)
                     {
                         Arg = args.message.Substring(Encoding.UTF8.GetString(bytes.Take(i).ToArray()).Length),
                         Source = args.Sender,
-                        Callback = args.Callback
+                        Callback = args.Callback,
+                        Trigger = node.trigger
                     });
                     cmdhandle = true;
                 }
                 catch (Exception e)
                 {
-                    ProcessError(args.Callback, e);
+                    ProcessError(args.Callback, e, await args.Sender.HasPermission("ignore.noerr", -1));
                 }
             }
 
@@ -236,115 +257,33 @@ namespace BandoriBot.Handler
                 try
                 {
                     if ((!cmdhandle || function.handler.IgnoreCommandHandled) && !Configuration.GetConfig<BlacklistF>().InBlacklist(args.Sender.FromGroup, function))
-                         if (await function.cmd.Run(args)) break;
+                    {
+                        if (await function.cmd.Run(args))
+                        {
+                            break;
+                        }
+                    }
                 }
                 catch (Exception e)
                 {
-                    ProcessError(args.Callback, e);
+                    ProcessError(args.Callback, e, await args.Sender.HasPermission("ignore.noerr", -1));
                 }
             }
             return true;
         }
-
-#pragma warning disable CS1998 // 异步方法缺少 "await" 运算符，将以同步方式运行
-        public async Task<bool> GroupMessage(MiraiHttpSession session, IGroupMessageEventArgs e)
+        public static async Task Broadcast(string msg)
         {
-            var source = e.Chain.First() as SourceMessage;
-            if (source != null && (Configuration.GetConfig<Antirevoke>().hash.Contains(e.Sender.Group.Id) ||
-                Configuration.GetConfig<AntirevokePlus>().hash.Contains(e.Sender.Group.Id)))
-            {
-                var now = DateTime.Now;
-                while (msgRecord.Count > 0)
-                {
-                    if (now - msgRecord.Peek().time > new TimeSpan(0, 10, 0))
-                        msgRecord.Dequeue();
-                    else
-                        break;
-                }
-
-                msgRecord.Enqueue(new Message
-                {
-                    id = source.Id,
-                    message = e.Chain.Skip(1).ToArray(),
-                    group = e.Sender.Group.Id,
-                    qq = e.Sender.Id,
-                    time = now
-                });
-            }
-
-            OnMessage(session, Utils.GetCQMessage(e.Chain), new Source
-            {
-                FromGroup = e.Sender.Group.Id,
-                FromQQ = e.Sender.Id,
-                Session = session
-            });
-            return false;
+            var group = await GetGroupList();
+            foreach (var tuple in group.GroupBy(t => t.Item1).Select(g => g.OrderBy(g => g.GetHashCode()).First()))
+                await tuple.Item2.SendGroupMessage(tuple.Item1, Utils.GetMessageChain(msg));
         }
 
-        public async Task<bool> FriendMessage(MiraiHttpSession session, IFriendMessageEventArgs e)
+        public static async Task<(long, SoraApi)[]> GetGroupList()
         {
-            OnMessage(session, Utils.GetCQMessage(e.Chain), new Source
-            {
-                FromGroup = 0,
-                FromQQ = e.Sender.Id,
-                Session = session
-            });
-            return false;
+            var group = new List<(long, SoraApi)>();
+            foreach (var pair in bots)
+                group.AddRange((await pair.Value.GetGroupList()).groupList.Select(g => (g.GroupId, pair.Value)));
+            return group.ToArray();
         }
-
-        public async Task<bool> NewFriendApply(MiraiHttpSession session, INewFriendApplyEventArgs e)
-        {
-            await session.HandleNewFriendApplyAsync(e, FriendApplyAction.Allow);
-            return true;
-        }
-
-        public async Task<bool> BotInvitedJoinGroup(MiraiHttpSession session, IBotInvitedJoinGroupEventArgs e)
-        {
-            await session.HandleGroupApplyAsync(e, GroupApplyActions.Allow);
-            return true;
-        }
-
-        public async Task<bool> GroupMessageRevoked(MiraiHttpSession session, IGroupMessageRevokedEventArgs e)
-        {
-            var record = msgRecord.FirstOrDefault(msg => msg.id == e.MessageId);
-            if (record == null || e.Operator.Id != record.qq) return false;
-            try
-            {
-                if (Configuration.GetConfig<AntirevokePlus>().hash.Contains(record.group))
-                {
-                    await session.SendFriendMessageAsync(Source.AdminQQ, (new IMessageBase[]
-                    {
-                        new PlainMessage($"群{record.group}的{record.qq}尝试撤回一条消息：")
-                    }).Concat(record.message).ToArray());
-                }
-                else
-                {
-                    await session.SendGroupMessageAsync(record.group, (new IMessageBase[]
-                    {
-                        new AtMessage(e.Operator.Id),
-                        new PlainMessage("尝试撤回一条消息：")
-                    }).Concat(record.message).ToArray());
-                }
-                return true;
-            }
-            catch (Exception e2)
-            {
-                this.Log(LoggerLevel.Error, e2.ToString());
-                return false;
-            }
-        }
-
-        public async Task<bool> TempMessage(MiraiHttpSession session, ITempMessageEventArgs e)
-        {
-            OnMessage(session, Utils.GetCQMessage(e.Chain), new Source
-            {
-                FromGroup = 0,
-                FromQQ = e.Sender.Id,
-                Session = session,
-                IsTemp = true
-            });
-            return false;
-        }
-#pragma warning restore CS1998 // 异步方法缺少 "await" 运算符，将以同步方式运行
     }
 }

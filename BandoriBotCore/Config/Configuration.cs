@@ -81,7 +81,7 @@ namespace BandoriBot.Config
                     {
                         Utils.Log(LoggerLevel.Error, e.ToString());
                         //backup error file
-                        File.Copy(config.Value.Name, config.Value.Name + ".errbak");
+                        File.Copy(config.Value.Name, config.Value.Name + ".errbak",true);
                     }
                     config.Value.LoadDefault();
                 }

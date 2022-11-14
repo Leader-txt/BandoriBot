@@ -1,6 +1,5 @@
 using BandoriBot.Config;
 using BandoriBot.Handler;
-using Mirai_CSharp.Models;
 using Native.Csharp.App.Terraria;
 using Newtonsoft.Json.Linq;
 using System;
@@ -827,7 +826,7 @@ namespace BandoriBot.Commands
                         $"权限: {data["group"]}\n" +
                         //$"等级: {data["ip"]}\n" +
                         //$"经验: {data["ip"]}\n" +；//$"财富: {data["ip"]}\n" +
-                        $"货币：{Utils.GetMoney(Configuration.GetConfig<ServerManager>().GetServer(args), account.username)}\r" +
+                        //$"货币：{Utils.GetMoney(Configuration.GetConfig<ServerManager>().GetServer(args), account.username)}\r" +
                         $"生命：{data["statLife"]}/{data["statLifeMax"]}\n" +
                         $"法力：{data["statMana"]}/{data["statManaMax"]}\n" +
                         ((bank != null && bank["status"].ToString() == "200") ? $"经济：{bank["money"]}$\n" : "") +
@@ -835,10 +834,11 @@ namespace BandoriBot.Commands
                         //$"今日总在线时长:功能未实现\n" +
                         //$"本期PE在线时长: {(int)data["onlinetime"] / 3600}分钟\n" +
                         //$"本期PC在线时长: {(int)data["onlinetime"] / 3600}分钟\n" +
-                        $"本期总在线时长: {(int)data["onlinetime"] / 3600}分钟\n" +
+                        $"本期总在线时长: {(int)data["onlinetime"] / 3600}分钟\n" +""
                     //$"当前服务器阶段: {((bool)data["online"] ? "肉前阶段" : "肉后阶段" : "巨人前阶段" : "巨人后阶段" : "四柱阶段" : "月后阶段")}");
                     //$"状态: {((bool)data["online"] ? $"在线 ({GetCurrentServer(account.username)})" : "离线")}");
-                    $"状态: {(Utils.PlayerOnline(account.username) ? $"在线 ({Utils.GetOnlineServer(account.username)})" : "离线")}");
+                    //$"状态: {(Utils.PlayerOnline(account.username) ? $"在线 ({Utils.GetOnlineServer(account.username)})" : "离线")}"
+                    );
                 }
             }
             [Permission("terraria.admin")]
@@ -883,7 +883,7 @@ namespace BandoriBot.Commands
                         $"权限: {data["group"]}\n" +
                         //$"等级: {data["ip"]}\n" +
                         //$"经验: {data["ip"]}\n" +；//$"财富: {data["ip"]}\n" +
-                        $"货币：{Utils.GetMoney(Configuration.GetConfig<ServerManager>().GetServer(args),account.username)}\r"+
+                        //$"货币：{Utils.GetMoney(Configuration.GetConfig<ServerManager>().GetServer(args),account.username)}\r"+
                         $"生命：{data["statLife"]}/{data["statLifeMax"]}\n" +
                         $"法力：{data["statMana"]}/{data["statManaMax"]}\n" +
                         ((bank!=null&&bank["status"].ToString()=="200")?$"经济：{bank["money"]}$\n":"")+
@@ -891,10 +891,11 @@ namespace BandoriBot.Commands
                         //$"今日总在线时长:功能未实现\n" +
                         //$"本期PE在线时长: {(int)data["onlinetime"] / 3600}分钟\n" +
                         //$"本期PC在线时长: {(int)data["onlinetime"] / 3600}分钟\n" +
-                        $"本期总在线时长: {(int)data["onlinetime"] / 3600}分钟\n" +
+                        $"本期总在线时长: {(int)data["onlinetime"] / 3600}分钟\n" +""
                     //$"当前服务器阶段: {((bool)data["online"] ? "肉前阶段" : "肉后阶段" : "巨人前阶段" : "巨人后阶段" : "四柱阶段" : "月后阶段")}");
                     //$"状态: {((bool)data["online"] ? $"在线 ({GetCurrentServer(account.username)})" : "离线")}");
-                    $"状态: {(Utils.PlayerOnline(account.username) ? $"在线 ({Utils.GetOnlineServer(account.username)})" : "离线")}");
+                    //$"状态: {(Utils.PlayerOnline(account.username) ? $"在线 ({Utils.GetOnlineServer(account.username)})" : "离线")}"
+                    );
                 }
             }
             

@@ -14,6 +14,8 @@ namespace BandoriBot.Commands
             "/whitelist"
         };
 
+        protected override string Permission => throw new NotImplementedException();
+
         protected override long GetTarget(long value) => value;
 
         public override async Task Run(CommandArgs args)

@@ -14,6 +14,8 @@ namespace BandoriBot.Commands
             "/blacklist"
         };
 
+        protected override string Permission => throw new NotImplementedException();
+
         protected override long GetTarget(string value)
         {
             try

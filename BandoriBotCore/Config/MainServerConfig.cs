@@ -1,6 +1,5 @@
 ﻿using BandoriBot.Handler;
 using BandoriBot.Terraria;
-using Mirai_CSharp.Models;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -38,7 +37,7 @@ namespace BandoriBot.Config
             server.OnServerMessage += msg =>
             {
                 foreach (var group in t.groups)
-                    MessageHandler.session.SendGroupMessageAsync(group, new PlainMessage(msg)).Wait();
+                    MessageHandler.session.SendGroupMessage(group, msg);
             };
         }
 

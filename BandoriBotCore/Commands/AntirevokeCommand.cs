@@ -9,6 +9,9 @@ namespace BandoriBot.Commands
     public class AntirevokeCommand : HashCommand<Antirevoke, long>
     {
         public override List<string> Alias => new List<string> { "/antirevoke" };
+
+        protected override string Permission => throw new NotImplementedException();
+
         protected override long GetTarget(long value) => value;
 
         public override async Task Run(CommandArgs args)
@@ -20,6 +23,9 @@ namespace BandoriBot.Commands
     public class AntirevokePlusCommand : HashCommand<AntirevokePlus, long>
     {
         public override List<string> Alias => new List<string> { "/arplus" };
+
+        protected override string Permission => throw new NotImplementedException();
+
         protected override long GetTarget(long value) => value;
 
         public override async Task Run(CommandArgs args)

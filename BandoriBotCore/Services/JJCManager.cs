@@ -1,11 +1,8 @@
-using BandoriBot.Handler;
+using BandoriBot.Services;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using PCRClient;
-using SekaiClient;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -16,13 +13,15 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
+using GoWasmWrapper;
+using WebAssembly;
 
 namespace BandoriBot.Services
 {
+    using JsObject = Dictionary<string, object>;
     public sealed class JJCManager : IDisposable
     {
         public static JJCManager Instance = new JJCManager(Path.Combine("jjc"));
-        private ProxyPool pool = new ProxyPool();
 
 #pragma warning disable CS0649
         class CommentModel
@@ -97,29 +96,36 @@ namespace BandoriBot.Services
 
         public JJCManager(string root)
         {
-            textures = new Dictionary<string, Image>();
-            nicknames = new Dictionary<string, int>();
-            font = new Font(FontFamily.GenericMonospace, 15);
-
-            foreach (var file in Directory.GetFiles(root))
-                if (file.EndsWith(".png"))
-                    textures.Add(Path.GetFileNameWithoutExtension(file), Image.FromFile(file));
-
-            trie = new Trie<int>();
-
-            foreach (Match match in Regex.Matches(File.ReadAllText(Path.Combine(root, "chara_names.py")),
-                @"(\d\d\d\d): \[(.*?)\],"))
+            try
             {
-                var id = 100 * int.Parse(match.Groups[1].Value) + 1;// characters.SingleOrDefault(c => c.name.EndsWith(splits[2]));
-                foreach (var text in match.Groups[2].Value.Split(','))
+                textures = new Dictionary<string, Image>();
+                nicknames = new Dictionary<string, int>();
+                font = new Font(FontFamily.GenericMonospace, 15);
+
+                foreach (var file in Directory.GetFiles(root))
+                    if (file.EndsWith(".png"))
+                        textures.Add(Path.GetFileNameWithoutExtension(file), Image.FromFile(file));
+
+                trie = new Trie<int>();
+
+                foreach (Match match in Regex.Matches(File.ReadAllText(Path.Combine(root, "chara_names.py")),
+                             @"(\d\d\d\d): \[(.*?)\],"))
                 {
-                    var nickname = text.Trim(' ').Trim('"');
-                    if (!nicknames.ContainsKey(nickname))
+                    var id = 100 * int.Parse(match.Groups[1].Value) + 1;// characters.SingleOrDefault(c => c.name.EndsWith(splits[2]));
+                    foreach (var text in match.Groups[2].Value.Split(','))
                     {
-                        trie.AddWord(Normalize(nickname), id);
-                        nicknames.Add(nickname, id);
+                        var nickname = text.Trim(' ').Trim('"');
+                        if (!nicknames.ContainsKey(nickname))
+                        {
+                            trie.AddWord(Normalize(nickname), id);
+                            nicknames.Add(nickname, id);
+                        }
                     }
                 }
+            }
+            catch
+            {
+
             }
 
             client = new HttpClient();
@@ -141,70 +147,6 @@ namespace BandoriBot.Services
             */
         }
         
-        private JObject ProxyPost(JObject json)
-        {
-            bool suc = false;
-            object suclock = new object();
-            JObject result = null;
-            using var evt = new ManualResetEvent(false);
-            this.Log(Models.LoggerLevel.Info, $"posting {json}");
-
-            pool.proxys.OrderBy(_ => Guid.NewGuid())
-                .AsParallel().WithDegreeOfParallelism(48).ForAll(s =>
-                {
-                    lock (suclock) if (suc) return;
-
-                    var client = new HttpClient
-                    
-                    (new HttpClientHandler
-                    {
-                        Proxy = new WebProxy(s.ToString())
-                    });
-
-                    client.Timeout = new TimeSpan(0, 0, 10);
-
-                    client.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36 Edg/87.0.664.66");
-                    client.DefaultRequestHeaders.Add("Referer", "https://pcrdfans.com/");
-                    client.DefaultRequestHeaders.Add("Origin", "https://pcrdfans.com");
-                    client.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", "");
-                    client.DefaultRequestHeaders.Add("Sec-Fetch-Dest", "empty");
-                    client.DefaultRequestHeaders.Add("Sec-Fetch-Mode", "cors");
-                    client.DefaultRequestHeaders.Add("Sec-Fetch-Site", "same-site");
-                    client.DefaultRequestHeaders.Add("Accept", "*/*");
-                    //client.DefaultRequestHeaders.Add("Accept-Encoding", "gzip, deflate, br");
-                    client.DefaultRequestHeaders.Add("Accept-Language", "zh-CN,zh;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6");
-                    client.DefaultRequestHeaders.Remove("Expect");
-
-                    try
-                    {
-                        var content = client.PostAsync($"https://api.pcrdfans.com/x/v1/search",
-                            new StringContent(json.ToString(Formatting.None)
-                        , Encoding.UTF8, "application/json")).Result;
-
-                        lock (suclock) if (suc) return;
-
-                        var res = JObject.Parse(content.Content.ReadAsStringAsync().Result);
-                        var code = res.Value<int>("code");
-                        if (code == -429 || code == 601) throw new ApiException();
-
-                        lock (suclock)
-                        {
-                            if (suc) return;
-
-                            suc = true;
-                            result = res;
-                            evt.Set();
-                        }
-                    }
-                    catch
-                    {
-
-                    }
-                });
-
-            evt.WaitOne();
-            return result;
-        }
         private Image GetTexture(Character c)
         {
             Image img;
@@ -239,7 +181,7 @@ namespace BandoriBot.Services
 
             canvas.DrawString($"顶：{t.up} 踩：{t.down} ", font, Brushes.Black, offx, offy + 100);
         }
-        
+
         private Image GetImage(Result[] teams)
         {
             var n = teams.Length;
@@ -265,42 +207,92 @@ namespace BandoriBot.Services
             return (long)ts.TotalSeconds;
         }
 
-        private delegate void CallbackD(string text);
+        internal GoWrapper wrapper;
 
-        [DllImport("PCRDwasm.dll", EntryPoint = "getSign", CallingConvention = CallingConvention.Cdecl)]
-        private static extern void GetSign(string text, string nonce, CallbackD callback);
+        private static double calcHash(string str)
+        {
+            var text = Encoding.ASCII.GetBytes(str);
+            uint _0x473e93, _0x5d587e;
+            for (_0x473e93 = 0x1bf52, _0x5d587e = (uint)text.Length; _0x5d587e != 0;)
+                _0x473e93 = 0x309 * _0x473e93 ^ text[--_0x5d587e];
+            return _0x473e93 >> 0x3;
+        }
+
+        private static double myHash(string str)
+        {
+            var text = Encoding.ASCII.GetBytes(str);
+            uint _0x473e93, _0x5d587e;
+            for (_0x473e93 = 0x202, _0x5d587e = (uint)text.Length; _0x5d587e != 0;)
+                _0x473e93 = 0x72 * _0x473e93 ^ text[--_0x5d587e];
+            return _0x473e93 >> 0x3;
+        }
+
+        private string version;
+
+        public async Task UpdateVersion()
+        {
+            var cur = JObject.Parse(await client.GetStringAsync("https://api.pcrdfans.com/x/v1/search")).Value<string>("version");
+            if (cur != version)
+            {
+                version = cur;
+
+                await File.WriteAllBytesAsync("pcrd.wasm", await client.GetByteArrayAsync("https://pcrdfans.com/pcrd.wasm"));
+
+                wrapper = new GoWrapper(Module.ReadFromBinary("pcrd.wasm"))
+                {
+                    Global =
+                    {
+                        ["myhash"] = new Func<string, double>(myHash),
+                        ["location"] = new JsObject
+                        {
+                            ["host"] = "pcrdfans.com",
+                            ["hostname"] = "pcrdfans.com",
+
+                        }
+                    }
+                };
+            }
+
+        }
 
         public async Task<string> Callapi(string text)
         {
             string prefix = "";
             var indexes = trie.WordSplit(Normalize(text));
+            if (indexes.Item1.Length == 0) return string.Empty;
             if (indexes.Item1.Length > 5)
                 throw new ApiException("角色数超过了五个！");
             else if (indexes.Item1.Length < 5)
                 prefix = "**角色数少于五个**\n" +
                     (indexes.Item2.Length > 0 ? $"未能识别的名字：{string.Join(',', indexes.Item2.Where(s => !string.IsNullOrWhiteSpace(s)))}\n" : "");
 
+            await UpdateVersion();
             this.Log(Models.LoggerLevel.Debug, $"chara id = {string.Join(",", indexes.Item1)}");
+
+            var nonce = GenNonce();
             var json = new JObject
             {
                 ["def"] = new JArray(indexes.Item1),
-                ["nonce"] = GenNonce(),
+                ["language"] = 0,
+                ["nonce"] = nonce,
                 ["page"] = 1,
                 ["region"] = 1,
                 ["sort"] = 1,
                 ["ts"] = GetTimeStamp()
             };
 
-            string sign = null;
-            
-            GetSign(json.ToString(Formatting.None), json.Value<string>("nonce"),
-                s => sign = s);
-
+            var sign = wrapper.RunEvent(1, new object[]
+            {
+                json.ToString(Formatting.None),
+                nonce,
+                calcHash(nonce)
+            }) as string;
 
             json = new JObject
             {
                 ["_sign"] = sign,
                 ["def"] = json["def"],
+                ["language"] = json["language"],
                 ["nonce"] = json["nonce"],
                 ["page"] = json["page"],
                 ["region"] = json["region"],

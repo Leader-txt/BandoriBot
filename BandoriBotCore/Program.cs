@@ -2,17 +2,23 @@ using BandoriBot.Commands;
 using BandoriBot.Config;
 using BandoriBot.Handler;
 using BandoriBot.Services;
-using Mirai_CSharp;
-using Mirai_CSharp.Models;
 using Native.Csharp.App.Terraria;
-using SekaiClient.Datas;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.ExceptionServices;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using YukariToolBox.LightLog;
+using BandoriBot.Models;
+using Sora;
+using Sora.Net.Config;
+using Sora.EventArgs.SoraEvent;
+using Sora.Enumeration.EventParamsType;
 
 namespace BandoriBot
 {
@@ -20,9 +26,10 @@ namespace BandoriBot
     {
         public static object SekaiFile = new object();
 
-        private static void PluginInitialize(MiraiHttpSession session)
+
+        private static void PluginInitialize()
         {
-            MessageHandler.session = session;
+            //MessageHandler.session = session;
 
             Configuration.Register<AntirevokePlus>();
             Configuration.Register<Activation>();
@@ -35,7 +42,7 @@ namespace BandoriBot
             Configuration.Register<Blacklist>();
             Configuration.Register<BlacklistF>();
             Configuration.Register<TitleCooldown>();
-            Configuration.Register<PCRConfig>();
+            //Configuration.Register<PCRConfig>();
             Configuration.Register<R18Allowed>();
             Configuration.Register<NormalAllowed>();
             Configuration.Register<AccountBinding>();
@@ -50,6 +57,7 @@ namespace BandoriBot
             Configuration.Register<PermissionConfig>();
             Configuration.Register<Pipe>();
             //Configuration.Register<PeriodRank>();
+            Configuration.Register<GroupBlacklist>();
 
             MessageHandler.Register<CarHandler>();
             MessageHandler.Register(Configuration.GetConfig<ReplyHandler>());
@@ -61,34 +69,34 @@ namespace BandoriBot
             MessageHandler.Register<YCM>();
             MessageHandler.Register<QueryCommand>();
             MessageHandler.Register<ReplyCommand>();
-            MessageHandler.Register<FindCommand>();
+            //MessageHandler.Register<FindCommand>();
             MessageHandler.Register<DelayCommand>();
             MessageHandler.Register<AdminCommand>();
             MessageHandler.Register<AntirevokePlusCommand>();
-            MessageHandler.Register<SekaiCommand>();
-            MessageHandler.Register<SekaiPCommand>();
+            //MessageHandler.Register<SekaiCommand>();
+            //MessageHandler.Register<SekaiPCommand>();
             MessageHandler.Register<WhitelistCommand>();
             MessageHandler.Register<GachaCommand>();
-            MessageHandler.Register<GachaListCommand>();
+            //MessageHandler.Register<GachaListCommand>();
             MessageHandler.Register<Activate>();
             MessageHandler.Register<Deactivate>();
             MessageHandler.Register<BlacklistCommand>();
             MessageHandler.Register<TitleCommand>();
-            MessageHandler.Register<PCRRunCommand>();
+            //MessageHandler.Register<PCRRunCommand>();
             MessageHandler.Register<CarTypeCommand>();
-            MessageHandler.Register<SekaiLineCommand>();
-            MessageHandler.Register<SekaiGachaCommand>();
+            //MessageHandler.Register<SekaiLineCommand>();
+            //MessageHandler.Register<SekaiGachaCommand>();
             MessageHandler.Register<PermCommand>();
             MessageHandler.Register<SendCommand>();
 
-            MessageHandler.Register<DDCommand>();
+            /*MessageHandler.Register<DDCommand>();
             MessageHandler.Register<CDCommand>();
             MessageHandler.Register<CCDCommand>();
             MessageHandler.Register<SLCommand>();
             MessageHandler.Register<SCCommand>();
             MessageHandler.Register<TBCommand>();
             MessageHandler.Register<RCCommand>();
-            MessageHandler.Register<CPMCommand>();
+            MessageHandler.Register<CPMCommand>();*/
 
             CommandHelper.Register<AdditionalCommands.test>();
             CommandHelper.Register<AdditionalCommands.Wiki>();
@@ -131,70 +139,182 @@ namespace BandoriBot
             MessageHandler.Register<SetuCommand>();
             MessageHandler.Register<ZMCCommand>();
             MessageHandler.Register<AntirevokeCommand>();
-            MessageHandler.Register<SubscribeCommand>();
+            //MessageHandler.Register<SubscribeCommand>();
 
-            if (File.Exists("sekai"))
+
+            /*if (!Directory.Exists("Plugins")) Directory.CreateDirectory("Plugins");
+            foreach (var type in new[] { Assembly.GetExecutingAssembly() }
+                         .Concat(Directory.GetFiles("Plugins").Select(file => Assembly.LoadFrom(file)))
+                         .SelectMany(asm => asm.GetTypes()))
             {
-            }
+                if (type.IsAbstract) continue;
+
+                object o = null;
+                if (type.IsAssignableTo(typeof(Configuration)))
+                {
+                    Configuration.Register((Configuration)(o ??= System.Activator.CreateInstance(type)));
+                    Utils.Log(LoggerLevel.Info, $"registering {o} to configuration");
+                }
+
+                if (type.IsAssignableTo(typeof(ICommand)))
+                {
+                    MessageHandler.Register((ICommand)(o ??= System.Activator.CreateInstance(type)));
+                    Utils.Log(LoggerLevel.Info, $"registering {o} to command");
+                }
+
+                if (type.IsAssignableTo(typeof(IMessageHandler)))
+                {
+                    MessageHandler.Register((IMessageHandler)(o ??= System.Activator.CreateInstance(type)));
+                    Utils.Log(LoggerLevel.Info, $"registering {o} to handler");
+                }
+            }*/
 
             Configuration.LoadAll();
+            RecordDatabaseManager.InitDatabase();
+            MessageHandler.SortHandler();
 
-            foreach (var schedule in Configuration.GetConfig<TimeConfiguration>().t)
+            /*foreach (var schedule in Configuration.GetConfig<TimeConfiguration>().t)
             {
                 var s = schedule;
                 ScheduleManager.QueueTimed(async () =>
                 {
                     await session.SendGroupMessageAsync(s.group, await Utils.GetMessageChain(s.message, async p => await session.UploadPictureAsync(UploadTarget.Group, p)));
                 }, s.delay);
-            }
+            }*/
 
             GC.Collect();
-            MessageHandler.booted = true;
+            //MessageHandler.booted = true;
         }
 
-        public static async Task Main(string[] args)
+        private static async Task Testing()
         {
-            string authkey = File.ReadAllText("authkey.txt");
 
+        }
+
+        public static void Main(string[] args)
+        {
+            Log.SetLogLevel(LogLevel.Fatal);
+            Testing().Wait();
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
+            //AppDomain.CurrentDomain.FirstChanceException += CurrentDomain_FirstChanceException;
+            AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
 
-            AppDomain.CurrentDomain.FirstChanceException += CurrentDomain_FirstChanceException;
-            
-            await using var session = new MiraiHttpSession();
+            new Thread(() => Apis.Program.Main2(args)).Start();
+            var tasks = new List<Task>();
 
-            session.AddPlugin(new MessageHandler());
-            
-            PluginInitialize(session);
+            PluginInitialize();
 
-            var options = new MiraiHttpSessionOptions("localhost", int.Parse(args[1]), authkey);
+            foreach (var line in File.ReadAllLines("cqservers.txt"))
+            {
+                var s = line.Split(":");
+                var service = SoraServiceFactory.CreateService(new ClientConfig()
+                {
+                    Host = s[0],
+                    Port = ushort.Parse(s[1])
+                });
 
-            await session.ConnectAsync(options, long.Parse(args[0]));
+                service.Event.OnClientConnect += Event_OnClientConnect;
+                service.Event.OnFriendRequest += Event_OnFriendRequest;
+                service.Event.OnGroupMessage += Event_OnGroupMessage;
+                service.Event.OnPrivateMessage += Event_OnPrivateMessage;
+                service.Event.OnGroupRequest += Event_OnGroupRequest;
+                service.Event.OnGuildMessage += Event_OnGuildMessage;
 
-            Console.WriteLine("connected to server");
+                Console.WriteLine("connected to server");
 
-            Thread.Sleep(int.MaxValue);
+                tasks.Add(service.StartService().AsTask());
+            }
 
+            Task.WaitAll(tasks.ToArray());
+            Thread.Sleep(-1);
+        }
+
+        private static Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)
+        {
+            try
+            {
+                var root = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+                return Assembly.LoadFrom(Path.Combine(root, $"{new AssemblyName(args.Name).Name}.dll"));
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        private static async ValueTask Event_OnGuildMessage(string eventType, GuildMessageEventArgs eventArgs)
+        {
+            //eventArgs.SoraApi.SendGuildMessage(eventArgs.Guild, eventArgs.Channel, "guild::rep");
+            await MessageHandler.OnMessage(eventArgs.SoraApi, Utils.GetCQMessage(eventArgs.Message), new Source
+            {
+                Session = eventArgs.SoraApi,
+                FromGroup = MessageHandler.HashGroupCache(eventArgs.Guild, eventArgs.Channel),
+                IsGuild = true,
+                FromQQ = eventArgs.SenderInfo.UserId,
+                time = eventArgs.Time
+            });
+        }
+
+        private static async ValueTask Event_OnGroupRequest(string type, AddGroupRequestEventArgs eventArgs)
+        {
+            if (eventArgs.SubType == GroupRequestType.Invite)
+                await eventArgs.Accept();
+        }
+
+        private static async ValueTask Event_OnPrivateMessage(string type, PrivateMessageEventArgs eventArgs)
+        {
+            await MessageHandler.OnMessage(eventArgs.SoraApi, Utils.GetCQMessage(eventArgs.Message), new Source
+            {
+                Session = eventArgs.SoraApi,
+                FromGroup = 0,
+                FromQQ = eventArgs.SenderInfo.UserId,
+                time = eventArgs.Time
+            });
+        }
+
+        private static async ValueTask Event_OnGroupMessage(string type, GroupMessageEventArgs eventArgs)
+        {
+            await MessageHandler.OnMessage(eventArgs.SoraApi, Utils.GetCQMessage(eventArgs.Message), new Source
+            {
+                Session = eventArgs.SoraApi,
+                FromGroup = eventArgs.SourceGroup.Id,
+                FromQQ = eventArgs.SenderInfo.UserId,
+                time = eventArgs.Time
+            });
+        }
+
+        private static async ValueTask Event_OnFriendRequest(string type, FriendRequestEventArgs eventArgs)
+        {
+            await eventArgs.SoraApi.SetFriendAddRequest(eventArgs.RequestFlag, true);
+        }
+
+        private static async ValueTask Event_OnClientConnect(string type, Sora.EventArgs.SoraEvent.ConnectEventArgs eventArgs)
+        {
+            lock (MessageHandler.bots)
+            {
+                if (MessageHandler.bots.ContainsKey(eventArgs.LoginUid))
+                    MessageHandler.bots.Remove(eventArgs.LoginUid);
+                MessageHandler.bots.Add(eventArgs.LoginUid, eventArgs.SoraApi);
+                MessageHandler.selfids.Add(eventArgs.LoginUid);
+            }
+            MessageHandler.booted = true;
         }
 
         private static void CurrentDomain_FirstChanceException(object sender, FirstChanceExceptionEventArgs e)
         {
             var ex = e.Exception;
-            while (ex is AggregateException e2) ex = e2.InnerException;
-            if (ex is ApiException) return;
-            if (ex is IOException) return;
+            //while (ex is AggregateException e2) ex = e2.InnerException;
+            //if (ex is ApiException) return;
+            //if (ex is IOException) return;
 
             Console.WriteLine(e.Exception);
         }
 
         private static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
+            RecordDatabaseManager.Close();
             Console.WriteLine(e.ExceptionObject);
-        }
-
-        private static async Task Testing()
-        {
-            Console.WriteLine(await JJCManager.Instance.Callapi("环奈水黑布丁空花望"));
-            Environment.Exit(0);
         }
     }
 }

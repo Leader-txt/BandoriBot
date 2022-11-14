@@ -1,8 +1,6 @@
 ﻿using BandoriBot.Config;
 using BandoriBot.DataStructures;
 using BandoriBot.Handler;
-using Mirai_CSharp;
-using Mirai_CSharp.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;

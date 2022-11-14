@@ -9,7 +9,6 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using BandoriBot.Handler;
-using Mirai_CSharp.Models;
 using Newtonsoft.Json;
 
 namespace BandoriBot.Config
@@ -91,7 +90,7 @@ namespace BandoriBot.Config
                 pair.Value.Input += msg =>
                 {
                     this.Log(Models.LoggerLevel.Debug, msg);
-                    MessageHandler.session.SendGroupMessageAsync(pair.Key, new PlainMessage(msg)).Wait();
+                    MessageHandler.session.SendGroupMessage(pair.Key, msg);
                 };
         }
 

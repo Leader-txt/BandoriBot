@@ -14,6 +14,8 @@ namespace BandoriBot.Commands
             "/admin"
         };
 
+        protected override string Permission => throw new NotImplementedException();
+
         string ICommand.Permission => "management.admin";
 
         public override async Task Run(CommandArgs args)

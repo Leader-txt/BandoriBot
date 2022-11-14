@@ -1,19 +1,27 @@
 using BandoriBot.Handler;
-using BandoriBot.Models;
-using Mirai_CSharp;
-using Mirai_CSharp.Models;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace BandoriBot.Commands
 {
-    public struct CommandArgs
+    public class CommandArgs
     {
         public Func<string, Task> Callback;
-        public string Arg;
+        public string Arg, Trigger;
         public Source Source;
+        private readonly HandlerArgs parent;
+
+        public Task finishedTask
+        {
+            get => parent.finishedTask;
+            set => parent.finishedTask = value;
+        }
+
+        public CommandArgs(HandlerArgs args)
+        {
+            parent = args;
+        }
     }
 
     public interface ICommand

@@ -1,11 +1,9 @@
-using BandoriBot.Config;
-using BandoriBot.Handler;
+using BandoriBot.Services;
 using BandoriBot.Models;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Mirai_CSharp;
-using Mirai_CSharp.Models;
-using Native.Csharp.App.Terraria;
 using Newtonsoft.Json.Linq;
+using Sora.Entities;
+using Sora.Entities.Base;
+using Sora.Enumeration;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -13,23 +11,37 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
+using System.Net.Mime;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using static Mirai_CSharp.Models.PokeMessage;
+using Sora.Entities.Segment;
+using Sora.Entities.Segment.DataModel;
+using Sora.Enumeration.EventParamsType;
+using Image = System.Drawing.Image;
 
 namespace BandoriBot
 {
     public static class Utils
     {
 
-        public static string FindAtMe(string origin, out bool isat, long qq)
+        public static string FindAtMe(string origin, out bool isat)
         {
-            var at = $"[mirai:at={qq}]";
-            isat = origin.Contains(at);
-            return origin.Replace(at, "");
+            isat = false;
+            foreach (var qq in MessageHandler.selfids)
+            {
+                var at = $"[mirai:at={qq}]";
+                isat |= origin.Contains(at);
+                origin = origin.Replace(at, "");
+            }
+
+            return origin;
         }
 
+        public static int SetGroupSpecialTitle(this SoraApi session, long groupId, long qqId, string specialTitle, TimeSpan time)
+        {
+            throw new NotImplementedException();
+        }
         public static string TryGetValueStart<T>(IEnumerable<T> dict, Func<T, string> conv, string start, out T value)
         {
             var matches = new List<Tuple<string, T>>();
@@ -64,38 +76,45 @@ namespace BandoriBot
         }
 
         private static Regex codeReg = new Regex(@"^(.*?)\[(.*?)=(.*?)\](.*)$", RegexOptions.Singleline | RegexOptions.Multiline | RegexOptions.Compiled);
-        
-        public static async Task<IMessageBase[]> GetMessageChain(string msg, Func<string, Task<ImageMessage>> picUploader)
+
+        private static string FixImage(this string imgcode)
+        {
+            return imgcode[1..37].Replace("-", "").ToLower() + ".image";
+        }
+
+        public static MessageBody GetMessageChain(string msg)
         {
             Match match;
-            List<IMessageBase> result = new List<IMessageBase>();
+            List<SoraSegment> result = new List<SoraSegment>();
 
             while ((match = codeReg.Match(msg)).Success)
             {
                 if (!string.IsNullOrEmpty(match.Groups[1].Value))
-                    result.Add(new PlainMessage(match.Groups[1].Value.Decode()));
+                    result.Add(SoraSegment.Text(match.Groups[1].Value.Decode()));
                 var val = match.Groups[3].Value;
                 switch (match.Groups[2].Value)
                 {
-                    case "mirai:at": result.Add(new AtMessage(long.Parse(val))); break;
-                    case "mirai:imageid": result.Add(new ImageMessage(val.Decode(), "", "")); break;
-                    case "mirai:imageurl": result.Add(new ImageMessage("", val.Decode(), "")); break;
-                    case "mirai:imagepath": result.Add(await picUploader(Path.GetFullPath(val.Decode()))); break;
-                    case "mirai:atall": result.Add(new AtAllMessage());break;
-                    case "mirai:json": result.Add(new JsonMessage(val.Decode())); break;
-                    case "mirai:xml": result.Add(new XmlMessage(val.Decode())); break;
-                    case "mirai:poke": result.Add(new PokeMessage(Enum.Parse<PokeType>(val))); break;
-                    case "mirai:face": result.Add(new FaceMessage(int.Parse(val), "")); break;
-                    case "CQ:at,qq": result.Add(new AtMessage(long.Parse(val))); break;
-                    case "CQ:face,id": result.Add(new FaceMessage(int.Parse(val), "")); break;
-                    default: result.Add(new PlainMessage($"[{match.Groups[2].Value}={match.Groups[3].Value}]")); break;
+                    case "mirai:at": result.Add(SoraSegment.At(long.Parse(val))); break;
+                    case "mirai:imageid": result.Add(SoraSegment.Image(val.Decode().FixImage(), false)); break;
+                    case "mirai:imageurl": result.Add(SoraSegment.Image(val.Decode(), false)); break;
+                    case "mirai:imagepath": result.Add(SoraSegment.Image(Path.GetFullPath(val.Decode()), false)); break;
+                    case "mirai:imagenew": result.Add(SoraSegment.Image(val.Decode(), false)); break;
+                    case "mirai:atall": result.Add(SoraSegment.AtAll()); break;
+                    case "mirai:json": result.Add(SoraSegment.Json(val.Decode())); break;
+                    case "mirai:xml": result.Add(SoraSegment.Xml(val.Decode())); break;
+                    case "mirai:poke": result.Add(SoraSegment.Poke(long.Parse(val))); break;
+                    case "mirai:face": result.Add(SoraSegment.Face(int.Parse(val))); break;
+                    case "CQ:at,qq": result.Add(SoraSegment.At(long.Parse(val))); break;
+                    case "CQ:face,id": result.Add(SoraSegment.Face(int.Parse(val))); break;
+                    case "mirai:record": result.Add(SoraSegment.Record(val.Decode())); break;
+                    default: result.Add(SoraSegment.Text($"[{match.Groups[2].Value}={match.Groups[3].Value}]")); break;
                 }
                 msg = match.Groups[4].Value;
             }
 
-            if (!string.IsNullOrEmpty(msg)) result.Add(new PlainMessage(msg.Decode()));
+            if (!string.IsNullOrEmpty(msg)) result.Add(SoraSegment.Text(msg.Decode()));
 
-            return result.ToArray();
+            return new MessageBody(result);
         }
 
         /*
@@ -117,63 +136,6 @@ public static string FixImage(string origin)
        });
 }
 */
-        public static bool PlayerOnline(string name)
-        {
-            return GetAllOnlinePlayers().Contains(name);
-        }
-        public static string GetOnlineServer(string name)
-        {
-            if (PlayerOnline(name))
-                foreach (var s in Configuration.GetConfig<ServerManager>().servers)
-                {
-                    if (GetOnlinePlayers(s.Value).Contains(name))
-                        return s.Key;
-                }
-            else
-                return null;
-            return null;
-        }
-        public static int GetItemStack(Server server,string name,int id)
-        {
-            return int.Parse (server.RunRest("/v1/itemrank/rankboard?&id=" + id).Where(t => t["name"].ToString() == name).FirstOrDefault()["count"].ToString());
-        }
-        public static string GetMoney(Server server,string name)
-        {
-            int copper = GetItemStack(server,name ,71), 
-                silver = GetItemStack(server, name, 72), 
-                gold = GetItemStack(server, name, 73), 
-                platinum = GetItemStack(server, name, 74);
-            string res = "";
-            if (platinum != 0)
-            {
-                res += platinum + "铂金";
-            }
-            if(gold != 0)
-            {
-                res += gold + "金";
-            }
-            if (silver != 0)
-            {
-                res += silver + "银";
-            }
-            if(copper != 0)
-            {
-                res += copper + "铜";
-            }
-            if (res == "") res = "无产阶级";
-            return res;
-        }
-        public static string[] GetOnlinePlayers(Server server)
-        {
-            return server.RunRest("/v2/users/activelist")["activeusers"]
-                .ToString().Split('\t').Where((s) => !string.IsNullOrWhiteSpace(s)).ToArray();
-        }
-        public static string[] GetAllOnlinePlayers()
-        {
-            var server = Configuration.GetConfig<ServerManager>().servers["流光之城"];
-            var online = string.Join("\n", server.RunCommand("/list")["response"].Select(s => s.ToString()));
-            return online.Split('：')[1].Split(',');
-        }
         public static string FixRegex(string origin)
         {
             return origin.Replace("[", @"\[").Replace("]", @"\]").Replace("&#91;", "[").Replace("&#93;", "]");
@@ -184,11 +146,11 @@ public static string FixImage(string origin)
             return Image.FromFile(path) as Bitmap;
         }
 
-        public static async Task<string> GetName(this MiraiHttpSession session, long group, long qq)
+        public static async Task<string> GetName(this SoraApi session, long group, long qq)
         {
             try
             {
-                return (await session.GetGroupMemberInfoAsync(qq, group)).Name;
+                return (await session.GetGroupMemberInfo(qq, group)).memberInfo.Card;
             }
             catch (Exception e)
             {
@@ -200,9 +162,9 @@ public static string FixImage(string origin)
         public static async Task<string> GetName(this Source source)
             => await source.Session.GetName(source.FromGroup, source.FromQQ);
 
-        internal static string GetCQMessage(IEnumerable<IMessageBase> chain)
+        internal static string GetCQMessage(Message chain)
         {
-            return string.Concat(chain.Select(msg => GetCQMessage(msg)));
+            return string.Concat(chain.MessageBody.Select(GetCQMessage));
         }
 
         public static string Encode(this string str)
@@ -215,32 +177,31 @@ public static string FixImage(string origin)
             return str.Replace("&#91;", "[").Replace("&#93;", "]").Replace("&amp;", "&");
         }
 
-        private static string GetCQMessage(IMessageBase msg)
+        private static string GetCQMessage(SoraSegment msg)
         {
-            switch (msg)
+            switch (msg.Data)
             {
-                case FaceMessage face:
+                case FaceSegment face:
                     return $"[mirai:face={face.Id}]";
-                case PlainMessage plain:
-                    return plain.Message.Encode();
-                case JsonMessage json:
-                    return $"[mirai:json={json.Json.Encode()}]";
-                case XmlMessage xml:
-                    return $"[mirai:xml={xml.Xml.Encode()}]";
-                case AtMessage at:
+                case TextSegment plain:
+                    return plain.Content.Encode();
+                case AtSegment at:
                     return $"[mirai:at={at.Target}]";
-                case ImageMessage img:
-                    return img.ImageId != null ? $"[mirai:imageid={img.ImageId}]" : $"[mirai:imageurl={img.Url.Encode()}]";
-                case AtAllMessage atall:
-                    return $"[mirai:atall=]";
-                case PokeMessage poke:
-                    return $"[mirai:poke={poke.Name}]";
-                case QuoteMessage quote:
-                    return "";
-                case SourceMessage _:
-                    return "";
+                case ImageSegment img:
+                    return $"[mirai:imagenew={img.ImgFile.Encode()}]";
+                case PokeSegment poke:
+                    return $"[mirai:poke={poke.Uid}]";
+                case CodeSegment code:
+                    switch (msg.MessageType)
+                    {
+                        case SegmentType.Json: return $"[mirai:json={code.Content.Encode()}]";
+                        case SegmentType.Xml: return $"[mirai:xml={code.Content.Encode()}]";
+                        default: return "";
+                    }
+                case RecordSegment record:
+                    return $"[mirai:record={record.RecordFile.Encode()}]";
                 default:
-                    return msg.ToString().Encode();
+                    return "";//msg.ToString().Encode();
             }
         }
 
@@ -262,7 +223,37 @@ public static string FixImage(string origin)
         {
             var path = Path.Combine("imagecache", $"cache{new Random().Next()}.jpg");
             img.Save(path);
-            return $"[mirai:imagepath={path}]";
+            return $"[mirai:imagepath={Path.GetFullPath(path)}]";
+        }
+
+        public static string ToCache(this byte[] b)
+        {
+            var path = Path.Combine("imagecache", $"cache{new Random().Next()}");
+            File.WriteAllBytes(path, b);
+            return Path.GetFullPath(path);
+        }
+
+        private static Font font = new Font(FontFamily.GenericMonospace, 10f, FontStyle.Regular);
+        private static Brush brush = Brushes.Black;
+        public static string ToImageText(this string str)
+        {
+            using var bitmap = new Bitmap(1, 1);
+            using var g = Graphics.FromImage(bitmap);
+            var lines = str.Split('\n', StringSplitOptions.RemoveEmptyEntries);
+            var sizes = lines.Select(l => g.MeasureString(l, font)).ToArray();
+            var img = new Bitmap((int)sizes.Max(s => s.Width) + 6, (int)sizes.Sum(s => s.Height) + 6);
+            using (var g2 = Graphics.FromImage(img))
+            {
+                g2.Clear(Color.White);
+                var h = 3f;
+                for (int i = 0; i < lines.Length; ++i)
+                {
+                    g2.DrawString(lines[i], font, brush, 3, h);
+                    h += sizes[i].Height;
+                }
+            }
+
+            return GetImageCode(img);
         }
 
         public static void Log(this object o, LoggerLevel level, object s)
@@ -344,8 +335,22 @@ public static string FixImage(string origin)
             if (typeof(T) == typeof(string))
                 return (T)(object)str;
             else
-                return (T) typeof(T).GetMethod("Parse", BindingFlags.Public | BindingFlags.Static, null, new Type[] { typeof(string) }, null)
+                return (T)typeof(T).GetMethod("Parse", BindingFlags.Public | BindingFlags.Static, null, new Type[] { typeof(string) }, null)
                     .Invoke(null, new object[] { str });
+        }
+
+        private static DateTime dateTimeStart = TimeZoneInfo.ConvertTime(new DateTime(1970, 1, 1), TimeZoneInfo.Local);
+
+        // 时间戳转为C#格式时间
+        public static DateTime ToDateTime(this long timeStamp)
+        {
+            return dateTimeStart.Add(new TimeSpan(10000 * timeStamp));
+        }
+
+        // DateTime时间格式转换为Unix时间戳格式
+        public static long ToTimestamp(this DateTime time)
+        {
+            return (long)(time - dateTimeStart).TotalMilliseconds;
         }
     }
 }

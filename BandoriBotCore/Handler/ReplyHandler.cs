@@ -4,8 +4,6 @@ using BandoriBot.DataStructures;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.VisualBasic.CompilerServices;
-using Mirai_CSharp;
-using MsgPack;
 using Newtonsoft.Json.Linq;
 using System;
 using System.CodeDom.Compiler;
@@ -115,7 +113,7 @@ namespace BandoriBot.Handler
 
         public async Task<bool> OnMessage(HandlerArgs args)
         {
-            var raw = Utils.FindAtMe(args.message, out var isme, args.Sender.Session.QQNumber ?? 0).Trim();
+            var raw = Utils.FindAtMe(args.message, out var isme).Trim();
             var isadmin = await args.Sender.CheckPermission();
 
             if (!GetConfig<Whitelist>().hash.Contains(args.Sender.FromGroup) && !isadmin)
@@ -202,7 +200,7 @@ namespace BandoriBot.Handler
             int func = 0;
             var sb = new StringBuilder();
 
-            _ = typeof(SekaiClient.SekaiClient);
+            //_ = typeof(SekaiClient.SekaiClient);
             var usings = new string[]
             {
                 "BandoriBot",
