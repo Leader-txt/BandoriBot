@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "1lwTiXrGiFSz3EdbZ9EqpVSy80DsBgvWcS7WBR14QWMYCRwCtoUE9L8td25Hpr4fHgUgVHWRfqHobcLmvnDxmw==",
+  "dgSpecHash": "r5qGMQNld/iXuGBPzqDAPBjdWX2dKIX7E4fQwxfoXi/WPzB+svpSzueD/Tm2ouRZOOet8sJaruZCU+lzuTnQvw==",
   "success": true,
-  "projectFilePath": "D:\\Documents\\Code\\BandoriBot - 副本\\Mirai-CSharp\\Mirai-CSharp\\Mirai-CSharp.csproj",
+  "projectFilePath": "D:\\Documents\\Code\\BandoriBot\\Mirai-CSharp\\Mirai-CSharp\\Mirai-CSharp.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\32512\\.nuget\\packages\\microsoft.bcl.asyncinterfaces\\1.1.0\\microsoft.bcl.asyncinterfaces.1.1.0.nupkg.sha512",
     "C:\\Users\\32512\\.nuget\\packages\\microsoft.netcore.platforms\\1.1.0\\microsoft.netcore.platforms.1.1.0.nupkg.sha512",

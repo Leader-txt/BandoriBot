@@ -65,6 +65,8 @@ internal enum ApiRequestType
     /// </summary>
     [Description("get_group_member_info")]
     GetGroupMemberInfo,
+    [Description("get_guild_member_profile")]
+    GetGuildMemberProfile,
 
     [Description("get_guild_members")]
     GetGuildMembers,

@@ -22,7 +22,6 @@ namespace BandoriBot.Handler
         public async Task<bool> OnMessage(HandlerArgs args)
         {
             if (args.Sender.FromGroup == 0) return false;
-
             if (!t.ContainsKey(args.Sender.FromGroup))
                 t[args.Sender.FromGroup] = new Dictionary<long, int>();
             Dictionary<long, int> dic = t[args.Sender.FromGroup];

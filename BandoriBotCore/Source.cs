@@ -29,12 +29,12 @@ namespace BandoriBot
             target = FromGroup;
             if (IsGuild)
             {
-                var res = (await Session.GetGuildMembers(MessageHandler.GetGroupCache(target).guild)).memberInfo;
+                return IsSuperadmin;
+                /*var res = (await Session.GetGuildMembers(MessageHandler.GetGroupCache(target).guild)).memberInfo;
                 var qq = FromQQ;
-
                 var info = res.bots.Concat(res.admins).Concat(res.members).FirstOrDefault(m => m.UserId == qq); 
                 this.Log(LoggerLevel.Info, $"guild perm {target}::{FromQQ} = {info?.Role}");
-                return (info?.Role ?? MemberRoleType.Unknown) >= required;
+                return (info?.Role ?? MemberRoleType.Unknown) >= required;*/
             }
             return (await Session.GetGroupMemberInfo(target, FromQQ)).memberInfo.Role >= required;
         }

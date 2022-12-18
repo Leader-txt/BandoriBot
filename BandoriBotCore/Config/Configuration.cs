@@ -48,11 +48,19 @@ namespace BandoriBot.Config
             {
 
             }
+            try
+            {
 
-            using (FileStream fs = new FileStream(Path.Combine("", Name), FileMode.Open))
-            using (BinaryReader br = new BinaryReader(fs))
-                LoadFrom(br);
-            Utils.Log(LoggerLevel.Info, $"{GetType().Name} successfully loaded");
+                using (FileStream fs = new FileStream(Path.Combine("", Name), FileMode.Open))
+                using (BinaryReader br = new BinaryReader(fs))
+                    LoadFrom(br);
+                Utils.Log(LoggerLevel.Info, $"{GetType().Name} successfully loaded");
+            }
+            catch(Exception ex)
+            {
+                Utils.Log(LoggerLevel.Error, ex.ToString());
+                throw ex;
+            }
         }
         public static void SaveAll()
         {

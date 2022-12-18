@@ -209,9 +209,9 @@ namespace BandoriBot.Handler
                 "System",
                 "System.Collections.Generic",
                 "System.Text.RegularExpressions",
-                "System.Linq"
+                "System.Linq",
+                "Native.Csharp.App.Terraria"
             };
-
             var refs = new List<string>();
 
             foreach (var name in Assembly.GetExecutingAssembly().GetReferencedAssemblies())

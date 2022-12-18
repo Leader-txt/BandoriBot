@@ -755,6 +755,14 @@ public sealed class SoraApi
             throw new ArgumentOutOfRangeException(nameof(userId), $"out of range [{userId}]");
         return await ApiInterface.GetGroupMemberInfo(ServiceId, ConnectionId, groupId, userId, useCache);
     }
+    public async ValueTask<(ApiStatus apiStatus, GuildMemberInfo memberInfo)> GetGuildMemberProfile(long guildId, long userId)
+    {
+        return await ApiInterface.GetGuildMemberProfile(ServiceId, ConnectionId, guildId.ToString(), userId.ToString());
+    }
+    public async ValueTask<(ApiStatus apiStatus, GuildMemberInfo memberInfo)> GetGuildMemberProfile(string guildId, string userId)
+    {
+        return await ApiInterface.GetGuildMemberProfile(ServiceId, ConnectionId, guildId, userId);
+    }
     public async ValueTask<(ApiStatus apiStatus, GuildMembers memberInfo)> GetGuildMembers(
         long guildId)
     {

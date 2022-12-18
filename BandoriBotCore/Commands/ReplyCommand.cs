@@ -32,14 +32,14 @@ namespace BandoriBot.Commands
             switch (splits[0])
             {
                 case "reload":
-                    if (!await args.Source.CheckPermission())
+                    if (await args.Source.CheckPermission())
                     {
                         config.Load();
                         await args.Callback("configuration has been reloaded successfully.");
                     }
                     break;
                 case "save":
-                    if (!await args.Source.CheckPermission())
+                    if (await args.Source.CheckPermission())
                     {
                         config.Save();
                         await args.Callback("configuration has been saved successfully.");

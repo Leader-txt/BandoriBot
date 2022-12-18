@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿
+using System;
 using System.IO;
-using System.Linq;
 using System.Net.Sockets;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace BandoriBot.Terraria
 {
@@ -30,10 +27,10 @@ namespace BandoriBot.Terraria
 
         private void Listener()
         {
-            try
+            var buf = new byte[4];
+            while (!disposed)
             {
-                var buf = new byte[4];
-                while (Valid)
+                try
                 {
                     Thread.Sleep(0);
                     stream.Read(buf, 0, 4);
@@ -41,23 +38,14 @@ namespace BandoriBot.Terraria
                     {
                         case MsgType.SetServerName:
                             Name = br.ReadString();
-                            this.Log(Models.LoggerLevel.Info, $"set server = {Name}");
                             break;
                         case MsgType.WriteMessage:
                             var msg = br.ReadString();
                             var clr = br.ReadUInt32();
-                            this.Log(Models.LoggerLevel.Debug, $"recv msg {msg}");
                             OnMessage?.Invoke(msg, clr);
                             break;
                     }
                 }
-            }
-            catch
-            {
-                try
-                {
-                    Close();
-                }
                 catch
                 {
 
@@ -65,88 +53,93 @@ namespace BandoriBot.Terraria
             }
         }
 
-        private void Close()
+        private void ConnectTillSuc()
         {
-            Valid = false;
-            client.Close();
+            while (true)
+            {
+                try
+                {
+                    Connect();
+                    return;
+                }
+                catch
+                {
+                    Thread.Sleep(1000);
+                }
+            }
         }
         private void Heartbeat()
         {
-            try
+            while (!disposed)
             {
-                while (Valid)
+                Thread.Sleep(1000);
+                try
                 {
-                    Thread.Sleep(1000);
                     lock (bw)
                         bw.Write((int)MsgType.Heartbeat);
                 }
-            }
-            catch
-            {
-                try
-                {
-                    Close();
-                }
                 catch
                 {
-
+                    ConnectTillSuc();
                 }
             }
         }
 
-        public GameServer(TcpClient client)
+        private string host;
+        private ushort port;
+        private bool disposed = false;
+
+        public void Connect()
         {
-            this.client = client;
+            client = new TcpClient();
+            client.Connect(host, port);
             stream = client.GetStream();
             br = new BinaryReader(stream);
             bw = new BinaryWriter(stream);
-            Valid = true;
-            recvthread = new Thread(new ThreadStart(Listener));
-            tickthread = new Thread(new ThreadStart(Heartbeat));
+            recvthread = new Thread(Listener);
+            tickthread = new Thread(Heartbeat);
             recvthread.Start();
             tickthread.Start();
+            SetName();
+            Valid = true;
         }
 
-        public void SetName(string name)
+        public GameServer(string host, ushort port, string name)
         {
-            try
+            this.host = host;
+            this.port = port;
+            this.Name = name;
+            Connect();
+        }
+
+        public void SetName()
+        {
+            lock (bw)
             {
                 bw.Write((int)MsgType.SetServerName);
-                bw.Write(name);
+                bw.Write(Name);
             }
-            catch
-            {
-
-            }
-
         }
 
         public void SendMsg(string message, uint color = 0xffffff)
         {
-            try
+            if (string.IsNullOrEmpty(message)) return;
+            lock (bw)
             {
-                if (string.IsNullOrEmpty(message)) return;
-
-                lock (bw)
-                {
-                    bw.Write((int)MsgType.WriteMessage);
-                    bw.Write(message);
-                    bw.Write(color);
-                }
-            }
-            catch
-            {
-
+                bw.Write((int)MsgType.WriteMessage);
+                bw.Write(message);
+                bw.Write(color);
             }
         }
 
         public void Dispose()
         {
-            br.Dispose();
-            bw.Dispose();
             try
             {
+                disposed = true;
                 client.Close();
+                br.Dispose();
+                bw.Dispose();
             }
             catch
             {

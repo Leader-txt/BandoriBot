@@ -163,8 +163,10 @@ namespace BandoriBot
             {
                 try
                 {
+                    s = Regex.Replace(s, @"\[c/.{6}:(.*?)\]", "$1");
                     if (Sender.IsGuild)
                     {
+                        //s = "[mirai:at=144115218671449571]速速打钱！！！\r\n"+s;
                         var (guild, channel) = GetGroupCache(Sender.FromGroup);
                         Utils.Log(LoggerLevel.Debug,
                             $"[{guild}::{channel}::{Sender.FromQQ}] [{(DateTime.Now.Ticks - ticks) / 10000}ms] sent msg: " +
@@ -173,6 +175,7 @@ namespace BandoriBot
                     }
                     else
                     {
+                        //s = "[mirai:at=599349324]速速打钱！！！\r\n"+s;
                         Utils.Log(LoggerLevel.Debug,
                             $"[{Sender.FromGroup}::{Sender.FromQQ}] [{(DateTime.Now.Ticks - ticks) / 10000}ms] sent msg: " +
                             s);
@@ -197,8 +200,14 @@ namespace BandoriBot
                 Utils.Log(LoggerLevel.Debug, $"[{Sender.FromGroup}::{Sender.FromQQ}]ignored msg: " + message);
                 return;
             }
-
-            Utils.Log(LoggerLevel.Debug, $"[{Sender.FromGroup}::{Sender.FromQQ}]recv msg: " + message);
+            if (Sender.IsGuild)
+            {
+                //var info=(await Sender.Session.GetGuildMemberProfile(GetGroupCache(Sender.FromGroup).guild.ToString(), Sender.FromQQ.ToString())).memberInfo;
+                //Console.WriteLine(string.Join(",", info.Role.Select(x => $"id:{x.ID},name:{x.Name}")));
+                Utils.Log(LoggerLevel.Debug, $"[{GetGroupCache(Sender.FromGroup).guild}::{GetGroupCache(Sender.FromGroup).channel}::{Sender.FromQQ}]recv msg: " + message);
+            }
+            else
+                Utils.Log(LoggerLevel.Debug, $"[{Sender.FromGroup}::{Sender.FromQQ}]recv msg: " + message);
 
             await Task.Run(() => OnMessage(new HandlerArgs
             {

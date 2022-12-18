@@ -7,17 +7,28 @@ using Sora.Util;
 
 namespace Sora.Entities.Info;
 
+public class MemberRoleInfo
+{
+    [JsonProperty("role_id")]
+    public string ID { get; set; }
+    [JsonProperty("role_name")]
+    public string Name { get; set; }
+}
 public class GuildMemberInfo
 {
     [JsonProperty(PropertyName = "tiny_id")]
     public long UserId { get; set; }
 
-    [JsonProperty(PropertyName = "title")]
-    public string Title { get; set; }
+    /*[JsonProperty(PropertyName = "title")]
+    public string Title { get; set; }*/
     [JsonProperty(PropertyName = "nickname")]
     public string Nick { get; set; }
-    [JsonProperty(PropertyName = "role")]
-    public MemberRoleType Role { get; set; }
+    [JsonProperty("avatar_url")]
+    public string Avatar { get; set; }
+    [JsonProperty("join_time")]
+    public long Join { get; set; }
+    [JsonProperty(PropertyName = "roles")]
+    public MemberRoleInfo[] Role { get; set; }
 }
 
 public class GuildMembers

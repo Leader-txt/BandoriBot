@@ -296,6 +296,33 @@ internal static class ApiInterface
     /// </summary>
     /// <param name="connection">服务器连接标识</param>
     /// <param name="serviceId">服务ID</param>
+    /// <param name="guildId">群号</param>
+    /// <param name="userId">用户ID</param>
+    internal static async ValueTask<(ApiStatus apiStatus, GuildMemberInfo memberInfo)> GetGuildMemberProfile(
+        Guid serviceId, Guid connection, string guildId,string userId)
+    {
+        Log.Debug("Sora", "Sending get_guild_members request");
+        var (apiStatus, ret) = await ReactiveApiManager.SendApiRequest(new ApiRequest
+        {
+            ApiRequestType = ApiRequestType.GetGuildMemberProfile,
+            ApiParams = new
+            {
+                guild_id = guildId,
+                user_id=userId
+            }
+        }, connection);
+        Log.Debug("Sora", $"Get get_guild_members response {nameof(apiStatus)}={apiStatus.RetCode}");
+        if (apiStatus.RetCode != ApiStatusType.OK || ret?["data"] == null)
+            return (apiStatus, new GuildMemberInfo());
+        var memberInfo = ret["data"]?.ToObject<GuildMemberInfo>() ?? new GuildMemberInfo();
+        return (apiStatus, memberInfo);
+    }
+
+    /// <summary>
+    /// 获取群成员信息
+    /// </summary>
+    /// <param name="connection">服务器连接标识</param>
+    /// <param name="serviceId">服务ID</param>
     /// <param name="groupId">群号</param>
     /// <param name="userId">用户ID</param>
     /// <param name="useCache">是否使用缓存</param>

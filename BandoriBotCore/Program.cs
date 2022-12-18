@@ -19,6 +19,7 @@ using Sora;
 using Sora.Net.Config;
 using Sora.EventArgs.SoraEvent;
 using Sora.Enumeration.EventParamsType;
+using BandoriBot.Terraria;
 
 namespace BandoriBot
 {
@@ -45,7 +46,7 @@ namespace BandoriBot
             //Configuration.Register<PCRConfig>();
             Configuration.Register<R18Allowed>();
             Configuration.Register<NormalAllowed>();
-            Configuration.Register<AccountBinding>();
+            Configuration.Register<AccountBinding>();   
             Configuration.Register<ServerManager>();
             Configuration.Register<TimeConfiguration>();
             Configuration.Register<GlobalConfiguration>();
@@ -58,15 +59,16 @@ namespace BandoriBot
             Configuration.Register<Pipe>();
             //Configuration.Register<PeriodRank>();
             Configuration.Register<GroupBlacklist>();
+            Configuration.Register<SubServerMap>();
 
             MessageHandler.Register<CarHandler>();
             MessageHandler.Register(Configuration.GetConfig<ReplyHandler>());
             MessageHandler.Register<WhitelistHandler>();
             MessageHandler.Register<RepeatHandler>();
-            MessageHandler.Register(Configuration.GetConfig<MessageStatistic>());
-            MessageHandler.Register(Configuration.GetConfig<MainServerConfig>());
+            //MessageHandler.Register(Configuration.GetConfig<MessageStatistic>());
+            //MessageHandler.Register(Configuration.GetConfig<MainServerConfig>());
 
-            MessageHandler.Register<YCM>();
+            //MessageHandler.Register<YCM>();
             MessageHandler.Register<QueryCommand>();
             MessageHandler.Register<ReplyCommand>();
             //MessageHandler.Register<FindCommand>();
@@ -83,7 +85,7 @@ namespace BandoriBot
             MessageHandler.Register<BlacklistCommand>();
             MessageHandler.Register<TitleCommand>();
             //MessageHandler.Register<PCRRunCommand>();
-            MessageHandler.Register<CarTypeCommand>();
+            //MessageHandler.Register<CarTypeCommand>();
             //MessageHandler.Register<SekaiLineCommand>();
             //MessageHandler.Register<SekaiGachaCommand>();
             MessageHandler.Register<PermCommand>();
@@ -105,8 +107,8 @@ namespace BandoriBot
             CommandHelper.Register<AdditionalCommands.泰拉在线>();
             CommandHelper.Register<AdditionalCommands.泰拉资料>();
             CommandHelper.Register<AdditionalCommands.封>();
-            CommandHelper.Register<AdditionalCommands.泰拉注册>();
-            CommandHelper.Register<AdditionalCommands.泰拉每日在线排行>();
+            //CommandHelper.Register<AdditionalCommands.泰拉注册>();
+            CommandHelper.Register<AdditionalCommands.每日在线排行>();
             CommandHelper.Register<AdditionalCommands.泰拉在线排行>();
             CommandHelper.Register<AdditionalCommands.泰拉物品排行>();
             CommandHelper.Register<AdditionalCommands.泰拉财富排行>();
@@ -200,7 +202,7 @@ namespace BandoriBot
             //AppDomain.CurrentDomain.FirstChanceException += CurrentDomain_FirstChanceException;
             AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
 
-            new Thread(() => Apis.Program.Main2(args)).Start();
+            //new Thread(() => Apis.Program.Main2(args)).Start();
             var tasks = new List<Task>();
 
             PluginInitialize();
@@ -226,6 +228,7 @@ namespace BandoriBot
                 tasks.Add(service.StartService().AsTask());
             }
 
+            RegularMessage.Start();
             Task.WaitAll(tasks.ToArray());
             Thread.Sleep(-1);
         }
@@ -245,7 +248,18 @@ namespace BandoriBot
 
         private static async ValueTask Event_OnGuildMessage(string eventType, GuildMessageEventArgs eventArgs)
         {
-            //eventArgs.SoraApi.SendGuildMessage(eventArgs.Guild, eventArgs.Channel, "guild::rep");
+            Configuration.GetConfig<MainServerConfig>().OnMessage(new HandlerArgs()
+            {
+                message = Utils.GetCQMessage(eventArgs.Message),
+                Sender = new Source
+                {
+                    Session = eventArgs.SoraApi,
+                    FromGroup = MessageHandler.HashGroupCache(eventArgs.Guild, eventArgs.Channel),
+                    IsGuild = true,
+                    FromQQ = eventArgs.SenderInfo.UserId,
+                    time = eventArgs.Time
+                }
+            });
             await MessageHandler.OnMessage(eventArgs.SoraApi, Utils.GetCQMessage(eventArgs.Message), new Source
             {
                 Session = eventArgs.SoraApi,

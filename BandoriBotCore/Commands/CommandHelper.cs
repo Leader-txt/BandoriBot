@@ -92,7 +92,6 @@ namespace BandoriBot.Commands
                     return true;
                 }
 
-
                 method.Invoke(null, objs.ToArray());
                 return true;
             }
