@@ -3,6 +3,7 @@ using BandoriBot.Handler;
 using Microsoft.Data.Sqlite;
 using Native.Csharp.App.Terraria;
 using Newtonsoft.Json.Linq;
+using OpenQA.Selenium.Edge;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -71,7 +72,17 @@ namespace BandoriBot.Commands
             public static void Main(CommandArgs args, string name)
             {
                 //https://terraria.fandom.com/zh/wiki/Special:%E6%90%9C%E7%B4%A2?query=木剑
-                args.Callback("已经从WiKi上为你找到了【" + name + "】，请点击链接查看哦：\rhttps://terraria.wiki.gg/zh/index.php?search=" + System.Web.HttpUtility.UrlEncode(name));
+                var option = new EdgeOptions();
+                option.AddArguments("headless", "disable-gpu");
+                using (var driver=new EdgeDriver(option))
+                {
+                    driver.Navigate().GoToUrl($"https://terraria.wiki.gg/zh/index.php?search={System.Web.HttpUtility.UrlEncode(name)}");
+                    string width = driver.ExecuteScript("return document.body.scrollWidth").ToString();
+                    string height = driver.ExecuteScript("return document.body.scrollHeight").ToString();
+                    driver.Manage().Window.Size = new System.Drawing.Size(int.Parse(width), int.Parse(height)); //=int.Parse( height);
+                    args.Callback(Utils.GetImageCode(driver.GetScreenshot().AsByteArray));
+                }
+                //args.Callback("已经从WiKi上为你找到了【" + name + "】，请点击链接查看哦：\rhttps://terraria.wiki.gg/zh/index.php?search=" + System.Web.HttpUtility.UrlEncode(name));
             }
         }
         public class 泰拉注册
